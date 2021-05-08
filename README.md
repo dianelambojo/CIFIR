@@ -1,2 +1,0 @@
-# CIFIR
-CIFIR - File Reader
