@@ -10,6 +10,7 @@ urlpatterns = [
 
     #TEST URL
     path('index/', views.indexView.as_view(), name="cifir_index_view"),
+    path('home/', views.homePageView.as_view(), name="cifir_home_view"),
 
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

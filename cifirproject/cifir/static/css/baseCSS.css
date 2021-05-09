@@ -1,0 +1,82 @@
+/*TOP  NAVBAR */
+#spanLogo
+{
+	color:#FFD700;
+	font-size:70px;
+}
+
+#spanLogo2
+{
+	color:#FFD700;
+}
+
+#divLogo
+{
+	color:#800000;
+	font-family:arial-bold;
+	font-size:80px;
+}
+
+.logolink, .logolink:hover
+{   
+	text-decoration: none;
+}
+
+#spanIcons
+{
+	color:#800000;
+}
+
+#spanIconLetter
+{
+	color:#000000;
+}
+
+#spanIconLetter2
+{
+	color:#000000;
+	font-size:20px;
+}
+
+#spanIconLetter3
+{
+	color:#000000;
+	font-size:23px;
+
+}
+
+#imgFlagIcons
+{
+	width:20px;
+	length:15px;
+}
+
+#formProfileIcon
+{
+	background-color:#800000;
+}
+
+#searchProfileIcon
+{
+	color:#FFFFFF;
+}
+
+/*LEFT NAVBAR*/
+.span
+{
+	color:#FFFFFF;
+}
+
+hr
+{
+	background-color:#800000;
+	height:.3%;
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+#blankDiv
+{
+	background-color:#F0F0F0;
+}
+
