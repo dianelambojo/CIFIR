@@ -115,31 +115,31 @@
   		<div class="collapse navbar-collapse" id="navbarNavLeft">
     		<ul class="navbar-nav">
       			<li class="nav-item active">
-      				<a class="navbar" href="#">
+      				<a class="navbar" href='{% url "cifir:home_view" %}'>
       					<span style="color:#FFFFFF;"><i class="fas fa-swatchbook"></i></span>
       				</a>
         			
       			</li>
       			<li class="nav-item active">
-      				<a class="navbar" href="#">
+      				<a class="navbar" href='{% url "cifir:collections_view" %}'>
       					<span style="color:#FFFFFF;"><i class="far fa-folder"></i></span>
       				</a>
         			
       			</li>
       			<li class="nav-item active">
-      				<a class="navbar" href="#">
+      				<a class="navbar" href='{% url "cifir:bookmarks_view" %}'>
       					<span style="color:#FFFFFF;"><i class="far fa-bookmark"></i></span>
       				</a>
         			
       			</li>
       			<li class="nav-item active">
-      				<a class="navbar" href="#">
+      				<a class="navbar" href='{% url "cifir:audiobooks_view" %}'>
       					<span style="color:#FFFFFF;"><i class="fas fa-headphones"></i></span>
       				</a>
         			
       			</li>
       			<li class="nav-item active">
-      				<a class="navbar" href="#">
+      				<a class="navbar" href='{% url "cifir:networklibraries_view" %}'>
       					<span style="color:#FFFFFF;"><i class="fas fa-globe"></i></span>
       				</a>
       			</li>
@@ -150,19 +150,19 @@
   		<div class="navbar-text" id="navbarNavRight">
     		<ul class="navbar-nav">
       			<li class="nav-item active">
-      				<a class="navbar" href="#">
+      				<a class="navbar" href='{% url "cifir:favorites_view" %}'>
       					<span><i class="far fa-star"></i></span>
       				</a>
         			
       			</li>
       			<li class="nav-item active">
-      				<a class="navbar" href="#">
+      				<a class="navbar" href='{% url "cifir:toread_view" %}'>
       					<span><i class="far fa-clock"></i></span>
       				</a>
         			
       			</li>
       			<li class="nav-item active">
-      				<a class="navbar" href="#">
+      				<a class="navbar" href='{% url "cifir:haveread_view" %}'>
       					<span><i class="fas fa-check-double"></i></i></span>
       				</a>
         			
