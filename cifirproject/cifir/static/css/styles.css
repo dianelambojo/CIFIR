@@ -1,4 +1,5 @@
 /*TOP  NAVBAR */
+
 #spanLogo
 {
 	color:#FFD700;
@@ -48,7 +49,6 @@
 #imgFlagIcons
 {
 	width:20px;
-	length:15px;
 }
 
 #formProfileIcon
@@ -80,3 +80,21 @@ hr
 	background-color:#F0F0F0;
 }
 
+
+/*NETWORK LIBRARIES*/
+.card-read-more {
+	border-top: 1px solid #D4D4D4;
+  }
+  .card-read-more a {
+	text-decoration: none !important;
+	padding:10px;
+	font-weight:600;
+	text-transform: uppercase;
+}
+.i-folders{
+	font-size: 80px;
+}
+
+#divLogo{
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}

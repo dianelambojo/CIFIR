@@ -5,11 +5,15 @@
 <head>
 	<title>CIFIR</title>
 	<!---Bootstrap Link-->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"crossorigin="anonymous">
 	<!--FontAwesomeLink-->
 	<script src="https://kit.fontawesome.com/982a9b46d2.js" crossorigin="anonymous"></script>
+	<!-- Google fonts-->
+	<link href="https://fonts.googleapis.com/css?family=Merriweather+Sans:400,700" rel="stylesheet" />
+	<link href="https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic" rel="stylesheet" type="text/css" />
+	
 	<!--CSS LINK-->
-	<link rel="stylesheet" href="{% static 'css/baseCSS.css' %}">
+	<link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 
 <body>
@@ -184,13 +188,8 @@
   		</div>
 	</nav>
 	<hr>
-  			
-  			
-  			
-  			
-  		
-  		
-
+	{% block content %}		
+	{% endblock content %}				
 	<div id="blankDiv">
 	<br>
 	<br>

@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<!-- CSS
+.card-read-more {
+  border-top: 1px solid #D4D4D4;
+}
+.card-read-more a {
+  text-decoration: none !important;
+  padding:10px;
+  font-weight:600;
+  text-transform: uppercase
+}-->
+
+<!--  Base
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/bower_components/bootstrap-horizon/bootstrap-horizon.css">
+-->
+<br>
+<div class="container-fluid">
+
+	<div class="card">
+	  	<div class="card-header"><i class="fas fa-book-reader"></i>     Library</div>
+			<div class="card-body">
+				<div class="i-folders">
+                <i class="fas fa-folder"></i></div>
+                <h6>Folder Name</h6>
+
+				<div class="i-folders">
+					<i class="fas fa-folder"></i></div>
+					<h6>Folder Name</h6>
+			</div>   
+		</div>
+	</div>
+
+	<br>
+	<div class="card">
+		<div class="card-header"><i class="fas fa-globe"></i>     Network Libraries</div>
+			<section class="pt-5 pb-5">
+				<div class="container">
+					<div class="row">
+					     	<div class="col-12">
+					            <div id="carouselExampleIndicators2" class="carousel slide" data-ride="carousel">
+					                <div class="carousel-inner">
+					                    <div class="carousel-item active">
+					                        <div class="row">
+					                            <div class="col-md-4 mb-3">
+					                                <div class="card">
+					                                	<div class="embed-responsive embed-responsive-4by3">
+														     <img alt="Card image cap" class="card-img-top embed-responsive-item" src="https://media.glassdoor.com/sqll/764975/emerald-group-publishing-limited-squarelogo-1483603007677.png" />
+														 </div>
+					                                    <div class="card-body">
+					                                        <h4 class="card-title">Emerald</h4>
+					                                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+					                                         <div class="card-read-more">
+								                                <a href="https://www.emerald.com/insight/"> Read More</a>
+								                            </div>
+					                                    </div>
+					                                </div>
+
+					                            </div>
+
+					                            <div class="col-md-4 mb-3">
+					                                <div class="card">
+					                                	<div class="embed-responsive embed-responsive-4by3">
+														     <img alt="Card image cap" class="card-img-top embed-responsive-item" src="https://deterrasystem.com/wp-content/uploads/2020/12/VRDE_WEB_3Column_370x370_ScienceDirect.png" />
+														 </div>
+					                                  
+					                                    <div class="card-body">
+					                                        <h4 class="card-title">Science Direct</h4>
+					                                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+					                                        <div class="card-read-more">
+								                                <a href="https://www.sciencedirect.com/"> Read More</a>
+								                            </div>
+					                                    </div>
+					                                </div>
+					                            </div>
+
+					                            <div class="col-md-4 mb-3">
+					                                <div class="card">
+					                                	<div class="embed-responsive embed-responsive-4by3">
+														     <img alt="Card image cap" class="card-img-top embed-responsive-item" src="https://www.openaccess.nl/sites/www.openaccess.nl/files/afbeeldingen/springer.jpg" />
+														 </div>
+					                             
+					                                    <div class="card-body">
+					                                        <h4 class="card-title">Springer Open</h4>
+					                                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+					                                        <div class="card-read-more">
+								                                <a href="https://www.springeropen.com/journals"> Read More</a>
+								                            </div>
+					                                    </div>
+					                                </div>
+					                            </div>
+
+					                        </div>
+					                    </div>
+
+					                    <div class="carousel-item">
+					                        <div class="row">
+
+					                            <div class="col-md-4 mb-3">
+					                               <div class="card">
+					                                	<div class="embed-responsive embed-responsive-4by3">
+														     <img alt="Card image cap" class="card-img-top embed-responsive-item" src="https://i.pinimg.com/originals/1a/11/f6/1a11f6a90aea4a0d204b8b9f30321e14.png" />
+														 </div>
+					                             
+					                                    <div class="card-body">
+					                                        <h4 class="card-title">Directory of Open Access Journals</h4>
+					                                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+					                                        <div class="card-read-more">
+								                                <a href="https://doaj.org/"> Read More</a>
+								                            </div>
+					                                    </div>
+					                                </div>
+					                            </div>
+					                            <div class="col-md-4 mb-3">
+					                               <div class="card">
+					                                	<div class="embed-responsive embed-responsive-4by3">
+														     <img alt="Card image cap" class="card-img-top embed-responsive-item" src="https://cdn.ncbi.nlm.nih.gov/pubmed/persistent/pubmed-meta-image.png" />
+														 </div>
+					                             
+					                                    <div class="card-body">
+					                                        <h4 class="card-title">PubMed</h4>
+					                                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+					                                        <div class="card-read-more">
+								                                <a href="https://www.ncbi.nlm.nih.gov/pmc/"> Read More</a>
+								                            </div>
+					                                    </div>
+					                                </div>
+					                            </div>
+					                            <div class="col-md-4 mb-3">
+					                                <div class="card">
+					                                	<div class="embed-responsive embed-responsive-4by3">
+														     <img alt="Card image cap" class="card-img-top embed-responsive-item" src="https://www.eifl.net/sites/default/files/styles/resources_detail_page/public/taylor-francis_2-1.jpg?itok=OhVfaGEO" />
+														 </div>
+					                             
+					                                    <div class="card-body">
+					                                        <h4 class="card-title">Taylor and Francis</h4>
+					                                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+					                                        <div class="card-read-more">
+								                                <a href="https://www.tandfonline.com/openaccess/openjournals"> Read More</a>
+								                            </div>
+					                                    </div>
+					                                </div>
+					                            </div>
+
+					                        </div>
+					                    </div>
+					                </div>
+					            </div>
+					        </div>
+					    <div class="col-7 text-right">
+					            <a class="btn btn-primary mb-3 mr-1" href="#carouselExampleIndicators2" role="button" data-slide="prev">
+					                <i class="fa fa-arrow-left"></i>
+					            </a>
+					            <a class="btn btn-primary mb-3 " href="#carouselExampleIndicators2" role="button" data-slide="next">
+					                <i class="fa fa-arrow-right"></i>
+					            </a>
+					    </div>
+					</div>
+				</div>
+			</section>
+		</div>
+	</div>
+</div>
+{% endblock content %}
