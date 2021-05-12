@@ -1,0 +1,128 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>CIFIR</title>
+	<!---Bootstrap Link-->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"crossorigin="anonymous">
+	<!--FontAwesomeLink-->
+	<script src="https://kit.fontawesome.com/982a9b46d2.js" crossorigin="anonymous"></script>
+	<!-- Google fonts-->
+	<link href="https://fonts.googleapis.com/css?family=Merriweather+Sans:400,700" rel="stylesheet" />
+	<link href="https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic" rel="stylesheet" type="text/css" />
+	
+	<!--CSS LINK-->
+	<link rel="stylesheet" href="{% static 'css/styles.css' %}">
+	
+</head>
+<body>
+<!--TOPLEFT NAVBAR-->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+	<div class="collapse navbar-collapse" id="navbarNavTopLeft">
+	  <ul class="navbar-nav">
+			<li class="nav-item active">
+				<a class="navbar" href="#">
+					<span id="spanLogo"><i class="fas fa-swatchbook fa-flip-horizontal"></i></span>
+				</a>
+			</li>
+			<li class="nav-item active">
+				<a class="logolink" href="#">
+					<span id="spanLogo2">
+						<div id="divLogo">CIFIR</div>
+					</span>
+				</a>
+			</li>
+		</ul>
+	</div>
+  <!--TOPRIGHT NAVBAR-->
+	<div class="navbar-text" id="navbarNavRight">
+	  <ul class="navbar-nav">
+			<li class="nav-item active">
+				<a class="navbar" href="#">
+					<span id="spanIcons"><i class="fas fa-map-marker-alt"></i></span>
+				</a>
+			  
+			</li>
+			<li class="nav-item active">
+				<a class="navbar" href="#">
+					<span id="spanIcons"><i class="fas fa-envelope"></i></span>
+				</a>
+			  
+			</li>
+			<li class="nav-item active">
+				<a class="navbar" href="#">
+					<span id="spanIcons"><i class="fas fa-phone-alt"></i></span>
+				</a>
+			</li>
+
+
+			<span id="spanIcons">|</span>
+			
+			<li class="nav-item active">
+				<a class="navbar" href="#">
+					<span id="spanIconLetter"><i class="fas fa-font"></i></span>
+					<span id="spanIconLetter2"><i class="fas fa-font"></i></span>
+					<span id="spanIconLetter3"><i class="fas fa-font"></i></span>
+				</a>
+			  
+			</li>
+
+			<span id="spanIconLetter">|</span>
+
+			
+			<li class="nav-item active">
+				<a class="navbar" href="#">
+					<img src="{% static 'images/unitedKingdomFlagIcon.png' %}" id="imgFlagIcons">
+				</a>
+			</li>
+
+			<li class="nav-item active">
+				<a class="navbar" href="#">
+					<img src="{% static 'images/unitedStatesFlagIcon.png' %}" id="imgFlagIcons">
+				</a>
+			</li>
+
+			<span id="spanIconLetter">|</span>
+
+			<li class="nav-item active">
+				<a class="navbar" href="#">
+					<span id="spanIcons"><i class="fas fa-bell"></i></span>
+				</a>
+			  
+			</li>
+
+			<li class="nav-item active">
+				<a class="navbar" href="#">
+					<span id="spanIcons"><i class="fas fa-comment"></i></span>
+				</a>
+			  
+			</li>
+
+	  </ul>
+	</div>
+</nav>
+
+<div class = "d-flex justify-content-center">
+   <div class ="login">
+        <div class= "panel-transparent">
+            <div class= "login-body">
+                <h1>LOGIN</h1>
+                    <div class="txt_field">
+                        <input class="w-100" type="text" placeholder="Email" name="username" maxlength="150" required="" id="id_username">
+                        <span></span>
+						<br>
+						<br>
+                    </div>
+                    <div class="txt_field">
+                        <input class="w-100" type="password" placeholder="Password" name="password" autocomplete="new-password" required="" id="id_password">
+                        <span></span>
+                    </div>
+					<div class="pass">Forgot Password?</div>
+					<div class="d-flex justify-content-center">
+                    <input type="submit" value="LOGIN">
+				</div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>

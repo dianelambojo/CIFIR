@@ -98,3 +98,37 @@ hr
 #divLogo{
 	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
+
+ /* LOGIN */
+.login{
+	top: 600px;
+	width: 600px;
+  	border-radius: 10px;
+}
+.login-body{
+	margin-top: 20%;
+	margin-bottom: 30%;
+	padding: 10px 10px 10px 10px;
+}
+.login h1{
+	font-family:'Verdana' ;
+	text-align: center;
+	padding: 0 0 20px 0;
+	font-style: normal;
+	font-weight: 750;
+	font-size: 2rem;
+	color: #ffffff;
+}
+.login form{
+	padding: 0 40px;
+	box-sizing: border=box;
+}
+.panel-transparent {
+	background: #343a40;
+	border-radius: 15px;
+	align-content: center;
+}
+.pass{
+	color: #FFFFFF;
+	
+}

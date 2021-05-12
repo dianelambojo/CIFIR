@@ -11,6 +11,15 @@ class homePageView(View):
 	def get(self, request):
 		return render(request,'homepage.html')
 
+class homePageView(View):
+	def get(self, request):
+		return render(request,'homepage.html')
+
+class viewPageView(View):
+	def get(self, request):
+		return render(request,'login.html')
+
+
 class audiobooksPageView(View):
 	def get(self, request):
 		return render(request,'audiobooks.html')
