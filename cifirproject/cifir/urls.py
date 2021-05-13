@@ -11,12 +11,13 @@ urlpatterns = [
     #TEST URL
     path('index/', views.indexView.as_view(), name="index_view"),
     
-    path('login/', views.viewPageView.as_view(), name="login_view"),
+    path('login/', views.loginPageView.as_view(), name="login_view"),
     path('home/', views.homePageView.as_view(), name="home_view"),
     path('collections/', views.collectionsPageView.as_view(), name="collections_view"),
     path('bookmarks/', views.bookmarksPageView.as_view(), name="bookmarks_view"),
     path('audiobooks/', views.audiobooksPageView.as_view(), name="audiobooks_view"),
     path('networklibraries/', views.networkLibrariesPageView.as_view(), name="networklibraries_view"),
+    path('books/', views.filesView.as_view(), name="files_view"),
 
     path('favorites/', views.favoritesPageView.as_view(), name="favorites_view"),
     path('toread/', views.toReadPageView.as_view(), name="toread_view"),

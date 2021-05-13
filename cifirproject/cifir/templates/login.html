@@ -106,9 +106,11 @@
    <div class ="login">
         <div class= "panel-transparent">
             <div class= "login-body">
+            	<form class="" method="POST">
+            	{% csrf_token %}
                 <h1>LOGIN</h1>
                     <div class="txt_field">
-                        <input class="w-100" type="text" placeholder="Email" name="username" maxlength="150" required="" id="id_username">
+                        <input class="w-100" type="text" placeholder="username" name="username" maxlength="150" required="" id="id_username">
                         <span></span>
 						<br>
 						<br>
@@ -121,6 +123,7 @@
 					<div class="d-flex justify-content-center">
                     <input type="submit" value="LOGIN">
 				</div>
+			</form>
             </div>
         </div>
     </div>

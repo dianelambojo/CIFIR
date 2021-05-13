@@ -1,20 +1,23 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
+{% if user.is_authenticated %}
 <div class="container-fluid">
 	<div class="card">
-		<div class="card-header"><i class="fas fa-book-reader"></i>     Files</div>
+		{% for collection in collections %}
+		<div class="card-header"><i class="fas fa-book-reader"></i> {{collection.name}}</div>
 			<div class="card-body">
+				{% for book in books %}
 				<div class="i-folders">
-					<i class="fas fa-folder"></i>
-				    <h6>Book Name</h6>
+					<div class="row">
+					<div class="col-md-4 mb-3"> <img alt="Card image cap" class="card-img-top embed-responsive-item" src="{{book.cover.url}}" /> </div>
+				</div>
+				    <h6>{{book.title}}</h6>
                 </div>
-				<div class="i-folders">
-					<i class="fas fa-folder"></i>
-				    <h6>Book Name</h6>
-             </div>
-		</div>   
+                {% endfor %}
+            </div> 
+            {% endfor %}
 	</div>
 </div>
-
+{% endif %}
 {% endblock content %}
