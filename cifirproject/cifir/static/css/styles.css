@@ -132,3 +132,64 @@ hr
 	color: #FFFFFF;
 	
 }
+
+
+.under{
+	position:absolute;
+    right: 150px;
+	bottom: 150px;
+    z-index: -1;
+	width: 450px;
+	height: 450px;
+	-webkit-animation: spin 5s linear infinite;
+	-moz-animation: spin 5s linear infinite;
+	animation: spin 5s linear infinite;
+}
+  
+.over{
+	position:fixed;
+    right: 150px;
+	bottom: 150px;
+    z-index: 1;
+	width: 450px;
+	height: 450px;
+}
+
+.topGear{
+	position:fixed;
+    right: -120px;
+	top: 25px;
+    z-index: -1;
+	width: 450px;
+	height: 450px;
+	-webkit-animation: spin 5s linear infinite;
+	-moz-animation: spin 15s linear infinite;
+	animation: spin 5s linear infinite;
+	animation-direction: reverse;
+}
+.bottomGear{
+	position:fixed;
+    right: -120px;
+	bottom: -190px;
+    z-index: -1;
+	width: 450px;
+	height: 450px;
+	-webkit-animation: spin 10s linear infinite;
+	-moz-animation: spin 10s linear infinite;
+	animation: spin 5s linear infinite;
+	animation-direction: reverse;
+}
+
+/*use keyframes*/
+@-webkit-keyframes spin{
+	100%{-webkit-transform: rotate(360deg);}
+}
+@-moz-keyframes spin{
+	100%{-webkit-transform: rotate(360deg);}
+}
+@keyframes spin{
+	100%{-webkit-transform: rotate(360deg);}
+}
+
+
+
