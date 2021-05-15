@@ -20,21 +20,32 @@
   text-decoration: none;
 }
 
-#spanIcons {
+#navbarNavRight .navbar-nav .nav-item .navbar {
+  display: block;
+}
+
+#navbarNavRight .navbar-nav .nav-item .navbar i {
   color: #800000;
 }
 
-#spanIconLetter {
-  color: #000000;
+#navbarNavRight .navbar-nav .nav-item .navbar {
+  text-decoration: none;
 }
 
-#spanIconLetter2 {
-  color: #000000;
+#navbarNavRight .navbar-nav .nav-item.nav-item-last {
+  border-right: 1px #800000 solid;
+  height: 40px;
+}
+
+.icon-font {
+  color: black;
+}
+
+.icon-font.icon-font-medium {
   font-size: 20px;
 }
 
-#spanIconLetter3 {
-  color: #000000;
+.icon-font.icon-font-large {
   font-size: 23px;
 }
 
@@ -44,10 +55,18 @@
 
 #formProfileIcon {
   background-color: #800000;
+  padding: 5px;
+  border-radius: 5px;
 }
 
 #searchProfileIcon {
   color: #ffffff;
+  padding: 0 10px 0 10px;
+}
+
+#navbarNavLowRight .navbar-nav .nav-item.nav-item-last {
+  border-right: 1px white solid;
+  height: 40px;
 }
 
 /*LEFT NAVBAR*/
