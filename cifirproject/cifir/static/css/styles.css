@@ -162,7 +162,6 @@ hr {
   animation: spin 5s linear infinite;
   animation-direction: reverse;
 }
-
 /*use keyframes*/
 @-webkit-keyframes spin {
   100% {
