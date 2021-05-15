@@ -1,5 +1,5 @@
-{% extends "base.html" %} {% load static %} {% block content %} {% if
-user.is_authenticated %}
+{% extends "base.html" %} {% load static %} {% block content %}
+{% if user.is_authenticated %}
 <div class="container-fluid">
   <div class="card">
     {% for collection_name in collection_names %}
@@ -154,4 +154,4 @@ user.is_authenticated %}
     </div>
   </div>
 </div>
-{% endblock content %}
+{% endif %} {% endblock content %}
