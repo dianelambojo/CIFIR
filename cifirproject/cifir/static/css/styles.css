@@ -119,11 +119,11 @@ hr {
 
 .under {
   position: absolute;
-  right: 150px;
-  bottom: 150px;
+  right: 70px;
+  bottom: 250px;
   z-index: -1;
-  width: 450px;
-  height: 450px;
+  width: 250px;
+  height: 250px;
   -webkit-animation: spin 5s linear infinite;
   -moz-animation: spin 5s linear infinite;
   animation: spin 5s linear infinite;
@@ -131,20 +131,20 @@ hr {
 
 .over {
   position: fixed;
-  right: 150px;
-  bottom: 150px;
+  right: 70px;
+  bottom: 250px;
   z-index: 1;
-  width: 450px;
-  height: 450px;
+  width: 250px;
+  height: 250px;
 }
 
 .topGear {
   position: fixed;
   right: -120px;
-  top: 25px;
+  top: 100px;
   z-index: -1;
-  width: 450px;
-  height: 450px;
+  width: 250px;
+  height: 250px;
   -webkit-animation: spin 5s linear infinite;
   -moz-animation: spin 15s linear infinite;
   animation: spin 5s linear infinite;
@@ -153,10 +153,10 @@ hr {
 .bottomGear {
   position: fixed;
   right: -120px;
-  bottom: -190px;
+  bottom: 100px;
   z-index: -1;
-  width: 450px;
-  height: 450px;
+  width: 250px;
+  height: 250px;
   -webkit-animation: spin 10s linear infinite;
   -moz-animation: spin 10s linear infinite;
   animation: spin 5s linear infinite;
