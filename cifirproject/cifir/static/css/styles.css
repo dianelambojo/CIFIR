@@ -1,195 +1,181 @@
 /*TOP  NAVBAR */
 
-#spanLogo
-{
-	color:#FFD700;
-	font-size:70px;
+#spanLogo {
+  color: #ffd700;
+  font-size: 70px;
 }
 
-#spanLogo2
-{
-	color:#FFD700;
+#spanLogo2 {
+  color: #ffd700;
 }
 
-#divLogo
-{
-	color:#800000;
-	font-family:arial-bold;
-	font-size:80px;
+#divLogo {
+  color: #800000;
+  font-family: arial-bold;
+  font-size: 80px;
 }
 
-.logolink, .logolink:hover
-{   
-	text-decoration: none;
+.logolink,
+.logolink:hover {
+  text-decoration: none;
 }
 
-#spanIcons
-{
-	color:#800000;
+#spanIcons {
+  color: #800000;
 }
 
-#spanIconLetter
-{
-	color:#000000;
+#spanIconLetter {
+  color: #000000;
 }
 
-#spanIconLetter2
-{
-	color:#000000;
-	font-size:20px;
+#spanIconLetter2 {
+  color: #000000;
+  font-size: 20px;
 }
 
-#spanIconLetter3
-{
-	color:#000000;
-	font-size:23px;
-
+#spanIconLetter3 {
+  color: #000000;
+  font-size: 23px;
 }
 
-#imgFlagIcons
-{
-	width:20px;
+#imgFlagIcons {
+  width: 20px;
 }
 
-#formProfileIcon
-{
-	background-color:#800000;
+#formProfileIcon {
+  background-color: #800000;
 }
 
-#searchProfileIcon
-{
-	color:#FFFFFF;
+#searchProfileIcon {
+  color: #ffffff;
 }
 
 /*LEFT NAVBAR*/
-.span
-{
-	color:#FFFFFF;
+.span {
+  color: #ffffff;
 }
 
-hr
-{
-	background-color:#800000;
-	height:.3%;
-	margin-top: 0;
-	margin-bottom: 0;
+hr {
+  background-color: #800000;
+  height: 0.3%;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
-#blankDiv
-{
-	background-color:#F0F0F0;
+#blankDiv {
+  background-color: #f0f0f0;
 }
-
 
 /*NETWORK LIBRARIES*/
 .card-read-more {
-	border-top: 1px solid #D4D4D4;
-  }
-  .card-read-more a {
-	text-decoration: none !important;
-	padding:10px;
-	font-weight:600;
-	text-transform: uppercase;
+  border-top: 1px solid #d4d4d4;
 }
-.i-folders{
-	font-size: 80px;
+.card-read-more a {
+  text-decoration: none !important;
+  padding: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
 }
-
-#divLogo{
-	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+.i-folders {
+  font-size: 80px;
 }
 
- /* LOGIN */
-.login{
-	top: 600px;
-	width: 600px;
-  	border-radius: 10px;
+#divLogo {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
-.login-body{
-	margin-top: 20%;
-	margin-bottom: 30%;
-	padding: 10px 10px 10px 10px;
+
+/* LOGIN */
+.login {
+  top: 600px;
+  width: 600px;
+  border-radius: 10px;
 }
-.login h1{
-	font-family:'Verdana' ;
-	text-align: center;
-	padding: 0 0 20px 0;
-	font-style: normal;
-	font-weight: 750;
-	font-size: 2rem;
-	color: #ffffff;
+.login-body {
+  margin-top: 20%;
+  margin-bottom: 30%;
+  padding: 10px 10px 10px 10px;
 }
-.login form{
-	padding: 0 40px;
-	box-sizing: border=box;
+.login h1 {
+  font-family: "Verdana";
+  text-align: center;
+  padding: 0 0 20px 0;
+  font-style: normal;
+  font-weight: 750;
+  font-size: 2rem;
+  color: #ffffff;
+}
+.login form {
+  padding: 0 40px;
+  box-sizing: border=box;
 }
 .panel-transparent {
-	background: #343a40;
-	border-radius: 15px;
-	align-content: center;
+  background: #343a40;
+  border-radius: 15px;
+  align-content: center;
 }
-.pass{
-	color: #FFFFFF;
-	
-}
-
-
-.under{
-	position:absolute;
-    right: 150px;
-	bottom: 150px;
-    z-index: -1;
-	width: 450px;
-	height: 450px;
-	-webkit-animation: spin 5s linear infinite;
-	-moz-animation: spin 5s linear infinite;
-	animation: spin 5s linear infinite;
-}
-  
-.over{
-	position:fixed;
-    right: 150px;
-	bottom: 150px;
-    z-index: 1;
-	width: 450px;
-	height: 450px;
+.pass {
+  color: #ffffff;
 }
 
-.topGear{
-	position:fixed;
-    right: -120px;
-	top: 25px;
-    z-index: -1;
-	width: 450px;
-	height: 450px;
-	-webkit-animation: spin 5s linear infinite;
-	-moz-animation: spin 15s linear infinite;
-	animation: spin 5s linear infinite;
-	animation-direction: reverse;
+.under {
+  position: absolute;
+  right: 150px;
+  bottom: 150px;
+  z-index: -1;
+  width: 450px;
+  height: 450px;
+  -webkit-animation: spin 5s linear infinite;
+  -moz-animation: spin 5s linear infinite;
+  animation: spin 5s linear infinite;
 }
-.bottomGear{
-	position:fixed;
-    right: -120px;
-	bottom: -190px;
-    z-index: -1;
-	width: 450px;
-	height: 450px;
-	-webkit-animation: spin 10s linear infinite;
-	-moz-animation: spin 10s linear infinite;
-	animation: spin 5s linear infinite;
-	animation-direction: reverse;
+
+.over {
+  position: fixed;
+  right: 150px;
+  bottom: 150px;
+  z-index: 1;
+  width: 450px;
+  height: 450px;
+}
+
+.topGear {
+  position: fixed;
+  right: -120px;
+  top: 25px;
+  z-index: -1;
+  width: 450px;
+  height: 450px;
+  -webkit-animation: spin 5s linear infinite;
+  -moz-animation: spin 15s linear infinite;
+  animation: spin 5s linear infinite;
+  animation-direction: reverse;
+}
+.bottomGear {
+  position: fixed;
+  right: -120px;
+  bottom: -190px;
+  z-index: -1;
+  width: 450px;
+  height: 450px;
+  -webkit-animation: spin 10s linear infinite;
+  -moz-animation: spin 10s linear infinite;
+  animation: spin 5s linear infinite;
+  animation-direction: reverse;
 }
 
 /*use keyframes*/
-@-webkit-keyframes spin{
-	100%{-webkit-transform: rotate(360deg);}
+@-webkit-keyframes spin {
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
 }
-@-moz-keyframes spin{
-	100%{-webkit-transform: rotate(360deg);}
+@-moz-keyframes spin {
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
 }
-@keyframes spin{
-	100%{-webkit-transform: rotate(360deg);}
+@keyframes spin {
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
 }
-
-
-

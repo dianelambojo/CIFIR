@@ -1,0 +1,24 @@
+:root {
+  --main-color: #ffd700;
+  --maroon: #800000;
+}
+
+.fab-wrapper {
+  position: fixed;
+  right: 25px;
+  bottom: 25px;
+
+  button {
+    color: white;
+    background-color: var(--maroon);
+    border: none;
+    border-radius: 50%;
+    padding: 20px 23px;
+    outline: none;
+    cursor: pointer;
+
+    i {
+      font-size: 1.5rem;
+    }
+  }
+}

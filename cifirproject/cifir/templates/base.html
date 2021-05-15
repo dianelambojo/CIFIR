@@ -14,6 +14,7 @@
 	
 	<!--CSS LINK-->
 	<link rel="stylesheet" href="{% static 'css/styles.css' %}">
+	<link rel="stylesheet" href="{% static 'scss/fab.css' %}">
 </head>
 
 <body>
@@ -190,7 +191,11 @@
 	<hr>
 	{% block content %}		
 	{% endblock content %}
-
+	<div class="fab-wrapper">
+		<button id="fab-button">
+			<i class="fas fa-plus"></i>
+		</button>
+	</div>
   <!-- Footer-->
         <footer class="bg-light py-5">
             <div class="container"><div class="small text-center text-muted">Copyright © 2021 - Cebu Institute of Technology - University File Reader</div></div>
