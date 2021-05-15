@@ -13,6 +13,11 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+import zipfile
+from lxml import etree
+
+import ebooklib
+from ebooklib import epub
 # Create your views here.
 
 
@@ -26,14 +31,49 @@ class homePageView(View):
 		library = Library.objects.exclude(user=request.user)
 		collection = Collection.objects.filter(user=request.user)
 		catalog = Catalog.objects.all()
+		book = Book.objects.filter(user=request.user)
+
 		context = {
 				'collections' : collection,
 				'catalogs' : catalog,
 				'libraries' : library,
 				'users' : user,
+				'books' : book,
 				}
 
 		return render(request, 'homepage.html', context)
+
+	def post(self,request):
+		if 'btnUpload' in request.POST:
+			user = User.objects.get(id=request.user.id)
+			file = request.FILES.get('book_file')
+			print(file)
+			ns = {
+			        'n':'urn:oasis:names:tc:opendocument:xmlns:container',
+			        'pkg':'http://www.idpf.org/2007/opf',
+			        'dc':'http://purl.org/dc/elements/1.1/'
+			    }
+
+			zip = zipfile.ZipFile(file)
+
+			txt = zip.read('META-INF/container.xml')
+			tree = etree.fromstring(txt)
+			cfname = tree.xpath('n:rootfiles/n:rootfile/@full-path',namespaces=ns)[0]
+
+			    # grab the metadata block from the contents metafile
+			cf = zip.read(cfname)
+			tree = etree.fromstring(cf)
+			p = tree.xpath('/pkg:package/pkg:metadata',namespaces=ns)[0]
+
+			    # repackage the data
+			res = {}
+			for s in ['title','language','creator','date','identifier']:
+				res[s] = p.xpath('dc:%s/text()'%(s),namespaces=ns)[0]
+			print(res['title'])
+			book = Book.objects.create(title= res['title'], file = file)
+			book.user.add(user)
+
+			return HttpResponse('Book uploaded!')
 
 class loginPageView(View):
 	def get(self, request):
@@ -67,7 +107,25 @@ class bookmarksPageView(View):
 
 class collectionsPageView(View):
 	def get(self, request):
-		return render(request,'collections.html')
+		user = User.objects.filter(username=request.user)
+		collection = Collection.objects.filter(user=request.user)
+		context = {
+				'collections' : collection,
+				'users' : user,
+				}
+		return render(request, 'collections.html', context)
+
+	def post(self, request):
+		user = User.objects.get(id=request.user.id)
+		collection_name = request.POST.get('collection_name')
+		collection = Collection.objects.create(name = collection_name)
+		collection.user.add(user)
+
+		return HttpResponse('Collection added!')
+
+
+		return redirect('cifir:collection_view')
+
 
 class favoritesPageView(View):
 	def get(self, request):
@@ -85,15 +143,30 @@ class networkLibrariesPageView(View):
 	def get(self, request):
 		return render(request,'networklibraries.html')
 
-class filesView(View):
-	def get(self,request):
+class viewBook(View):
+	def post(self,request):
+		context = {}
+		collection = request.POST.get('collection', None)
+		collection_id = request.POST.get('collection_id', None)
 		user = User.objects.filter(username=request.user)
-		collection = Collection.objects.filter(user=request.user)
-		book = Book.objects.filter(collection=True)
+		collection_name = Collection.objects.filter(user=request.user).filter(name=collection)
+		book = Book.objects.filter(user=request.user)
+
 		context = {
-				'collections' : collection,
-				'books' : book,
-				'users' : user,
+					'collections' : collection,
+					'collection_names' : collection_name,
+					'books' : book,
 				}
 
+		if request.method == 'POST':	
+			if 'btnEdit' in request.POST:	
+				print('clicked')
+				collection_new_name = request.POST.get("collection_name")
+				collection_id = request.POST.get("collection_id")
+				update_collection = Collection.objects.filter(id = collection_id).update(name=collection_new_name)
+
+				return HttpResponse('Collection edited!')
+
 		return render(request, 'files.html', context)
+
+

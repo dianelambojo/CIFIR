@@ -17,8 +17,8 @@ urlpatterns = [
     path('bookmarks/', views.bookmarksPageView.as_view(), name="bookmarks_view"),
     path('audiobooks/', views.audiobooksPageView.as_view(), name="audiobooks_view"),
     path('networklibraries/', views.networkLibrariesPageView.as_view(), name="networklibraries_view"),
-    path('books/', views.filesView.as_view(), name="files_view"),
-
+    path('books/', views.viewBook.as_view(), name="book_view"),
+    #path('books/', views.book, name="files_view"),
     path('favorites/', views.favoritesPageView.as_view(), name="favorites_view"),
     path('toread/', views.toReadPageView.as_view(), name="toread_view"),
     path('haveread/', views.haveReadPageView.as_view(), name="haveread_view"),

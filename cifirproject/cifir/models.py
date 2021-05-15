@@ -13,6 +13,8 @@ class Book(models.Model):
 	noOfPages = models.CharField(max_length=250)
 	chapterCount = models.CharField(max_length=250)
 
+	user = models.ManyToManyField(User, blank=True)
+
 	class Meta:
 		db_table = "Book"
 		verbose_name_plural = "Books"

@@ -3,14 +3,41 @@
 {% block content %}
 <br>
 {% if user.is_authenticated %}
+<div class="container-fluid">
+	<div class="card">
+		  <div class="card-header"><i class="fas fa-book"></i> Books | 
+		  <div class="navbar-text" id="navbarNavRight">
+					<a class="buttons" href="#">
+						<i class="fas fa-plus-square" data-toggle="modal" data-target="#uploadfile"></i>
+					</a>
+				</div>
+				</div>
+			<div class="card-body">
+				{% for book in books %}
+				<div class="i-folders">
+					<i class="fas fa-book"></i></div>
+				<h6>{{ book.title}} </h6>
+				{% endfor %}
+			</div>   
+		</div>
+</div>
+<br>
 	<div class="container-fluid">
 		<div class="card">
-			{% for collection in collections %}
-			  <div class="card-header"><i class="fas fa-book-reader"></i> Collections</div>
+			
+			  <div class="card-header"> <i class="fas fa-book-reader"></i> 
+			  	<a href='{% url "cifir:collections_view" %}'> Collections  </a>
+			</div>
 				<div class="card-body">
+					{% for collection in collections %}
 					<div class="i-folders">
 						<i class="fas fa-folder"></i></div>
-					<a href='{% url "cifir:files_view" %}'> {{collection.name}} </a>  
+					<form action="/cifir/books/" method="POST" id="collectionform">
+							{% csrf_token %}
+
+					<button type="submit" class="btn btn-light" name="collection" value="{{collection.name}}" form="collectionform"> {{collection.name}} <input type="text" name="collection_id" value="{{collection.id}}" hidden> </button>
+			
+				</form> 
 				 {% endfor %}
 			</div>
 	</div>
@@ -61,6 +88,34 @@
 				</section>
 		</div>
 	</div>
+<!-- Modal -->
+<div class="modal fade" id="uploadfile" tabindex="-1" role="dialog" aria-labelledby="uploadfile" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="uploadfile">Upload File</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      	<form class="" method="POST" enctype="multipart/form-data">
+            	{% csrf_token %}
+       
+    <div>		
+			<label for="book_file">File Upload</label>
+			<input type="file" name="book_file"  id="id_book_file" required="">
+			</div>	
 
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" name="btnUpload">Upload </button>
+      </div>
+  </form>
+    </div>
+  </div>
+</div>
+</div>
 {% endif %}
 {% endblock content %}
