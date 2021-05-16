@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.auth.admin import UserAdmin
+from django import forms
 
 # Create your models here.
 
@@ -72,3 +73,13 @@ class Library(models.Model):
 		db_table = "Library"
 		verbose_name_plural = "Libraries"
 
+class LibUser(models.Model):
+	firstname = models.CharField(max_length=200)
+	lastname = models.CharField(max_length=200)
+	email = models.EmailField(max_length=200)
+	password = models.CharField(max_length=200, default ='')
+	#password = forms.CharField(widget=forms.PasswordInput)
+
+	class Meta:
+		db_table = "LibUser"
+		verbose_name_plural = "LibUsers" 

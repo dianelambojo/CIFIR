@@ -110,19 +110,28 @@
             	{% csrf_token %}
                 <h1>LOGIN</h1>
                     <div class="txt_field">
-                        <input class="w-100" type="text" placeholder="username" name="username" maxlength="150" required="" id="id_username">
+                        <input class="w-100" type="text" placeholder="email" name="email" maxlength="150" required="" id="email">
                         <span></span>
 						<br>
 						<br>
                     </div>
                     <div class="txt_field">
-                        <input class="w-100" type="password" placeholder="Password" name="password" autocomplete="new-password" required="" id="id_password">
+                        <input class="w-100" type="password" placeholder="Password" name="password" autocomplete="new-password" required="" id="password">
                         <span></span>
                     </div>
 					<div class="pass">Forgot Password?</div>
 					<div class="d-flex justify-content-center">
-                    <input type="submit" value="LOGIN">
+                    <input type="submit" value="LOGIN" name='loginBtn'>
 				</div>
+				<div style='background-color:#FFD700;'>
+					{% if messages %}
+					<ul class="messages">
+					    {% for message in messages %}
+					    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+					    {% endfor %}
+					</ul>
+					{% endif %}
+                 </div>
 			</form>
             </div>
         </div>

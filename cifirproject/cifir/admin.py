@@ -1,5 +1,7 @@
 from django.contrib import admin
 from .models import *
+from import_export.admin import ImportExportModelAdmin
+from cifir.models import LibUser
 # Register your models here.
 
 admin.site.register(Book)
@@ -9,3 +11,8 @@ admin.site.register(Favorite)
 admin.site.register(Note)
 admin.site.register(Catalog)
 admin.site.register(Library)
+
+@admin.register(LibUser)
+class UserAdmin(ImportExportModelAdmin):
+	list_display = ("firstname","lastname", "email", "password")
+	pass

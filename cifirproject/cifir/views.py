@@ -8,7 +8,8 @@ from django.shortcuts import render,redirect
 from django.views.generic import View
 from django.http import HttpResponse, Http404
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.models import User, auth
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -16,8 +17,7 @@ from django.utils.decorators import method_decorator
 import zipfile
 from lxml import etree
 
-import ebooklib
-from ebooklib import epub
+
 # Create your views here.
 
 
@@ -77,25 +77,29 @@ class homePageView(View):
 
 class loginPageView(View):
 	def get(self, request):
-		return render(request,'login.html')
-	def post(self,request):
-		username = request.POST.get('username')
-		password = request.POST.get('password')
-
-		user = authenticate(request, username=username, password=password)
-		print(user)
-
-
-		if user is not None:
-			login(request, user)
-			# pass the name of the user to the base.html navbar
-			request.session['username'] = username
-			return redirect('cifir:home_view')
-		else:
-			messages.info(request, 'Username or password is incorrect')
-				
+		users = User.objects.all()
+		print(users)
 		return render(request, 'login.html')
 
+	def post(self,request):
+		if request.method == 'POST':
+			if 'loginBtn' in request.POST:
+				print('Login Button Clicked!')
+				email = request.POST.get('email')
+				password = request.POST.get('password')
+				user = LibUser.objects.filter(email = email,password = password)
+				print(user)
+				if user:
+					user = LibUser.objects.filter(email = email,password = password)
+					messages.info(request,'Logged in succesfully!')
+					return redirect('cifir:home_view')
+				else:
+					messages.info(request, 'Email or password is incorrect')
+					return redirect('cifir:login_view')
+			else:
+			 	messages.warning(request, 'Email or password is incorrect')
+			 	return render(request, 'login.html')
+				
 
 class audiobooksPageView(View):
 	def get(self, request):
