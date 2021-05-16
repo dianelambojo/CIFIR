@@ -117,7 +117,7 @@ class collectionsPageView(View):
 
 	def post(self, request):
 		user = User.objects.get(id=request.user.id)
-		collection_name = request.POST.get('collection_name')
+		collection_name = request.POST.get('collection_id')
 		collection = Collection.objects.create(name = collection_name)
 		collection.user.add(user)
 

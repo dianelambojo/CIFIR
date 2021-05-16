@@ -1,4 +1,4 @@
-{% extends "base.html" %} {% load static %} {% block content %}
+{% extends "base.html" %} {% load static %} {% block content %}<br />
 {% if user.is_authenticated %}
 <div class="container-fluid">
   <div class="card">
@@ -27,12 +27,11 @@
     </div>
     <div class="card-body">
       {% for book in books %}
-      <div class="i-folders">
+      <!-- <div class="i-folders">
         <i class="fas fa-book"></i>
       </div>
-      <h6>{{ book.title }}</h6>
-
-      {% endfor %}
+      <h6>{{ book.title }}</h6> -->
+      {% include './components/TheBook.html' %} {% endfor %}
     </div>
     {% endfor %}
   </div>

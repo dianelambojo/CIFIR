@@ -99,6 +99,11 @@ hr {
   font-size: 80px;
 }
 
+.i-folders .fa-folder,
+.fa-book {
+  color: #800000;
+}
+
 #divLogo {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
