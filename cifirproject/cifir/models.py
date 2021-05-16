@@ -35,6 +35,8 @@ class Collection(models.Model):
 
 	user = models.ManyToManyField(User, blank=True)
 
+	isDeleted = models.BooleanField(default=False)
+
 	class Meta:
 		db_table = "Collection"
 		verbose_name_plural = "Collections"

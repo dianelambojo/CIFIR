@@ -28,15 +28,13 @@ class indexView(View):
 class homePageView(View):
 	def get(self, request):
 		user = User.objects.filter(username=request.user)
-		library = Library.objects.exclude(user=request.user)
-		collection = Collection.objects.filter(user=request.user)
+		collection = Collection.objects.filter(user=request.user).filter(isDeleted=False)
 		catalog = Catalog.objects.all()
 		book = Book.objects.filter(user=request.user)
 
 		context = {
 				'collections' : collection,
 				'catalogs' : catalog,
-				'libraries' : library,
 				'users' : user,
 				'books' : book,
 				}
@@ -85,12 +83,14 @@ class loginPageView(View):
 		if request.method == 'POST':
 			if 'loginBtn' in request.POST:
 				print('Login Button Clicked!')
-				email = request.POST.get('email')
+				username = request.POST.get('username')
 				password = request.POST.get('password')
-				user = LibUser.objects.filter(email = email,password = password)
+				#user = LibUser.objects.filter(email = email,password = password)
+				user = authenticate(request, username=username, password=password)
 				print(user)
 				if user:
-					user = LibUser.objects.filter(email = email,password = password)
+					#user = LibUser.objects.filter(email = email,password = password)
+					login(request, user)
 					messages.info(request,'Logged in succesfully!')
 					return redirect('cifir:home_view')
 				else:
@@ -121,7 +121,7 @@ class collectionsPageView(View):
 
 	def post(self, request):
 		user = User.objects.get(id=request.user.id)
-		collection_name = request.POST.get('collection_id')
+		collection_name = request.POST.get('collection_name')
 		collection = Collection.objects.create(name = collection_name)
 		collection.user.add(user)
 
@@ -148,28 +148,50 @@ class networkLibrariesPageView(View):
 		return render(request,'networklibraries.html')
 
 class viewBook(View):
+	def get(self, request):
+		user = User.objects.filter(username=request.user)
+		collection = Collection.objects.filter(user=request.user)
+
+		context = {
+				'collections' : collection,
+				}
+		return render(request, 'files.html', context)
+
 	def post(self,request):
 		context = {}
 		collection = request.POST.get('collection', None)
 		collection_id = request.POST.get('collection_id', None)
 		user = User.objects.filter(username=request.user)
 		collection_name = Collection.objects.filter(user=request.user).filter(name=collection)
-		book = Book.objects.filter(user=request.user)
+
+		
+		#book = Book.objects.filter(user=request.user)
 
 		context = {
 					'collections' : collection,
 					'collection_names' : collection_name,
-					'books' : book,
+					#'books' : book,
 				}
 
-		if request.method == 'POST':	
-			if 'btnEdit' in request.POST:	
+		if request.method == 'POST':
+			if 'editCollectionBtn' in request.POST:
 				print('clicked')
-				collection_new_name = request.POST.get("collection_name")
-				collection_id = request.POST.get("collection_id")
-				update_collection = Collection.objects.filter(id = collection_id).update(name=collection_new_name)
+				collection_new_name = request.POST.get("name")
+				collection_id = request.POST.get("id")
+				print(collection_new_name)
+				update_collection = Collection.objects.filter(id=collection_id).update(name=collection_new_name)
+				print('save')
 
 				return HttpResponse('Collection edited!')
+
+			elif 'deleteCollectionBtn' in request.POST:	
+
+				print('Delete Button Clicked')
+				collection_id = request.POST.get("id")
+				collection = Collection.objects.filter(id = collection_id).update(isDeleted=True)
+				print('Collection Deleted')
+
+				return HttpResponse('Collection deleted!')
 
 		return render(request, 'files.html', context)
 

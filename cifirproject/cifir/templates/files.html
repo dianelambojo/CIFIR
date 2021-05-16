@@ -4,36 +4,36 @@
   <div class="card">
     {% for collection_name in collection_names %}
     <div class="card-header">
-      <i class="fas fa-book-reader"></i> {{collection_name.name}}
+      <i class="fas fa-book-reader"></i> {{collection_name.name}} 
       <div class="navbar-text" id="navbarNavRight">
-        <a class="buttons" href="#">
+        <a class="buttons">
           <i
             class="fas fa-plus-square"
             data-toggle="modal"
             data-target="#addBookModal"
           ></i>
         </a>
-        <a class="buttons" href="#">
-          <i class="fas fa-minus-circle"></i>
+        <a class="buttons">
+          <i class="fas fa-minus-circle" data-toggle="modal" data-target="#deleteCollectionModal-{{collection_name.id}}"></i>
         </a>
-        <a class="buttons" href="#">
+        <a class="buttons">
           <i
             class="fas fa-edit"
             data-toggle="modal"
-            data-target="#editCollectionModal"
+            data-target="#editCollectionModal-{{collection_name.id}}"
           ></i>
         </a>
       </div>
     </div>
     <div class="card-body">
-      {% for book in books %}
-      <!-- <div class="i-folders">
+      <!--{% for book in books %}
+      < !-- <div class="i-folders">
         <i class="fas fa-book"></i>
       </div>
       <h6>{{ book.title }}</h6> -->
-      {% include './components/TheBook.html' %} {% endfor %}
+      {% include './components/TheBook.html' %}
     </div>
-    {% endfor %}
+    <!-- {% endfor %} -->
   </div>
 </div>
 <!-- Modal add-->
@@ -87,7 +87,7 @@
 <!-- Modal edit-->
 <div
   class="modal fade"
-  id="editCollectionModal"
+  id="editCollectionModal-{{collection_name.id}}"
   tabindex="-1"
   role="dialog"
   aria-labelledby="editCollectionModal"
@@ -96,7 +96,7 @@
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="editCollectionModal">Rename collection</h5>
+        <h5 class="modal-title" id="editCollectionModal-{{collection_name.id}}">Rename collection</h5>
         <button
           type="button"
           class="close"
@@ -118,19 +118,21 @@
                 class="form-control form-control-sm"
                 type="text"
                 placeholder="Rename Collection"
-                name="collection_name"
+                name="name"
                 maxlength="150"
                 required=""
                 id="id_collection_name"
+
               />
               <input
                 class="form-control form-control-sm"
                 type="text"
                 placeholder="Rename Collection"
-                name="collection_id"
+                name="id"
                 maxlength="150"
                 required=""
                 id="id_collection_id"
+                value = "{{collection_name.id}}"
                 hidden
               />
             </div>
@@ -144,7 +146,7 @@
             >
               Close
             </button>
-            <button type="submit" class="btn btn-primary" name="btnEdit">
+            <button type="submit" class="btn btn-primary" name="editCollectionBtn">
               Save
             </button>
           </div>
@@ -153,4 +155,64 @@
     </div>
   </div>
 </div>
-{% endif %} {% endblock content %}
+<!-- Modal delete-->
+<div
+  class="modal fade"
+  id="deleteCollectionModal-{{collection_name.id}}"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="deleteCollectionModal"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteCollectionModal-{{collection_name.id}}">Delete collection</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form class="" method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+
+          <div class="txt_field">
+              <input
+                class="form-control form-control-sm"
+                type="text"
+                name="id"
+                maxlength="150"
+                required=""
+                id="id_collection_id"
+                value = "{{collection_name.id}}"
+                hidden
+              />
+            </div>
+          
+Are you sure you want to delete this record?
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              No
+            </button>
+            <button type="submit" class="btn btn-primary" name="deleteCollectionBtn">
+              Yes
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endfor %} 
+{% endif %} 
+{% endblock content %}

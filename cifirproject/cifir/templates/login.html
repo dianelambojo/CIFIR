@@ -110,7 +110,7 @@
             	{% csrf_token %}
                 <h1>LOGIN</h1>
                     <div class="txt_field">
-                        <input class="w-100" type="text" placeholder="email" name="email" maxlength="150" required="" id="email">
+                        <input class="w-100" type="text" placeholder="username" name="username" maxlength="150" required="" id="username">
                         <span></span>
 						<br>
 						<br>
@@ -121,7 +121,7 @@
                     </div>
 					<div class="pass">Forgot Password?</div>
 					<div class="d-flex justify-content-center">
-                    <input type="submit" value="LOGIN" name='loginBtn'>
+                    <input type="submit" value="LOGIN" name="loginBtn">
 				</div>
 				<div style='background-color:#FFD700;'>
 					{% if messages %}
