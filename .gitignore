@@ -1,3 +1,5 @@
 
 *.pyc
 cifirproject/cifir/migrations/*
+cifirproject/cifir/migrations/__pycache__/0005_auto_20210513_1538.cpython-38.pyc
+*.pyc

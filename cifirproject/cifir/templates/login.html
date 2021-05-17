@@ -110,18 +110,18 @@
             	{% csrf_token %}
                 <h1>LOGIN</h1>
                     <div class="txt_field">
-                        <input class="w-100" type="text" placeholder="username" name="username" maxlength="150" required="" id="username">
+                        <input class="w-100 login-inputs" type="text" placeholder="Username" name="username" maxlength="150" required="" id="username">
                         <span></span>
 						<br>
 						<br>
                     </div>
                     <div class="txt_field">
-                        <input class="w-100" type="password" placeholder="Password" name="password" autocomplete="new-password" required="" id="password">
+                        <input class="w-100 login-inputs" type="password" placeholder="Password" name="password" autocomplete="new-password" required="" id="password">
                         <span></span>
                     </div>
-					<div class="pass">Forgot Password?</div>
+					<div class="forgot-password">Forgot Password?</div>
 					<div class="d-flex justify-content-center">
-                    <input type="submit" value="LOGIN" name="loginBtn">
+                    <input type="submit" value="LOGIN" name="loginBtn" id="login-button">
 				</div>
 				<div style='background-color:#FFD700;'>
 					{% if messages %}
@@ -131,17 +131,17 @@
 					    {% endfor %}
 					</ul>
 					{% endif %}
-                 </div>
+				</div>
 			</form>
             </div>
         </div>
     </div>
 </div>
-<img src="{% static 'images/CITULogo.png' %}" class="over">
-<img src="{% static 'images/CITUGear1.png' %}" class="under">
+<img src="{% static 'images/CITULogo.png' %}" class="login-citlogo over">
+<img src="{% static 'images/CITUGear1.png' %}" class="login-citlogo under">
 
-<img src="{% static 'images/CITUGear2.png' %}" class="topGear">
-<img src="{% static 'images/CITUGear3.png' %}" class="bottomGear">
+<img src="{% static 'images/CITUGear2.png' %}" class="login-citlogo topGear">
+<img src="{% static 'images/CITUGear3.png' %}" class="login-citlogo bottomGear">
 
 
 </body>
