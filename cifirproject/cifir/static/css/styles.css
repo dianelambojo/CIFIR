@@ -24,6 +24,11 @@
   display: block;
 }
 
+.profile-dropdown {
+  color: #800000;
+  display: inline-flex;
+}
+
 #navbarNavRight .navbar-nav .nav-item .navbar i {
   color: #800000;
 }
