@@ -85,6 +85,19 @@ hr {
   background-color: #f0f0f0;
 }
 
+.book-btn {
+  min-width: 160px;
+  max-width: 160px;
+  overflow: hidden;
+  margin: 10px;
+  background-color: white;
+  transition-duration: 0.2s;
+}
+
+.book-btn:hover {
+  background-color: #fff7cc;
+}
+
 /*NETWORK LIBRARIES*/
 .card-read-more {
   border-top: 1px solid #d4d4d4;
@@ -231,4 +244,11 @@ hr {
   100% {
     -webkit-transform: rotate(360deg);
   }
+}
+
+.card-body.collection-folders {
+  display: grid;
+
+  /* define the number of grid columns */
+  grid-template-columns: repeat(8, 1fr);
 }

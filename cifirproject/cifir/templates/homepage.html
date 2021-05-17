@@ -7,7 +7,7 @@
       <i class="fas fa-book icon-link"></i>
       <span class="icon-link icon-link-icon">Books</span>
     </div>
-    <div class="card-body">
+    <div class="card-body collection-folders">
       {% for book in books %}
       <form action="" method="POST" id="">
         <!-- NO ACTION AND ID YET -->
@@ -43,7 +43,7 @@
         Collections
       </a>
     </div>
-    <div class="card-body">
+    <div class="card-body collection-folders">
       {% for collection in collections %}
       <form action="/cifir/books/" method="POST" id="collectionform">
         {% csrf_token %} {% include './components/TheFolder.html' %}

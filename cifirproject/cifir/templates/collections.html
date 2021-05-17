@@ -10,7 +10,7 @@
 					</a>
 				</div>
 			</div>
-			<div class="card-body">
+			<div class="card-body collection-folders">
 				{% for collection in collections %}
 					<form action="/cifir/books/" method="POST" id="collectionform">
 						{% csrf_token %}
