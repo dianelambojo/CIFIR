@@ -248,7 +248,5 @@ hr {
 
 .card-body.collection-folders {
   display: grid;
-
-  /* define the number of grid columns */
-  grid-template-columns: repeat(8, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
 }
