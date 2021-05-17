@@ -112,7 +112,7 @@ class bookmarksPageView(View):
 class collectionsPageView(View):
 	def get(self, request):
 		user = User.objects.filter(username=request.user)
-		collection = Collection.objects.filter(user=request.user)
+		collection = Collection.objects.filter(user=request.user).filter(isDeleted=False)
 		context = {
 				'collections' : collection,
 				'users' : user,
