@@ -109,6 +109,21 @@ hr {
 }
 
 /* LOGIN */
+.icon-link {
+  text-decoration: none;
+  text-decoration: none !important;
+  color: #800000;
+}
+
+.icon-link-icon {
+  transition-duration: 0.5s;
+  cursor: pointer;
+}
+
+.icon-link-icon:hover {
+  color: #d1b104;
+}
+
 .login {
   top: 600px;
   width: 600px;
@@ -122,6 +137,7 @@ hr {
 .login h1 {
   font-family: "Verdana";
   text-align: center;
+  margin-top: 10px;
   padding: 0 0 20px 0;
   font-style: normal;
   font-weight: 750;
@@ -137,50 +153,64 @@ hr {
   border-radius: 15px;
   align-content: center;
 }
-.pass {
+.forgot-password {
+  margin-top: 5px;
   color: #ffffff;
+  cursor: pointer;
 }
 
-.under {
+#login-button {
+  border: none;
+  background-color: white;
+  padding: 5px 20px;
+  transition-duration: 0.2s;
+}
+
+#login-button:hover {
+  background-color: rgb(255, 240, 158);
+}
+
+.login-inputs {
+  padding: 5px;
+  outline: none;
+}
+
+.login-citlogo {
+  width: 250px;
+  height: 250px;
+  opacity: 0.5;
+  z-index: -2;
+}
+
+.login-citlogo.under {
   position: absolute;
   right: 70px;
   bottom: 250px;
-  z-index: -1;
-  width: 250px;
-  height: 250px;
   -webkit-animation: spin 5s linear infinite;
   -moz-animation: spin 5s linear infinite;
   animation: spin 5s linear infinite;
 }
 
-.over {
+.login-citlogo.over {
   position: fixed;
   right: 70px;
   bottom: 250px;
-  z-index: 1;
-  width: 250px;
-  height: 250px;
+  z-index: -1;
 }
 
-.topGear {
+.login-citlogo.topGear {
   position: fixed;
   right: -120px;
-  top: 100px;
-  z-index: -1;
-  width: 250px;
-  height: 250px;
+  bottom: 400px;
   -webkit-animation: spin 5s linear infinite;
   -moz-animation: spin 15s linear infinite;
   animation: spin 5s linear infinite;
   animation-direction: reverse;
 }
-.bottomGear {
+.login-citlogo.bottomGear {
   position: fixed;
   right: -120px;
   bottom: 100px;
-  z-index: -1;
-  width: 250px;
-  height: 250px;
   -webkit-animation: spin 10s linear infinite;
   -moz-animation: spin 10s linear infinite;
   animation: spin 5s linear infinite;
