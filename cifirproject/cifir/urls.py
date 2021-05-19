@@ -9,9 +9,8 @@ urlpatterns = [
     # path('api/data', views.get_data, name='api-data'),
 
     #TEST URL
-    path('index/', views.indexView.as_view(), name="index_view"),
-    
     path('login/', views.loginPageView.as_view(), name="login_view"),
+    path('logout/', views.logoutPage, name='logout_view'),
     path('home/', views.homePageView.as_view(), name="home_view"),
     path('collections/', views.collectionsPageView.as_view(), name="collections_view"),
     path('bookmarks/', views.bookmarksPageView.as_view(), name="bookmarks_view"),

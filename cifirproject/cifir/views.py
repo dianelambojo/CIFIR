@@ -21,10 +21,6 @@ from lxml import etree
 # Create your views here.
 
 
-class indexView(View):
-	def get(self, request):
-		return render(request,'index.html')
-
 class homePageView(View):
 	def get(self, request):
 		user = User.objects.filter(username=request.user)
@@ -71,7 +67,7 @@ class homePageView(View):
 			book = Book.objects.create(title= res['title'], file = file)
 			book.user.add(user)
 
-			return HttpResponse('Book uploaded!')
+			messages.success(request,'Book added!')
 
 class loginPageView(View):
 	def get(self, request):
@@ -88,10 +84,10 @@ class loginPageView(View):
 				#user = LibUser.objects.filter(email = email,password = password)
 				user = authenticate(request, username=username, password=password)
 				print(user)
-				if user:
+				if user is not None:
 					#user = LibUser.objects.filter(email = email,password = password)
 					login(request, user)
-					messages.info(request,'Logged in succesfully!')
+					request.session['username'] = username
 					return redirect('cifir:home_view')
 				else:
 					messages.info(request, 'Email or password is incorrect')
@@ -100,6 +96,10 @@ class loginPageView(View):
 			 	messages.warning(request, 'Email or password is incorrect')
 			 	return render(request, 'login.html')
 				
+def logoutPage(request):
+	logout(request)
+	return redirect('cifir:login_view')
+
 
 class audiobooksPageView(View):
 	def get(self, request):
@@ -124,11 +124,10 @@ class collectionsPageView(View):
 		collection_name = request.POST.get('collection_name')
 		collection = Collection.objects.create(name = collection_name)
 		collection.user.add(user)
+		messages.success(request,'Collection Added Successfuly!')
 
-		return HttpResponse('Collection added!')
 
-
-		return redirect('cifir:collection_view')
+		return redirect('cifir:collections_view')
 
 
 class favoritesPageView(View):
@@ -182,7 +181,7 @@ class viewBook(View):
 				update_collection = Collection.objects.filter(id=collection_id).update(name=collection_new_name)
 				print('save')
 
-				return HttpResponse('Collection edited!')
+				messages.success(request,'Collection Edited Successfuly!')
 
 			elif 'deleteCollectionBtn' in request.POST:	
 
@@ -191,7 +190,7 @@ class viewBook(View):
 				collection = Collection.objects.filter(id = collection_id).update(isDeleted=True)
 				print('Collection Deleted')
 
-				return HttpResponse('Collection deleted!')
+				messages.success(request,'Collection Deleted Successfuly!')
 
 		return render(request, 'files.html', context)
 

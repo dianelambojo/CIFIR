@@ -32,8 +32,10 @@
   </head>
 
   <body>
+    {% include './components/messages.html' %}
     {% include './components/NavBar.html' %}
     <hr />
+
     {% block content %} {% endblock content %}
 
     <div class="fab-wrapper">
@@ -123,6 +125,13 @@
     <!-- Core theme JS-->
     <!-- <script type="text/javascript" src="{% static 'js/script.js' %}"></script> -->
     <script type="text/javascript" src="{% static 'js/homepage.js' %}"></script>
+    <script>
+      setTimeout(function(){
+        if ($('#msg').length > 0) {
+          $('#msg').remove();
+        }
+      }, 2000)
+    </script> 
     <!-- <script>
 					$(document).ready(function(){
 					$('[data-toggle="tooltip"]').tooltip();   
