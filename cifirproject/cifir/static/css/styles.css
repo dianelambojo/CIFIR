@@ -1,3 +1,12 @@
+@import "network-libraries.css";
+@import "global.css";
+@import "fab.css";
+
+:root {
+  --gold: #ffd700;
+  --maroon: #800000;
+}
+
 /*TOP  NAVBAR */
 
 #spanLogo {
@@ -31,6 +40,12 @@
 
 #navbarNavRight .navbar-nav .nav-item .navbar i {
   color: #800000;
+  transition: 0.3s;
+}
+
+#navbarNavRight .navbar-nav .nav-item .navbar i:hover {
+  color: var(--gold);
+  text-shadow: 1px 1px #343a40;
 }
 
 #navbarNavRight .navbar-nav .nav-item .navbar {
@@ -69,9 +84,21 @@
   padding: 0 10px 0 10px;
 }
 
+/* LOWER RIGHT NAV BAR */
+
 #navbarNavLowRight .navbar-nav .nav-item.nav-item-last {
   border-right: 1px white solid;
   height: 40px;
+}
+
+#navbarNavLowRight .navbar-nav .nav-item .navbar i {
+  color: white;
+  transition: 0.3s;
+}
+
+#navbarNavLowRight .navbar-nav .nav-item .navbar i:hover {
+  color: var(--gold);
+  text-shadow: 1px 1px var(--maroon);
 }
 
 /*LEFT NAVBAR*/
@@ -103,45 +130,19 @@ hr {
   background-color: #fff7cc;
 }
 
-/*NETWORK LIBRARIES*/
-.card-read-more {
-  border-top: 1px solid #d4d4d4;
-}
-.card-read-more a {
-  text-decoration: none !important;
-  padding: 10px;
-  font-weight: 600;
-  text-transform: uppercase;
-}
-.i-folders {
-  font-size: 80px;
+/* LOWER LEFT NAV BAR */
+
+#navbarLowNavLeft .navbar-nav .nav-item .navbar i {
+  color: white;
+  transition: 0.3s;
 }
 
-.i-folders .fa-folder,
-.fa-book {
-  color: #800000;
-}
-
-#divLogo {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+#navbarLowNavLeft .navbar-nav .nav-item .navbar i:hover {
+  color: var(--gold);
+  text-shadow: 1px 1px var(--maroon);
 }
 
 /* LOGIN */
-.icon-link {
-  text-decoration: none;
-  text-decoration: none !important;
-  color: #800000;
-}
-
-.icon-link-icon {
-  transition-duration: 0.5s;
-  cursor: pointer;
-}
-
-.icon-link-icon:hover {
-  color: #d1b104;
-}
-
 .login {
   top: 600px;
   width: 600px;
@@ -177,6 +178,10 @@ hr {
   cursor: pointer;
 }
 
+#divLogo {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
 #login-button {
   border: none;
   background-color: white;
@@ -201,7 +206,7 @@ hr {
 }
 
 .login-citlogo.under {
-  position: absolute;
+  position: fixed;
   right: 70px;
   bottom: 250px;
   -webkit-animation: spin 5s linear infinite;

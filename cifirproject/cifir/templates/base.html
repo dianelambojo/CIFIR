@@ -28,11 +28,10 @@
 
     <!--CSS LINK-->
     <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
-    <link rel="stylesheet" href="{% static 'scss/fab.css' %}" />
   </head>
 
   <body>
-    {% include './components/messages.html' %}
+    {% include './components/messages.html' %} <span class="break-line"></span>
     {% include './components/NavBar.html' %}
     <hr />
 
@@ -126,12 +125,12 @@
     <!-- <script type="text/javascript" src="{% static 'js/script.js' %}"></script> -->
     <script type="text/javascript" src="{% static 'js/homepage.js' %}"></script>
     <script>
-      setTimeout(function(){
-        if ($('#msg').length > 0) {
-          $('#msg').remove();
+      setTimeout(function () {
+        if ($("#msg").length > 0) {
+          $("#msg").remove();
         }
-      }, 2000)
-    </script> 
+      }, 2000);
+    </script>
     <!-- <script>
 					$(document).ready(function(){
 					$('[data-toggle="tooltip"]').tooltip();   

@@ -1,0 +1,23 @@
+.i-folders {
+  font-size: 80px;
+}
+
+.i-folders .fa-folder,
+.fa-book {
+  color: #800000;
+}
+
+.icon-link {
+  text-decoration: none !important;
+  color: #800000;
+  margin-left: 10px;
+}
+
+.icon-link-icon {
+  color: #cc0000;
+  cursor: pointer;
+}
+
+.icon-link-icon:hover {
+  color: var(--maroon);
+}

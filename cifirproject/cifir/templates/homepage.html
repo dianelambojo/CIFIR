@@ -61,60 +61,7 @@
     </div>
     <section class="pt-5 pb-5">
       <div class="container">
-        <div class="row">
-          <div class="col-12">
-            <div
-              id="carouselExampleIndicators2"
-              class="carousel slide"
-              data-ride="carousel"
-            >
-              <div class="carousel-inner">
-                <div class="carousel-item active">
-                  <div class="row">
-                    {% for catalog in catalogs %}
-                    <div class="col-md-4 mb-3">
-                      <div class="card">
-                        <div class="embed-responsive embed-responsive-4by3">
-                          <img
-                            alt="Card image cap"
-                            class="card-img-top embed-responsive-item"
-                            src="{{catalog.cover}}"
-                          />
-                        </div>
-                        <div class="card-body">
-                          <h4 class="card-title">{{catalog.name}}</h4>
-                          <p class="card-text">{{catalog.description}}</p>
-                          <div class="card-read-more">
-                            <a href="{{catalog.link}}"> Read More</a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    {% endfor %}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-7 text-right">
-            <a
-              class="btn btn-primary mb-3 mr-1"
-              href="#carouselExampleIndicators2"
-              role="button"
-              data-slide="prev"
-            >
-              <i class="fa fa-arrow-left"></i>
-            </a>
-            <a
-              class="btn btn-primary mb-3"
-              href="#carouselExampleIndicators2"
-              role="button"
-              data-slide="next"
-            >
-              <i class="fa fa-arrow-right"></i>
-            </a>
-          </div>
-        </div>
+        {% include './components/NetworkLibrariesCarousel.html' %}
       </div>
     </section>
   </div>

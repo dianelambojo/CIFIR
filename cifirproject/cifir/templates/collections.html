@@ -2,56 +2,61 @@
 {% load static %}
 {% block content %}
 <div class="container-fluid">
-		<div class="card">
-			<div class="card-header"> <i class="fas fa-book-reader"></i> <a href='{% url "cifir:collections_view" %}'> Collections | </a>
-				<div class="navbar-text" id="navbarNavRight">
-					<a class="buttons" href="#">
-						<i class="fas fa-plus-square" data-toggle="modal" data-target="#addCollectionModal"></i>
-					</a>
-				</div>
+	<div class="card">
+		<div class="card-header">
+				<i class="fas fa-book-reader icon-link"></i>
+				<a class="icon-link icon-link-icon" href='{% url "cifir:collections_view" %}'>
+					Collections
+				</a>
+			<div class="navbar-text" id="navbarNavRight">
+				<a class="buttons" href="#">
+					<i class="fas fa-plus-square icon-link icon-link-icon" data-toggle="modal" data-target="#addCollectionModal"></i>
+				</a>
 			</div>
-			<div class="card-body collection-folders">
-				{% for collection in collections %}
-					<form action="/cifir/books/" method="POST" id="collectionform">
-						{% csrf_token %}
-					{% include './components/TheFolder.html' %}
-					</form>
-				{% endfor %}
+		</div>
+		<div class="card-body collection-folders">
+			{% for collection in collections %}
+			<form action="/cifir/books/" method="POST" id="collectionform">
+				{% csrf_token %}
+				{% include './components/TheFolder.html' %}
+			</form>
+			{% endfor %}
 		</div>
 	</div>
 </div>
 <!-- Modal -->
-<div class="modal fade" id="addCollectionModal" tabindex="-1" role="dialog" aria-labelledby="addCollectionModal" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="addCollectionModal">Add collection</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-      	<form class="" method="POST">
-            	{% csrf_token %}
-        <div class="txt_field">
-            <div class="i-folders">
-					
-						      <i class="fas fa-folder"> </i>
-				
-						      <input class="form-control form-control-sm" type="text" placeholder="Input collection name here" name="collection_name" maxlength="150" required="" id="id_collection_name">
-						       <input type="text" name="collection_id" value="{{collection.id}}" hidden />
-						 
-						    </div>
-						  </div>
-            <span></span>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary" name="btnSave">Save </button>
-      </div>
-  </form>
-    </div>
-  </div>
-</div>
+<div class="modal fade" id="addCollectionModal" tabindex="-1" role="dialog" aria-labelledby="addCollectionModal"
+	aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="addCollectionModal">Add collection</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form class="" method="POST">
+					{% csrf_token %}
+					<div class="txt_field">
+						<div class="i-folders">
+
+							<i class="fas fa-folder"> </i>
+
+							<input class="form-control form-control-sm" type="text" placeholder="Input collection name here"
+								name="collection_name" maxlength="150" required="" id="id_collection_name">
+							<input type="text" name="collection_id" value="{{collection.id}}" hidden />
+
+						</div>
+					</div>
+					<span></span>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				<button type="submit" class="btn btn-primary" name="btnSave">Save </button>
+			</div>
+			</form>
+		</div>
+	</div>
 </div>
 {% endblock content %}
