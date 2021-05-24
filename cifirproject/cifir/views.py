@@ -108,6 +108,10 @@ class audiobooksPageView(View):
 class bookmarksPageView(View):
 	def get(self, request):
 		return render(request,'bookmarks.html')
+		
+class epubReadpageView(View):
+	def get(self, request):
+		return render(request,'EpubRead.html')
 
 class collectionsPageView(View):
 	def get(self, request):

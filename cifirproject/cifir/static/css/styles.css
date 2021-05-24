@@ -22,6 +22,7 @@
   color: #800000;
   font-family: arial-bold;
   font-size: 80px;
+  font-weight: bold;
 }
 
 .logolink,
@@ -259,4 +260,10 @@ hr {
 .card-body.collection-folders {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+}
+
+/* EpubRead */
+
+[id^="epubjs-container"] {
+  overflow: hidden !important;
 }

@@ -12,6 +12,12 @@
   padding: 20px 23px;
   outline: none;
   cursor: pointer;
+  transition: ease-in 0.15s;
+}
+
+.fab-wrapper button:hover {
+  color: var(--gold);
+  border-radius: 30%;
 }
 
 .fab-wrapper button i {

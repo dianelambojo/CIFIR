@@ -21,6 +21,7 @@ urlpatterns = [
     path('favorites/', views.favoritesPageView.as_view(), name="favorites_view"),
     path('toread/', views.toReadPageView.as_view(), name="toread_view"),
     path('haveread/', views.haveReadPageView.as_view(), name="haveread_view"),
+    path('epub/', views.epubReadpageView.as_view(), name="epub_view"),
     
 
 ]
