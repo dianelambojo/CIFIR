@@ -17,14 +17,7 @@ from django.utils.decorators import method_decorator
 import zipfile
 from lxml import etree
 
-import ebooklib
-from ebooklib import epub
 
-from bs4 import BeautifulSoup
-
-from urllib.parse import urlparse
-import os 
-from pathlib import Path  
 # Create your views here.
 
 
@@ -129,7 +122,7 @@ class epubReadpageView(View):
 		context = {
 					'books' : book,
 				}
-				
+
 		return render(request,'EpubRead.html', context)
 
 	def post(self,request):
