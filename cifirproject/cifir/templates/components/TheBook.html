@@ -1,13 +1,15 @@
 <button
   type="submit"
   class="btn book-btn"
-  name="book"
-  value="{{book.name}}"
+  name="book_id"
+  value="{{book.id}}"
   form="bookform"
 >
   <div class="i-folders">
     <i class="fas fa-book"></i>
   </div>
-  <h6>{{ book.title}}</h6>
+  <h6>{{ book.title }} </h6>
   <input type="text" name="book_id" value="{{book.id}}" hidden />
+  <input type="text" name="book_file" value="{{book.file.url}}" hidden />
+
 </button>

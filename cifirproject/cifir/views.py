@@ -17,7 +17,14 @@ from django.utils.decorators import method_decorator
 import zipfile
 from lxml import etree
 
+import ebooklib
+from ebooklib import epub
 
+from bs4 import BeautifulSoup
+
+from urllib.parse import urlparse
+import os 
+from pathlib import Path  
 # Create your views here.
 
 
@@ -38,10 +45,13 @@ class homePageView(View):
 		return render(request, 'homepage.html', context)
 
 	def post(self,request):
+
 		if 'btnUpload' in request.POST:
 			user = User.objects.get(id=request.user.id)
 			file = request.FILES.get('book_file')
 			print(file)
+			extension = pathlib.Path(file).suffix
+			print(extension)
 			ns = {
 			        'n':'urn:oasis:names:tc:opendocument:xmlns:container',
 			        'pkg':'http://www.idpf.org/2007/opf',
@@ -66,8 +76,8 @@ class homePageView(View):
 			print(res['title'])
 			book = Book.objects.create(title= res['title'], file = file)
 			book.user.add(user)
-
 			messages.success(request,'Book added!')
+
 
 class loginPageView(View):
 	def get(self, request):
@@ -107,11 +117,32 @@ class audiobooksPageView(View):
 
 class bookmarksPageView(View):
 	def get(self, request):
+
 		return render(request,'bookmarks.html')
 		
 class epubReadpageView(View):
 	def get(self, request):
-		return render(request,'EpubRead.html')
+		book_id = request.POST.get('book_id', None)
+		user = User.objects.filter(username=request.user)
+		book = Book.objects.filter(user=request.user).filter(id=book_id)
+
+		context = {
+					'books' : book,
+				}
+				
+		return render(request,'EpubRead.html', context)
+
+	def post(self,request):
+		context = {}
+		book_id = request.POST.get('book_id', None)
+		user = User.objects.filter(username=request.user)
+		book = Book.objects.filter(user=request.user).filter(id=book_id)
+
+		context = {
+					'books' : book,
+				}
+
+		return render(request, 'EpubRead.html', context)
 
 class collectionsPageView(View):
 	def get(self, request):

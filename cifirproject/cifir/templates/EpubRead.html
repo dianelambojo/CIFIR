@@ -6,10 +6,14 @@
 {% endblock extrascriptheader %} {% block content %}
 <div class="container-fluid">
   <div class="card">
-    <div class="card-header"><i class="far fa-bookmark"></i> Bookmarks</div>
+    <div class="card-header"><i class="far fa-bookmark"></i> Book </div>
     <div class="card-body">
       <div id="title"><input type="file" id="input" /></div>
-      <div>show blob here</div>
+      <div>
+        {% for book in books %}
+              {{ book.file }}
+        {% endfor %}
+      </div>
       <div id="viewer" class="continuous" style="overflow: hidden"></div>
     </div>
   </div>
