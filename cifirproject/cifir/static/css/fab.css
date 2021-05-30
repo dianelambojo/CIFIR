@@ -17,7 +17,6 @@
 
 .fab-wrapper button:hover {
   color: var(--gold);
-  border-radius: 30%;
 }
 
 .fab-wrapper button i {
