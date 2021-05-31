@@ -32,9 +32,10 @@
   var inputElement = document.getElementById("input");
   var bookElement = document.getElementById("book1");
 
-  console.log("innerhtml ", bookElement.innerHTML);
+  var url = window.location.protocol + "//" + window.location.hostname;
+  if (window.location.port) url += ":" + window.location.port;
 
-  fetch("http://localhost:8000/media/" + bookElement.innerHTML)
+  fetch(url + "/media/" + bookElement.innerHTML)
     .then((response) => response.blob())
     .then(function (myBlob) {
       console.log(myBlob);
