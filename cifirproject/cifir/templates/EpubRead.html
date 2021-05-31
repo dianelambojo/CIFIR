@@ -13,12 +13,19 @@
         <p id="book1">{{ book.file }}</p>
         {% endfor %}
       </div>
-      <div id="viewer" class="continuous" style="overflow: hidden"></div>
+      <div
+        id="viewer"
+        class="continuous"
+        style="margin: auto; overflow: hidden; max-width: 1024px"
+      ></div>
     </div>
   </div>
 </div>
 {% endblock content %} {% block extrascriptfooter %}
 <script defer>
+  // Epub Reader Library
+  // https://github.com/futurepress/epub.js
+
   var book = ePub();
   var rendition;
 
