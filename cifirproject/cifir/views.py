@@ -43,8 +43,6 @@ class homePageView(View):
 			user = User.objects.get(id=request.user.id)
 			file = request.FILES.get('book_file')
 			print(file)
-			extension = pathlib.Path(file).suffix
-			print(extension)
 			ns = {
 			        'n':'urn:oasis:names:tc:opendocument:xmlns:container',
 			        'pkg':'http://www.idpf.org/2007/opf',
@@ -71,6 +69,7 @@ class homePageView(View):
 			book.user.add(user)
 			messages.success(request,'Book added!')
 
+			return render(request, 'homepage.html')
 
 class loginPageView(View):
 	def get(self, request):
