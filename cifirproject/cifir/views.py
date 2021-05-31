@@ -69,7 +69,8 @@ class homePageView(View):
 			book.user.add(user)
 			messages.success(request,'Book added!')
 
-			return render(request, 'homepage.html')
+			# return render(request, 'homepage.html')
+			return redirect('cifir:home_view')
 
 class loginPageView(View):
 	def get(self, request):

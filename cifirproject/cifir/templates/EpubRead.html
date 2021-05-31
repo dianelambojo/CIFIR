@@ -10,7 +10,7 @@
       <div id="title" class="d-none"><input type="file" id="input" /></div>
       <div class="d-none">
         {% for book in books %}
-        <div id="book1">{{ book.file }}</div>
+        <p id="book1">{{ book.file }}</p>
         {% endfor %}
       </div>
       <div id="viewer" class="continuous" style="overflow: hidden"></div>
@@ -27,7 +27,7 @@
 
   console.log("innerhtml ", bookElement.innerHTML);
 
-  fetch("http://localhost:8000/media/" + bookElement)
+  fetch("http://localhost:8000/media/" + bookElement.innerHTML)
     .then((response) => response.blob())
     .then(function (myBlob) {
       console.log(myBlob);
@@ -37,15 +37,15 @@
       console.log("done");
     });
 
-  inputElement.addEventListener("change", function (e) {
-    console.log("asdasd");
-    var file = e.target.files[0];
-    if (window.FileReader) {
-      var reader = new FileReader();
-      reader.onload = openBook;
-      reader.readAsArrayBuffer(file);
-    }
-  });
+  // inputElement.addEventListener("change", function (e) {
+  //   console.log("asdasd");
+  //   var file = e.target.files[0];
+  //   if (window.FileReader) {
+  //     var reader = new FileReader();
+  //     reader.onload = openBook;
+  //     reader.readAsArrayBuffer(file);
+  //   }
+  // });
 
   function openBook(e) {
     var bookData = e.target.result;
