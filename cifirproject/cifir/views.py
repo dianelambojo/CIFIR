@@ -190,14 +190,12 @@ class viewBook(View):
 		collection_id = request.POST.get('collection_id', None)
 		user = User.objects.filter(username=request.user)
 		collection_name = Collection.objects.filter(user=request.user).filter(name=collection)
-
-		
-		#book = Book.objects.filter(user=request.user)
+		book = Book.objects.filter(user=request.user)
 
 		context = {
 					'collections' : collection,
 					'collection_names' : collection_name,
-					#'books' : book,
+					'books' : book,
 				}
 
 		if request.method == 'POST':

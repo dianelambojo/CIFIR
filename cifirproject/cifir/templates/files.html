@@ -29,15 +29,16 @@
         </a>
       </div>
     </div>
-    <div class="card-body">
+    <div class="card-body collection-folders">
       {% for book in books %}
-      <!-- <div class="i-folders">
-        <i class="fas fa-book"></i>
-      </div>
-      <h6>{{ book.title }}</h6> -->
-      {% include './components/TheBook.html' %}
+      <form action="/cifir/epub/" method="POST" id="bookform">
+        <!-- NO ACTION AND ID YET -->
+        {% csrf_token %}
+        {% include './components/TheBook.html' %}
+      </form>
+      {% endfor %}
     </div>
-    {% endfor %}
+  </div>
   </div>
 </div>
 <!-- Modal add-->
