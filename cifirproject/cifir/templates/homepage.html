@@ -9,10 +9,9 @@
     </div>
     <div class="card-body collection-folders">
       {% for book in books %}
-      <form action="/cifir/epub/" method="POST" id="bookform">
-        <!-- NO ACTION AND ID YET -->
-        {% csrf_token %}
-        <!-- <button
+      <!-- <form action="/cifir/epub/" method="POST" id="bookform"> -->
+      <!-- NO ACTION AND ID YET -->
+      <!-- <button
           type="submit"
           class="btn btn-light"
           name="book"
@@ -25,8 +24,8 @@
           <h6>{{ book.title}}</h6>
           <input type="text" name="book_id" value="{{book.id}}" hidden />
         </button> -->
-        {% include './components/TheBook.html' %}
-      </form>
+      {% include './components/TheBook.html' %}
+      <!-- </form> -->
       {% endfor %}
     </div>
   </div>

@@ -1,15 +1,103 @@
-<button
-  type="submit"
-  class="btn book-btn"
-  name="book_id"
-  value="{{book.id}}"
-  form="bookform"
->
-  <div class="i-folders">
-    <i class="fas fa-book"></i>
-  </div>
-  <h6>{{ book.title }} </h6>
-  <input type="text" name="book_id" value="{{book.id}}" hidden />
-  <input type="text" name="book_file" value="{{book.file.url}}" hidden />
+<div class="btn book-btn" name="book_id" value="{{book.id}}">
+  <div class="dropdown">
+    <a
+      class="btn"
+      href="#"
+      role="button"
+      id="dropdownMenuLink"
+      data-toggle="dropdown"
+      aria-haspopup="true"
+      aria-expanded="false"
+    >
+      <i class="fas fa-ellipsis-v"></i>
+    </a>
 
-</button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+      <a
+        class="dropdown-item"
+        onclick="updateBook('{{ request.path }}' ,'favorite')"
+      >
+        Favorite
+      </a>
+      <a
+        class="dropdown-item"
+        onclick="updateBook('{{ request.path }}' ,'to-read')"
+      >
+        Add to To Read Books
+      </a>
+      <a
+        class="dropdown-item"
+        onclick="updateBook('{{ request.path }}' ,'have-read')"
+      >
+        Add to Have Read
+      </a>
+    </div>
+  </div>
+
+  <div onclick="openBook('{{book.id}}', '{{book.file.url}}')">
+    <div class="i-folders">
+      <i class="fas fa-book"></i>
+    </div>
+    <div class="book-title">
+      <h6>{{ book.title }}</h6>
+    </div>
+  </div>
+</div>
+
+{% block extrascriptfooter %}
+<script>
+  // source: https://stackoverflow.com/questions/133925/javascript-post-request-like-a-form-submit
+
+  function openBook(book_id, book_file) {
+    post('{% url "cifir:epub_view" %}', {
+      book_id,
+      book_file,
+      csrfmiddlewaretoken: "{{csrf_token}}",
+    });
+  }
+
+  function updateBook(currentURL, item) {
+    if (item === "favorite") {
+      post(currentURL, {
+        item: "favorite",
+        csrfmiddlewaretoken: "{{csrf_token}}",
+        updateBookStatus: "",
+      });
+    }
+    if (item === "to-read") {
+      post(currentURL, {
+        item: "to-read",
+        csrfmiddlewaretoken: "{{csrf_token}}",
+        updateBookStatus: "",
+      });
+    }
+    if (item === "have-read") {
+      post(currentURL, {
+        item: "have-read",
+        csrfmiddlewaretoken: "{{csrf_token}}",
+        updateBookStatus: "",
+      });
+    }
+  }
+
+  function post(path, params, method = "post") {
+    const form = document.createElement("form");
+    form.method = method;
+    form.action = path;
+
+    for (const key in params) {
+      if (params.hasOwnProperty(key)) {
+        const hiddenField = document.createElement("input");
+        hiddenField.type = "hidden";
+        hiddenField.name = key;
+        hiddenField.value = params[key];
+
+        form.appendChild(hiddenField);
+      }
+    }
+    document.body.appendChild(form);
+    form.submit();
+  }
+</script>
+
+{% endblock extrascriptfooter %}

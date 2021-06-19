@@ -19,6 +19,9 @@ from lxml import etree
 
 
 # Create your views here.
+def updateBookStatus(item):
+	print(item)
+	# insert code here
 
 
 class homePageView(View):
@@ -38,7 +41,6 @@ class homePageView(View):
 		return render(request, 'homepage.html', context)
 
 	def post(self,request):
-
 		if 'btnUpload' in request.POST:
 			user = User.objects.get(id=request.user.id)
 			file = request.FILES.get('book_file')
@@ -70,6 +72,10 @@ class homePageView(View):
 			messages.success(request,'Book added!')
 
 			# return render(request, 'homepage.html')
+			return redirect('cifir:home_view')
+
+		if 'updateBookStatus' in request.POST:
+			updateBookStatus(request.POST.get('item'))
 			return redirect('cifir:home_view')
 
 class loginPageView(View):
