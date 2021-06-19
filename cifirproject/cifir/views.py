@@ -19,8 +19,8 @@ from lxml import etree
 
 
 # Create your views here.
-def updateBookStatus(item):
-	print(item)
+def updateBookStatus(item, book_id):
+	print(item, book_id)
 	# insert code here
 
 
@@ -75,7 +75,7 @@ class homePageView(View):
 			return redirect('cifir:home_view')
 
 		if 'updateBookStatus' in request.POST:
-			updateBookStatus(request.POST.get('item'))
+			updateBookStatus(request.POST.get('item'), request.POST.get('book_id'))
 			return redirect('cifir:home_view')
 
 class loginPageView(View):
