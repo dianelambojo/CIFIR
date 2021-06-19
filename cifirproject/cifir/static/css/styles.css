@@ -146,7 +146,6 @@ hr {
   right: 0;
   opacity: 0;
   transition-duration: 0.2s;
-  transition-delay: 0.3s;
   z-index: 10;
 }
 .book-btn > .dropdown > a {

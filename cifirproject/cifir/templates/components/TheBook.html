@@ -15,19 +15,19 @@
     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
       <a
         class="dropdown-item"
-        onclick="updateBook('{{ request.path }}' ,'favorite')"
+        onclick="updateBook('{{ request.path }}' ,'favorite', '{{book.id}}')"
       >
         Favorite
       </a>
       <a
         class="dropdown-item"
-        onclick="updateBook('{{ request.path }}' ,'to-read')"
+        onclick="updateBook('{{ request.path }}' ,'to-read', '{{book.id}}')"
       >
         Add to To Read Books
       </a>
       <a
         class="dropdown-item"
-        onclick="updateBook('{{ request.path }}' ,'have-read')"
+        onclick="updateBook('{{ request.path }}' ,'have-read', '{{book.id}}')"
       >
         Add to Have Read
       </a>
@@ -56,9 +56,10 @@
     });
   }
 
-  function updateBook(currentURL, item) {
+  function updateBook(currentURL, item, book_id) {
     if (item === "favorite") {
       post(currentURL, {
+        book_id,
         item: "favorite",
         csrfmiddlewaretoken: "{{csrf_token}}",
         updateBookStatus: "",
@@ -66,6 +67,7 @@
     }
     if (item === "to-read") {
       post(currentURL, {
+        book_id,
         item: "to-read",
         csrfmiddlewaretoken: "{{csrf_token}}",
         updateBookStatus: "",
@@ -73,6 +75,7 @@
     }
     if (item === "have-read") {
       post(currentURL, {
+        book_id,
         item: "have-read",
         csrfmiddlewaretoken: "{{csrf_token}}",
         updateBookStatus: "",
