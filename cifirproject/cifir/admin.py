@@ -7,10 +7,8 @@ from cifir.models import LibUser
 admin.site.register(Book)
 admin.site.register(Author)
 admin.site.register(Collection)
-admin.site.register(Favorite)
 admin.site.register(Note)
 admin.site.register(Catalog)
-admin.site.register(Library)
 
 @admin.register(LibUser)
 class UserAdmin(ImportExportModelAdmin):

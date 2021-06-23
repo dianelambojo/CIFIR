@@ -13,8 +13,11 @@ class Book(models.Model):
 	fileType = models.CharField(max_length=250)
 	noOfPages = models.CharField(max_length=250)
 	chapterCount = models.CharField(max_length=250)
-
 	user = models.ManyToManyField(User, blank=True)
+
+	isFavorite = models.BooleanField(default=False)
+	isHaveRead = models.BooleanField(default=False)
+	isToRead = models.BooleanField(default=False)
 
 	class Meta:
 		db_table = "Book"
@@ -32,21 +35,12 @@ class Author(models.Model):
 class Collection(models.Model):
 	name = models.CharField(max_length=250)
 	book = models.ManyToManyField(Book, blank=True)
-
 	user = models.ManyToManyField(User, blank=True)
-
 	isDeleted = models.BooleanField(default=False)
 
 	class Meta:
 		db_table = "Collection"
 		verbose_name_plural = "Collections"
-
-class Favorite(models.Model):
-	book = models.ForeignKey(Book, on_delete=models.CASCADE, null=True, blank=True, related_name="favorite_book")
-
-	class Meta:
-		db_table = "Favorite"
-		verbose_name_plural = "Favorites"
 
 class Note(models.Model):
 	book = models.ForeignKey(Book, on_delete=models.CASCADE, null=True, blank=True, related_name="notes_book")
@@ -66,14 +60,6 @@ class Catalog(models.Model):
 	class Meta:
 		db_table = "Catalog"
 		verbose_name_plural = "Catalogs"
-
-class Library(models.Model):
-	user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name="user_library")
-	collection = models.ForeignKey(Collection, on_delete=models.CASCADE, null=True, blank=True, related_name="user_collection")
-
-	class Meta:
-		db_table = "Library"
-		verbose_name_plural = "Libraries"
 
 class LibUser(models.Model):
 	firstname = models.CharField(max_length=200)

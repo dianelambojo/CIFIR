@@ -5,14 +5,13 @@
 	<div class="card">
 		<div class="card-header"><i class="fas fa-book-reader"></i>     Favorites</div>
 			<div class="card-body">
+				{% for book in books %}
 				<div class="i-folders">
 					<i class="fas fa-book"></i>
-				    <h6>Book Name</h6>
+				    <h6>{{book.title}}</h6>
                 </div>
-				<div class="i-folders">
-					<i class="fas fa-book"></i>
-				    <h6>Book Name</h6>
-             </div>
+                {% endfor %}
+				
 		</div>   
 	</div>
 </div>

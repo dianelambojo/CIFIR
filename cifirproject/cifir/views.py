@@ -21,8 +21,15 @@ from lxml import etree
 # Create your views here.
 def updateBookStatus(item, book_id):
 	print(item, book_id)
-	# insert code here
-
+	if (item == "favorite"):
+		update_book = Book.objects.filter(id=book_id).update(isFavorite=True)
+		#insert success message here pls hahaha		
+	elif (item == 'have-read'):
+		update_book = Book.objects.filter(id=book_id).update(isHaveRead=True)
+		#insert success message here pls hahaha		
+	elif (item == 'to-read'):
+		update_book = Book.objects.filter(id=book_id).update(isToRead=True)
+		#insert success message here pls hahaha		
 
 class homePageView(View):
 	def get(self, request):
@@ -166,15 +173,40 @@ class collectionsPageView(View):
 
 class favoritesPageView(View):
 	def get(self, request):
-		return render(request,'favorites.html')
+		user = User.objects.filter(username=request.user)
+		book = Book.objects.filter(user=request.user).filter(isFavorite=True)
+
+		context = {
+				'users' : user,
+				'books' : book,
+				}
+
+		return render(request, 'favorites.html', context)
+
 
 class haveReadPageView(View):
 	def get(self, request):
-		return render(request,'haveRead.html')
+		user = User.objects.filter(username=request.user)
+		book = Book.objects.filter(user=request.user).filter(isHaveRead=True)
+
+		context = {
+				'users' : user,
+				'books' : book,
+				}
+
+		return render(request,'haveRead.html', context)
 
 class toReadPageView(View):
 	def get(self, request):
-		return render(request,'toRead.html')
+		user = User.objects.filter(username=request.user)
+		book = Book.objects.filter(user=request.user).filter(isToRead=True)
+
+		context = {
+				'users' : user,
+				'books' : book,
+				}
+
+		return render(request,'toRead.html', context)
 
 class networkLibrariesPageView(View):
 	def get(self, request):
