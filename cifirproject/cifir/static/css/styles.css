@@ -127,7 +127,7 @@ hr {
   transition-duration: 0.2s;
 }
 
-.book-btn > .book-title {
+.book-title {
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -284,6 +284,26 @@ hr {
 .card-body.collection-folders {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(160px, 160px));
+  gap: 8px;
+}
+
+.modal-body.collection-folders {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 180px));
+  gap: 8px;
+  justify-content: center;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+}
+.card-header i {
+  margin-top: 4px;
+  margin-right: 8px;
+}
+.card-header i:last-child {
+  margin-right: 0px;
 }
 
 /* EpubRead */

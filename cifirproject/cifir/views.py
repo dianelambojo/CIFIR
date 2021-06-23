@@ -21,6 +21,7 @@ from lxml import etree
 # Create your views here.
 def updateBookStatus(item, book_id):
 	print(item, book_id)
+	# revise code to add and remove from favorite, ishaveread, and istoread
 	if (item == "favorite"):
 		update_book = Book.objects.filter(id=book_id).update(isFavorite=True)
 		#insert success message here pls hahaha		
@@ -30,6 +31,10 @@ def updateBookStatus(item, book_id):
 	elif (item == 'to-read'):
 		update_book = Book.objects.filter(id=book_id).update(isToRead=True)
 		#insert success message here pls hahaha		
+
+def addToCollection(book_id, collection_id):
+	print("book id: ", book_id)
+	print("collection id: ", collection_id)
 
 class homePageView(View):
 	def get(self, request):
@@ -79,11 +84,17 @@ class homePageView(View):
 			messages.success(request,'Book added!')
 
 			# return render(request, 'homepage.html')
-			return redirect('cifir:home_view')
 
 		if 'updateBookStatus' in request.POST:
 			updateBookStatus(request.POST.get('item'), request.POST.get('book_id'))
-			return redirect('cifir:home_view')
+
+		if 'addToCollection' in request.POST:
+			addToCollection(request.POST.get('book_id'), request.POST.get('collection_id'))
+
+		if 'removeFromCollection' in request.POST:
+			# insert code here
+			print("insert code here to remove from collection")
+		return redirect('cifir:home_view')
 
 class loginPageView(View):
 	def get(self, request):

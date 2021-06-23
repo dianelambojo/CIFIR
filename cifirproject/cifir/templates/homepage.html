@@ -4,8 +4,10 @@
 <div class="container-fluid">
   <div class="card">
     <div class="card-header">
-      <i class="fas fa-book icon-link"></i>
-      <span class="icon-link icon-link-icon">Books</span>
+      <span>
+        <i class="fas fa-book icon-link"></i>
+        <span class="icon-link icon-link-icon">Books</span>
+      </span>
     </div>
     <div class="card-body collection-folders">
       {% for book in books %}
@@ -34,13 +36,15 @@
 <div class="container-fluid">
   <div class="card">
     <div class="card-header">
-      <i class="fas fa-book-reader icon-link"></i>
-      <a
-        class="icon-link icon-link-icon"
-        href='{% url "cifir:collections_view" %}'
-      >
-        Collections
-      </a>
+      <span>
+        <i class="fas fa-book-reader icon-link"></i>
+        <a
+          class="icon-link icon-link-icon"
+          href='{% url "cifir:collections_view" %}'
+        >
+          Collections
+        </a>
+      </span>
     </div>
     <div class="card-body collection-folders">
       {% for collection in collections %}
@@ -55,8 +59,10 @@
 <div class="container-fluid">
   <div class="card">
     <div class="card-header">
-      <i class="fas fa-globe icon-link"></i>
-      <span class="icon-link icon-link-icon">Network Libraries</span>
+      <span>
+        <i class="fas fa-globe icon-link"></i>
+        <span class="icon-link icon-link-icon">Network Libraries</span>
+      </span>
     </div>
     <section class="pt-5">
       <div class="container">

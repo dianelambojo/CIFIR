@@ -1,37 +1,40 @@
 <div class="btn book-btn" name="book_id" value="{{book.id}}">
   <div class="dropdown">
-    <a
-      class="btn"
-      href="#"
-      role="button"
-      id="dropdownMenuLink"
-      data-toggle="dropdown"
-      aria-haspopup="true"
-      aria-expanded="false"
-    >
+    <a class="btn" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+      aria-expanded="false">
       <i class="fas fa-ellipsis-v"></i>
     </a>
 
-    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-      <a
-        class="dropdown-item"
-        onclick="updateBook('{{ request.path }}' ,'favorite', '{{book.id}}')"
-      >
-        Favorite
-      </a>
-      <a
-        class="dropdown-item"
-        onclick="updateBook('{{ request.path }}' ,'to-read', '{{book.id}}')"
-      >
-        Add to To Read Books
-      </a>
-      <a
-        class="dropdown-item"
-        onclick="updateBook('{{ request.path }}' ,'have-read', '{{book.id}}')"
-      >
-        Add to Have Read
-      </a>
-    </div>
+    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+      <li>
+        <a class="dropdown-item" data-toggle="modal" data-target="#addBookCollectionModal" onclick="chooseBook('{{book.id}}')">Add to Collections</a>
+      </li>
+      <!-- show this if the book is already added to collection -->
+      <!-- <li>
+        <a class="dropdown-item" data-toggle="modal" data-target="#addBookCollectionModal" onclick="chooseBook('{{book.id}}')">Remove from Collections</a>
+      </li> -->
+      <li>
+        <a class="dropdown-item" onclick="updateBook('{{ request.path }}' ,'favorite', '{{book.id}}')">
+          Add to Favorites
+          <!-- show this if the book is already added to favorites -->
+          <!-- Remove from Favorites -->
+        </a>
+      </li>
+      <li>
+        <a class="dropdown-item" onclick="updateBook('{{ request.path }}' ,'to-read', '{{book.id}}')">
+          Add to To Read Books
+          <!-- show this if the book is already added to To Read Books -->
+          <!-- Remove from To Read Books -->
+        </a>
+      </li>
+      <li>
+        <a class="dropdown-item" onclick="updateBook('{{ request.path }}' ,'have-read', '{{book.id}}')">
+          Add to Have Read Books
+          <!-- show this if the book is already added to Add to Have Read -->
+          <!-- Remove from Have Read Books-->
+        </a>
+      </li>
+    </ul>
   </div>
 
   <div onclick="openBook('{{book.id}}', '{{book.file.url}}')">
@@ -44,9 +47,61 @@
   </div>
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="addBookCollectionModal" tabindex="-1" role="dialog" aria-labelledby="addCollectionModal"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Choose collection</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body collection-folders">
+        {% for collection in collections %}
+          {% csrf_token %}
+          <button class="btn book-btn" name="collection" value="{{collection.name}}"
+            data-toggle="tooltip" title="{{collection.name}}" onclick="addToCollection('{{collection.id}}')">
+            <div class="i-folders">
+              <i class="fas fa-folder"></i>
+            </div>
+
+            {{collection.name}}
+          </button>
+        {% endfor %}
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 {% block extrascriptfooter %}
 <script>
   // source: https://stackoverflow.com/questions/133925/javascript-post-request-like-a-form-submit
+  var book_id;
+  function chooseBook(id){
+    book_id = id
+  }
+  function addToCollection(collection_id) {
+    console.log("book: ", book_id)
+    console.log("collection_id: ", collection_id)
+    post('{% url "cifir:home_view" %}', {
+      book_id,
+      collection_id,
+      csrfmiddlewaretoken: "{{csrf_token}}",
+      addToCollection: "",
+    });
+  }
+
+  function removeFromCollection(book_id) {
+    console.log("book: ", book_id)
+    post('{% url "cifir:home_view" %}', {
+      book_id,
+      csrfmiddlewaretoken: "{{csrf_token}}",
+      removeFromCollection: "",
+    });
+  }
 
   function openBook(book_id, book_file) {
     post('{% url "cifir:epub_view" %}', {

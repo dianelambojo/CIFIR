@@ -5,14 +5,26 @@
 {% endblock extrascriptheader %} {% block content %}
 <div class="container-fluid">
   <div class="card">
-  <div class="card-header"> <i class="far fa-bookmark"></i> Book</div>
+    <div class="card-header">
+      {% for book in books %}
+      <span>
+        <i class="fas fa-book"></i>
+        {{book.title}}
+        <p id="book1" hidden>{{ book.file }}</p>
+      </span>
+      {% endfor %}
+      <span class="text-right">
+        <i class="fas fa-search"></i>
+        <i class="fas fa-bookmark"></i>
+        <i class="far fa-bookmark"></i>
+      </span>
+    </div>
     <div class="card-body">
-      <div id="title" class="d-none"><input type="file" id="input" /></div>
-      <div class="d-none">
+      <!-- <div class="d-none">
         {% for book in books %}
         <p id="book1">{{ book.file }}</p>
         {% endfor %}
-      </div>
+      </div> -->
       <div
         id="viewer"
         class="continuous"
@@ -57,7 +69,6 @@
 
   function openBook(e) {
     var bookData = e.target.result;
-    var title = document.getElementById("title");
 
     book.open(bookData, "binary");
     // document.getElementById("viewer").innerHTML = "";

@@ -1,7 +1,17 @@
 {% extends "base.html" %} {% load static %} {% block content %}
 <div class="container-fluid">
   <div class="card">
-    <div class="card-header"><i class="far fa-bookmark"></i> Bookmarks</div>
+    <div class="card-header">
+      <span>
+        <i class="far fa-bookmark icon-link"></i>
+        <a
+          class="icon-link icon-link-icon"
+          href='{% url "cifir:bookmarks_view" %}'
+        >
+          Bookmarks
+        </a>
+      </span>
+    </div>
     <div class="card-body collection-folders">
       {% for book in books %}
       <form action="" method="POST" id="">

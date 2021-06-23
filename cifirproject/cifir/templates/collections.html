@@ -4,15 +4,14 @@
 <div class="container-fluid">
 	<div class="card">
 		<div class="card-header">
+			<span>
 				<i class="fas fa-book-reader icon-link"></i>
 				<a class="icon-link icon-link-icon" href='{% url "cifir:collections_view" %}'>
 					Collections
 				</a>
-			<div class="navbar-text" id="navbarNavRight">
-				<a class="buttons" href="#">
-					<i class="fas fa-plus-square icon-link icon-link-icon" data-toggle="modal" data-target="#addCollectionModal"></i>
-				</a>
-			</div>
+			</span>
+			<span><i class="fas fa-plus-square icon-link icon-link-icon" data-toggle="modal"
+					data-target="#addCollectionModal"></i></span>
 		</div>
 		<div class="card-body collection-folders">
 			{% for collection in collections %}
