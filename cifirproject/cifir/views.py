@@ -35,6 +35,9 @@ def updateBookStatus(item, book_id):
 def addToCollection(book_id, collection_id):
 	print("book id: ", book_id)
 	print("collection id: ", collection_id)
+	book = Book.objects.get(id=book_id)
+	collection = Collection.objects.get(id=collection_id)
+	collection.book.add(book)
 
 class homePageView(View):
 	def get(self, request):
@@ -236,9 +239,9 @@ class viewBook(View):
 	def post(self,request):
 		context = {}
 		collection = request.POST.get('collection', None)
-		collection_id = request.POST.get('collection_id', None)
 		user = User.objects.filter(username=request.user)
 		collection_name = Collection.objects.filter(user=request.user).filter(name=collection)
+		collection_id = Collection.objects.filter(id=collection_name)
 		book = Book.objects.filter(user=request.user)
 
 		context = {
