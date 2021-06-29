@@ -12,12 +12,33 @@
         {{book.title}}
         <p id="book1" hidden>{{ book.file }}</p>
       </span>
-      {% endfor %}
+
       <span class="text-right">
-        <i class="fas fa-search"></i>
-        <i class="fas fa-bookmark"></i>
-        <i class="far fa-bookmark"></i>
+        <span class="field-search">
+          <input
+            class="input-search"
+            type="text"
+            name="search"
+            id="input-search"
+            placeholder="Enter Search..."
+            on
+          />
+          <i
+            class="fas fa-search icon-search"
+            id="btn-search"
+            onclick="search()"
+          ></i>
+        </span>
+        <i
+          class="fas fa-bookmark icon-link icon-link-icon"
+          onclick="bookmarkBook('{{book.id}}')"
+        ></i>
+        <i
+          class="far fa-bookmark icon-link icon-link-icon"
+          onclick="bookmarkBook('{{book.id}}')"
+        ></i>
       </span>
+      {% endfor %}
     </div>
     <div class="card-body">
       <!-- <div class="d-none">
@@ -35,6 +56,23 @@
 </div>
 {% endblock content %} {% block extrascriptfooter %}
 <script defer>
+  var input = document.getElementById("input-search");
+
+  // Execute a function when the user releases a key on the keyboard
+  input.addEventListener("keyup", function (event) {
+    // Number 13 is the "Enter" key on the keyboard
+    if (event.keyCode === 13) {
+      console.log("object");
+      // Cancel the default action, if needed
+      event.preventDefault();
+      // Trigger the button element with a click
+      document.getElementById("btn-search").click();
+    }
+  });
+
+  function search() {
+    alert("search");
+  }
   // Epub Reader Library
   // https://github.com/futurepress/epub.js
 
@@ -81,6 +119,34 @@
     });
 
     rendition.display();
+  }
+
+  function bookmarkBook(book_id) {
+    console.log("test");
+    console.log(book_id);
+    // post('{% url "cifir:epub_view" %}', {
+    //   book_id,
+    //   csrfmiddlewaretoken: "{{csrf_token}}",
+    // });
+  }
+
+  function post(path, params, method = "post") {
+    const form = document.createElement("form");
+    form.method = method;
+    form.action = path;
+
+    for (const key in params) {
+      if (params.hasOwnProperty(key)) {
+        const hiddenField = document.createElement("input");
+        hiddenField.type = "hidden";
+        hiddenField.name = key;
+        hiddenField.value = params[key];
+
+        form.appendChild(hiddenField);
+      }
+    }
+    document.body.appendChild(form);
+    form.submit();
   }
 </script>
 {% endblock extrascriptfooter %}
