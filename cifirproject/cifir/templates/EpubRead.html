@@ -37,6 +37,21 @@
           class="far fa-bookmark icon-link icon-link-icon"
           onclick="bookmarkBook('{{book.id}}')"
         ></i>
+            <!--CHANGE FONT-->
+            <select id ="fonts" onchange="changeFont()">
+              <option value='1'>Arial</option>
+              <option value='2'>Verdana</option>
+              <option value='3'>Times New Roman</option>
+              <option value='4'>Courier New</option>
+            </select>
+
+          <a class="btn" id="increaseFont">
+            <span class="icon-font"><i class="fas fa-caret-up icon-link icon-link-icon"></i></span>
+          </a>
+          <a class="btn" id="decreaseFont">
+            <span class="icon-font"><i class="fas fa-caret-down icon-link icon-link-icon"></i></span>
+          </a>
+          <!--CHANGE FONT END-->
       </span>
       {% endfor %}
     </div>
@@ -79,6 +94,11 @@
   var book = ePub();
   var rendition;
 
+  //fontvariables
+  var x = 15;
+  var count = 0;
+
+
   var inputElement = document.getElementById("input");
   var bookElement = document.getElementById("book1");
 
@@ -108,6 +128,7 @@
   function openBook(e) {
     var bookData = e.target.result;
 
+    
     book.open(bookData, "binary");
     // document.getElementById("viewer").innerHTML = "";
 
@@ -118,8 +139,211 @@
       height: "100%",
     });
 
+    changeFont();
+
     rendition.display();
+    document.getElementById("increaseFont").addEventListener("click", increaseFontSize);
+    document.getElementById("decreaseFont").addEventListener("click", decreaseFontSize);
   }
+
+    //CHANGE FONT FUNCTIONS
+  function increaseFontSize() {
+      x+=10;
+      count*=x;
+      rendition.themes.default({
+      h1: {
+        'font-size':x+'px',
+        color: 'purple'
+      },
+      h2: {
+        'font-size':x+'px',
+        color: 'purple'
+      },
+      h3: {
+        'font-size':x+'px',
+        color: 'purple'
+      },
+      h4: {
+        'font-size':x+'px',
+        color: 'purple'
+      },
+      h5: {
+        'font-size':x+'px',
+        color: 'purple'
+      },
+      h6: {
+        'font-size':x+'px',
+        color: 'purple'
+      },
+      div: {
+        'font-size':x+'px',
+      },
+      p: {
+        "margin": '10px',
+        'font-size': '20px',
+      },
+    });
+
+      // rendition.display();
+      count++;
+    }
+
+    function decreaseFontSize() {
+      x-=10;
+      count*=x;
+      rendition.themes.default({
+      h1: {
+        'font-size':x+'px',
+        color: 'purple'
+      },
+      h2: {
+        'font-size':x+'px',
+        color: 'purple'
+      },
+      h3: {
+        'font-size':x+'px',
+        color: 'purple'
+      },
+      h4: {
+        'font-size':x+'px',
+        color: 'purple'
+      },
+      h5: {
+        'font-size':x+'px',
+        color: 'purple'
+      },
+      h6: {
+        'font-size':x+'px',
+        color: 'purple'
+      },
+      div: {
+        'font-size':x+'px',
+      },
+      p: {
+        "margin": '10px',
+        'font-size': '10px',
+      },
+    });
+
+      // rendition.display();
+      count++;
+    }
+
+    function changeFont() {
+      if(document.getElementById("fonts").value =='1'){
+        rendition.themes.default({
+          h1: {
+            'font-family': 'Arial',
+          },
+          h2: {
+            'font-family': 'Arial',
+          },
+          h3: {
+            'font-family': 'Arial',
+          },
+          h4: {
+            'font-family': 'Arial',
+          },
+          h5: {
+            'font-family': 'Arial',
+          },
+          h6: {
+            'font-family': 'Arial',
+          },
+          div: {
+            'font-family': 'Arial',
+          },
+          p: {
+            'font-family': 'Arial',
+          },
+    });
+      }
+      else if(document.getElementById("fonts").value =='2'){
+        rendition.themes.default({
+          h1: {
+            'font-family': 'Verdana',
+          },
+          h2: {
+            'font-family': 'Verdana',
+          },
+          h3: {
+            'font-family': 'Verdana',
+          },
+          h4: {
+            'font-family': 'Verdana',
+          },
+          h5: {
+            'font-family': 'Verdana',
+          },
+          h6: {
+            'font-family': 'Verdana',
+          },
+          div: {
+            'font-family': 'Verdana',
+          },
+          p: {
+            'font-family': 'Verdana',
+          },
+    });
+      }
+      else if(document.getElementById("fonts").value =='3'){
+        rendition.themes.default({
+          h1: {
+            'font-family': 'Times New Roman',
+          },
+          h2: {
+            'font-family': 'Times New Roman',
+          },
+          h3: {
+            'font-family': 'Times New Roman',
+          },
+          h4: {
+            'font-family': 'Times New Roman',
+          },
+          h5: {
+            'font-family': 'Times New Roman',
+          },
+          h6: {
+            'font-family': 'Times New Roman',
+          },
+          div: {
+            'font-family': 'Times New Roman',
+          },
+          p: {
+            'font-family': 'Times New Roman',
+          },
+    });
+      }
+      else if(document.getElementById("fonts").value =='4'){
+        rendition.themes.default({
+          h1: {
+            'font-family': 'Courier New',
+          },
+          h2: {
+            'font-family': 'Courier New',
+          },
+          h3: {
+            'font-family': 'Courier New',
+          },
+          h4: {
+            'font-family': 'Courier New',
+          },
+          h5: {
+            'font-family': 'Courier New',
+          },
+          h6: {
+            'font-family': 'Courier New',
+          },
+          div: {
+            'font-family': 'Courier New',
+          },
+          p: {
+            'font-family': 'Courier New',
+          },
+    });
+      }
+    }
+    //CHANGE FONT FUNCTIONS END
 
   function bookmarkBook(book_id) {
     console.log("test");
@@ -148,5 +372,7 @@
     document.body.appendChild(form);
     form.submit();
   }
+
+
 </script>
 {% endblock extrascriptfooter %}
