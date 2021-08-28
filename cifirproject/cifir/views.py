@@ -99,6 +99,38 @@ class homePageView(View):
 			print("insert code here to remove from collection")
 		return redirect('cifir:home_view')
 
+
+	#pdf file format
+	def post(self, request):
+	    if request.method == 'POST':
+	    	if 'btnUpload' in request.POST:
+	    		user = User.objects.get(id=request.user.id)
+	    		#title = request.POST.get('book_title')
+		    	file = request.FILES.get('book_file')
+	    		a = Book( file = file)
+	    		book = Book.objects.create(file = file)
+	    		book.user.add(user)
+	    		messages.success(request,'Book added!')
+
+	    		return redirect('cifir:home_view')
+	    else:
+	    	messages.error(request, 'Files was not Submitted successfully!')
+	    	return redirect('cifir:home_view')
+
+def files(request):
+    if request.method == 'POST':
+        form = BookForm(request.POST,request.FILES)
+        if form.is_valid():
+            form.save()
+            return HttpResponse('The file is saved')
+    else:
+        form = BookForm()
+        context = {
+            'form':form,
+        }
+    return render(request, 'base.html', context)
+
+
 class loginPageView(View):
 	def get(self, request):
 		users = User.objects.all()
