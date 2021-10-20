@@ -17,6 +17,20 @@ from django.utils.decorators import method_decorator
 import zipfile
 from lxml import etree
 
+from selenium import webdriver 
+from selenium.webdriver.common.keys import Keys 
+from selenium.webdriver.chrome.options import Options 
+import time
+import undetected_chromedriver as chromedriver
+
+# import pathlib, pickle
+# from grab import Grab
+# import webbrowser
+# import requests
+# from bs4 import BeautifulSoup
+
+chromedriver.TARGET_VERSION = 94
+chromedriver.install()
 
 # Create your views here.
 def updateBookStatus(item, book_id):
@@ -39,6 +53,20 @@ def addToCollection(book_id, collection_id):
 	collection = Collection.objects.get(id=collection_id)
 	collection.book.add(book)
 
+
+def automateLogin(username, password, url, loginBtnSelector, indicator):
+	driver = webdriver.Chrome()
+	if indicator == 1:
+		driver.get(url)
+		username_field = driver.find_element_by_css_selector("#username")
+		username_field.send_keys(username)
+		driver.execute_script("document.querySelector('#password').setAttribute('value','"+ password +"')")
+		driver.execute_script("document.querySelector('"+ loginBtnSelector +"').click();")
+	
+	if indicator == 2:
+		driver.get(url)
+
+#CLASSES
 class homePageView(View):
 	def get(self, request):
 		user = User.objects.filter(username=request.user)
@@ -256,7 +284,60 @@ class toReadPageView(View):
 
 class networkLibrariesPageView(View):
 	def get(self, request):
-		return render(request,'networklibraries.html')
+		catalogs = Catalog.objects.all()
+		context = {
+				'catalog' : catalogs,
+				}
+		return render(request,'networklibraries.html', context)
+
+	def post(self, request):
+		if request.method == "POST":
+			username = request.POST.get("username")
+			password = request.POST.get("password")
+			url = request.POST.get("link")
+
+			if "Cambridge Core" in request.POST:
+				loginBtnSelector = '#login-form > div:nth-child(5) > button'
+				automateLogin(username, password, url, loginBtnSelector, 1)
+
+			elif "ProQuest Elibrary" in request.POST:
+				loginBtnSelector = '#login_button'
+				automateLogin(username, password, url, loginBtnSelector, 1)
+
+			elif "Wiley Online Library" in request.POST:
+				#convert webElement to string
+				pword = str(password)
+				driver = webdriver.Chrome()
+				driver.get(url)
+
+				driver.execute_script("document.querySelector('#username').setAttribute('value','"+ username +"')")
+				password = driver.find_element_by_css_selector("#password")
+				password.send_keys(pword)
+
+				driver.execute_script("document.querySelector('#main-content > div > div > div.container > div > div > div.card.card--light-shadow.login-widget.col-md-6 > div.widget__body > div.login-form > form > div.align-end > span > input').click();")
+
+			elif "Science Direct" in request.POST:
+				#convert webElement to string
+				uname = str(username)
+				pword = str(password)
+				driver = webdriver.Chrome()
+				driver.get(url)
+
+				username = driver.find_element_by_css_selector("#bdd-email")
+				username.send_keys(uname)
+				driver.execute_script("document.querySelector('#bdd-elsPrimaryBtn').click();")
+				password = driver.find_element_by_css_selector("#bdd-password")
+				password.send_keys(pword)
+
+				driver.execute_script("document.querySelector('#bdd-elsPrimaryBtn').click();")
+
+			elif "Directory of Open Access Books" in request.POST:
+				automateLogin(username, password, url, '', 2)
+
+			elif "Zlibrary" in request.POST:
+				automateLogin(username, password, url, '', 2)
+
+			return redirect("cifir:networklibraries_view")
 
 class viewBook(View):
 	def get(self, request):

@@ -8,28 +8,33 @@
       <div class="carousel-inner">
         <div class="carousel-item active">
           <div class="row">
+            {% for cat in catalog %}
             <div class="col-md-4 mb-3">
               <div class="card">
-                <div class="embed-responsive embed-responsive-4by3">
-                  <img
-                    alt="Card image cap"
-                    class="card-img-top embed-responsive-item"
-                    src="https://media.glassdoor.com/sqll/764975/emerald-group-publishing-limited-squarelogo-1483603007677.png"
-                  />
-                </div>
-                <div class="card-body">
-                  <h4 class="card-title">Emerald</h4>
-                  <p class="card-text">
-                    With supporting text below as a natural lead-in to
-                    additional content.
-                  </p>
-                  <div class="card-read-more">
-                    <a href="https://www.emerald.com/insight/"> Read More</a>
+                <form method="POST" action="" enctype="multipart/form-data">
+                {% csrf_token %}
+                  <div class="embed-responsive embed-responsive-4by3">
+                    {% if cat.cover %}
+                    <img alt="Card image cap" class="card-img-top embed-responsive-item" src="{{ cat.cover }}" />
+                    {% endif %}
                   </div>
-                </div>
+                  <div class="card-body">
+                    <h4 class="card-title">{{ cat.name }}</h4>
+                    <p class="card-text">
+                      {{ cat.description }}
+                    </p>
+                    <input type="hidden" name="link" id="link" value="{{ cat.link }}">
+                    <input type="hidden" name="username" id="username" value="{{ cat.defaultUsername }}">
+                    <input type="hidden" name="password" id="password" value="{{ cat.defaultPassword }}">
+                    <div class="card-read-more">
+                      <button type="submit" id="{{ cat.name }}" name="{{ cat.name }}" class="btn btn-primary">Go to {{ cat.name }}</button>
+                    </div>
+                  </div>
+                </form>
               </div>
             </div>
-            <div class="col-md-4 mb-3">
+            {% endfor %}
+            <!-- <div class="col-md-4 mb-3">
               <div class="card">
                 <div class="embed-responsive embed-responsive-4by3">
                   <img
@@ -45,12 +50,15 @@
                     additional content.
                   </p>
                   <div class="card-read-more">
-                    <a href="https://www.sciencedirect.com/"> Read More</a>
+                    <form method="POST" action="" enctype="multipart/form-data">
+                      {% csrf_token %}
+                      <button type="submit" id="scienceDirect" name="scienceDirect" class="btn btn-primary">Go to Site</button>
+                    </form>
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="col-md-4 mb-3">
+            </div> -->
+            <!-- <div class="col-md-4 mb-3">
               <div class="card">
                 <div class="embed-responsive embed-responsive-4by3">
                   <img
@@ -66,16 +74,17 @@
                     additional content.
                   </p>
                   <div class="card-read-more">
-                    <a href="https://www.springeropen.com/journals">
-                      Read More</a
-                    >
+                    <form method="POST" action="" enctype="multipart/form-data">
+                      {% csrf_token %}
+                      <button type="submit" id="sample" name="sample" class="btn btn-primary">Go to Site</button>
+                    </form>
                   </div>
                 </div>
               </div>
-            </div>
+            </div> -->
           </div>
         </div>
-        <div class="carousel-item">
+        <!-- <div class="carousel-item">
           <div class="row">
             <div class="col-md-4 mb-3">
               <div class="card">
@@ -145,11 +154,11 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
-  <div class="col-7 text-right">
+  <!-- <div class="col-7 text-right">
     <a
       class="btn btn-primary mb-3 mr-1 carousel-btn"
       href="#carouselExampleIndicators"
@@ -166,5 +175,5 @@
     >
       <i class="fa fa-arrow-right"></i>
     </a>
-  </div>
+  </div> -->
 </div>

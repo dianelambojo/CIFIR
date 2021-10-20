@@ -56,6 +56,8 @@ class Catalog(models.Model):
 	link = models.CharField(max_length=250)
 	description = models.CharField(max_length=250)
 	cover = models.CharField(max_length=250)
+	defaultUsername = models.CharField(max_length=150)
+	defaultPassword = models.CharField(max_length=100)
 
 	class Meta:
 		db_table = "Catalog"
