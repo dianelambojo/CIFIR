@@ -53,9 +53,14 @@ def addToCollection(book_id, collection_id):
 	collection = Collection.objects.get(id=collection_id)
 	collection.book.add(book)
 
+def setDriverOptions():
+	options = webdriver.ChromeOptions()
+	options.add_experimental_option("detach", True)
+
+	return options
 
 def automateLogin(username, password, url, loginBtnSelector, indicator):
-	driver = webdriver.Chrome()
+	driver = webdriver.Chrome(options=setDriverOptions())
 	if indicator == 1:
 		driver.get(url)
 		username_field = driver.find_element_by_css_selector("#username")
@@ -296,6 +301,10 @@ class networkLibrariesPageView(View):
 			password = request.POST.get("password")
 			url = request.POST.get("link")
 
+			#convert webElement to string
+			uname = str(username)
+			pword = str(password)
+
 			if "Cambridge Core" in request.POST:
 				loginBtnSelector = '#login-form > div:nth-child(5) > button'
 				automateLogin(username, password, url, loginBtnSelector, 1)
@@ -305,9 +314,7 @@ class networkLibrariesPageView(View):
 				automateLogin(username, password, url, loginBtnSelector, 1)
 
 			elif "Wiley Online Library" in request.POST:
-				#convert webElement to string
-				pword = str(password)
-				driver = webdriver.Chrome()
+				driver = webdriver.Chrome(options=setDriverOptions())
 				driver.get(url)
 
 				driver.execute_script("document.querySelector('#username').setAttribute('value','"+ username +"')")
@@ -317,10 +324,7 @@ class networkLibrariesPageView(View):
 				driver.execute_script("document.querySelector('#main-content > div > div > div.container > div > div > div.card.card--light-shadow.login-widget.col-md-6 > div.widget__body > div.login-form > form > div.align-end > span > input').click();")
 
 			elif "Science Direct" in request.POST:
-				#convert webElement to string
-				uname = str(username)
-				pword = str(password)
-				driver = webdriver.Chrome()
+				driver = webdriver.Chrome(options=setDriverOptions())
 				driver.get(url)
 
 				username = driver.find_element_by_css_selector("#bdd-email")
