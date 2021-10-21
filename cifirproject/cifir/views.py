@@ -34,17 +34,17 @@ chromedriver.install()
 
 # Create your views here.
 def updateBookStatus(item, book_id):
-	print(item, book_id)
 	# revise code to add and remove from favorite, ishaveread, and istoread
+	books = Book.objects.filter(id=book_id)
 	if (item == "favorite"):
-		update_book = Book.objects.filter(id=book_id).update(isFavorite=True)
-		#insert success message here pls hahaha		
+		isFavorite = not books[0].isFavorite
+		Book.objects.filter(id=book_id).update(isFavorite=isFavorite)
 	elif (item == 'have-read'):
-		update_book = Book.objects.filter(id=book_id).update(isHaveRead=True)
-		#insert success message here pls hahaha		
+		isHaveRead = not books[0].isHaveRead
+		Book.objects.filter(id=book_id).update(isHaveRead=isHaveRead)
 	elif (item == 'to-read'):
-		update_book = Book.objects.filter(id=book_id).update(isToRead=True)
-		#insert success message here pls hahaha		
+		isToRead = not books[0].isToRead
+		Book.objects.filter(id=book_id).update(isToRead=isToRead)
 
 def addToCollection(book_id, collection_id):
 	print("book id: ", book_id)
@@ -134,21 +134,21 @@ class homePageView(View):
 
 
 	#pdf file format
-	def post(self, request):
-	    if request.method == 'POST':
-	    	if 'btnUpload' in request.POST:
-	    		user = User.objects.get(id=request.user.id)
-	    		#title = request.POST.get('book_title')
-		    	file = request.FILES.get('book_file')
-	    		a = Book( file = file)
-	    		book = Book.objects.create(file = file)
-	    		book.user.add(user)
-	    		messages.success(request,'Book added!')
+	# def post(self, request):
+	#     if request.method == 'POST':
+	#     	if 'btnUpload' in request.POST:
+	#     		user = User.objects.get(id=request.user.id)
+	#     		#title = request.POST.get('book_title')
+	# 	    	file = request.FILES.get('book_file')
+	#     		a = Book( file = file)
+	#     		book = Book.objects.create(file = file)
+	#     		book.user.add(user)
+	#     		messages.success(request,'Book added!')
 
-	    		return redirect('cifir:home_view')
-	    else:
-	    	messages.error(request, 'Files was not Submitted successfully!')
-	    	return redirect('cifir:home_view')
+	#     		return redirect('cifir:home_view')
+	#     else:
+	#     	messages.error(request, 'Files was not Submitted successfully!')
+	#     	return redirect('cifir:home_view')
 
 def files(request):
     if request.method == 'POST':

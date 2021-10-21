@@ -6,32 +6,42 @@
     </a>
 
     <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+      
       <li>
         <a class="dropdown-item" data-toggle="modal" data-target="#addBookCollectionModal" onclick="chooseBook('{{book.id}}')">Add to Collections</a>
       </li>
+      
       <!-- show this if the book is already added to collection -->
       <!-- <li>
         <a class="dropdown-item" data-toggle="modal" data-target="#addBookCollectionModal" onclick="chooseBook('{{book.id}}')">Remove from Collections</a>
       </li> -->
+      
       <li>
         <a class="dropdown-item" onclick="updateBook('{{ request.path }}' ,'favorite', '{{book.id}}')">
-          Add to Favorites
-          <!-- show this if the book is already added to favorites -->
-          <!-- Remove from Favorites -->
+          {% if not book.isFavorite %}
+            Add to Favorites
+          {% else %}
+            Remove from Favorites
+          {% endif %}
         </a>
       </li>
+      
       <li>
         <a class="dropdown-item" onclick="updateBook('{{ request.path }}' ,'to-read', '{{book.id}}')">
-          Add to To Read Books
-          <!-- show this if the book is already added to To Read Books -->
-          <!-- Remove from To Read Books -->
+          {% if not book.isToRead %}
+            Add to To Read Books
+          {% else %}
+            Remove from To Read Books
+          {% endif %}
         </a>
       </li>
       <li>
         <a class="dropdown-item" onclick="updateBook('{{ request.path }}' ,'have-read', '{{book.id}}')">
-          Add to Have Read Books
-          <!-- show this if the book is already added to Add to Have Read -->
-          <!-- Remove from Have Read Books-->
+          {% if not book.isHaveRead %}
+            Add to Have Read Books
+          {% else %}
+            Remove from Have Read Books
+          {% endif %}
         </a>
       </li>
     </ul>
