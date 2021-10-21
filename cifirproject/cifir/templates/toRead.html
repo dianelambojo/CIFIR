@@ -3,8 +3,15 @@
 {% block content %}
 <div class="container-fluid">
 	<div class="card">
-		<div class="card-header"><i class="fas fa-book-reader"></i>     Favorites</div>
-			<div class="card-body">
+		<div class="card-header">
+			<span>
+				<i class="far fa-clock icon-link"></i>
+				<a class="icon-link icon-link-icon" href='{% url "cifir:toread_view" %}'>
+					Have Read
+				</a>
+			</span>
+		</div>
+			<div class="card-body collection-folders">
 				{% for book in books %}
 				<div class="i-folders">
 					{% if book.cover %}
