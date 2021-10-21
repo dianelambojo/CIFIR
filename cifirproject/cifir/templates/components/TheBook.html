@@ -49,7 +49,12 @@
   
     <div onclick="openBook('{{book.id}}', '{{book.file.url}}')">
       <div class="i-folders">
-        <i class="fas fa-book"></i>
+          {% if book.cover %}
+            <img src="{{book.cover.url}}"alt ="{{book.title}}"
+            style ="height: 160px; width:110px">
+          {% else %}
+            <span class = "text-muted">No Cover</span>
+					{% endif %}
       </div>
       <div class="book-title">
         <h6>{{ book.title }}</h6>
@@ -122,12 +127,30 @@
   }
 
   function updateBook(currentURL, item, book_id) {
-    post(currentURL, {
+    if (item === "favorite") {
+      post(currentURL, {
         book_id,
-        item: item,
+        item: "favorite",
         csrfmiddlewaretoken: "{{csrf_token}}",
         updateBookStatus: "",
       });
+    }
+    if (item === "to-read") {
+      post(currentURL, {
+        book_id,
+        item: "to-read",
+        csrfmiddlewaretoken: "{{csrf_token}}",
+        updateBookStatus: "",
+      });
+    }
+    if (item === "have-read") {
+      post(currentURL, {
+        book_id,
+        item: "have-read",
+        csrfmiddlewaretoken: "{{csrf_token}}",
+        updateBookStatus: "",
+      });
+    }
   }
 
   function post(path, params, method = "post") {

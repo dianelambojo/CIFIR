@@ -7,8 +7,13 @@
 			<div class="card-body">
 				{% for book in books %}
 				<div class="i-folders">
-					<i class="fas fa-book"></i>
-				    <h6>{{book.title}}</h6>
+					{% if book.cover %}
+						<img src="{{book.cover.url}}"alt ="{{book.title}}"
+						style ="height: 160px; width:110px">
+					{% else %}
+						<span class = "text-muted">No Cover</span>
+					{% endif %}
+					<h6>{{book.title}}</h6>
                 </div>
                 {% endfor %}
 				
