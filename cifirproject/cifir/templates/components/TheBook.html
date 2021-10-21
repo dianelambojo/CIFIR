@@ -122,30 +122,12 @@
   }
 
   function updateBook(currentURL, item, book_id) {
-    if (item === "favorite") {
-      post(currentURL, {
+    post(currentURL, {
         book_id,
-        item: "favorite",
+        item: item,
         csrfmiddlewaretoken: "{{csrf_token}}",
         updateBookStatus: "",
       });
-    }
-    if (item === "to-read") {
-      post(currentURL, {
-        book_id,
-        item: "to-read",
-        csrfmiddlewaretoken: "{{csrf_token}}",
-        updateBookStatus: "",
-      });
-    }
-    if (item === "have-read") {
-      post(currentURL, {
-        book_id,
-        item: "have-read",
-        csrfmiddlewaretoken: "{{csrf_token}}",
-        updateBookStatus: "",
-      });
-    }
   }
 
   function post(path, params, method = "post") {
