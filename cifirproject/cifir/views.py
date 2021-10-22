@@ -252,16 +252,27 @@ class collectionsPageView(View):
 
 class favoritesPageView(View):
 	def get(self, request):
+		book_id = request.POST.get('book_id', None)
 		user = User.objects.filter(username=request.user)
 		book = Book.objects.filter(user=request.user).filter(isFavorite=True)
-
 		context = {
-				'users' : user,
 				'books' : book,
 				}
 
 		return render(request, 'favorites.html', context)
 
+	
+	def post(self,request):
+		context = {}
+		book_id = request.POST.get('book_id', None)
+		user = User.objects.filter(username=request.user)
+		book = Book.objects.filter(user=request.user).filter(id=book_id)
+
+		context = {
+					'books' : book,
+				}
+
+		return render(request, 'EpubRead.html', context)
 
 class haveReadPageView(View):
 	def get(self, request):

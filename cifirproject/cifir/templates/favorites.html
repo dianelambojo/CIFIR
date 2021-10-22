@@ -12,17 +12,37 @@
 			</span>
 		</div>
 			<div class="card-body collection-folders">
-				{% for book in books %}
-				<div class="i-folders">
-					{% if book.cover %}
-						<img src="{{book.cover.url}}"alt ="{{book.title}}"
-						style ="height: 160px; width:110px">
-					{% endif %}
-					<h6>{{book.title}}</h6>
-                </div>
-                {% endfor %}
-				
-		</div>   
+				<div class="btn book-btn" name="book_id" value="{{book.id}}">
+					{% for book in books %}
+							<div onclick="openBook('{{book.id}}', '{{book.file.url}}')">
+							<div class="i-folders">
+								{% if book.cover %}
+									<img src="{{book.cover.url}}"alt ="{{book.title}}"
+									style ="height: 160px; width:110px">
+								{% endif %}
+								<h6>{{book.title}}</h6>
+							</div>
+						</div>
+					</div>  
+				{% endfor %} 
+		</div>
 	</div>
 </div>
 {% endblock content %}
+
+{% block extrascriptfooter %}
+<script>
+	var book_id;
+  	function chooseBook(id){
+    	book_id = id
+  	}
+
+	function openBook(book_id, book_file) {
+	post('{% url "cifir:epub_view" %}', {
+	book_id,
+	book_file,
+	csrfmiddlewaretoken: "{{csrf_token}}",
+	});
+}
+</script>
+{% endblock extrascriptfooter %}
