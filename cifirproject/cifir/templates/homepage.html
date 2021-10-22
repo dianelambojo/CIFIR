@@ -26,11 +26,12 @@
           <h6>{{ book.title}}</h6>
           <input type="text" name="book_id" value="{{book.id}}" hidden />
         </button> -->
-      {% include './components/TheBook.html' %}
+        {% include './components/TheBook.html' %}
       <!-- </form> -->
-      {% if book.file %}
-      <a href="{{ book.file.url }}"></a>
-      {% endif %} {% endfor %}
+          {% if book.file %}
+              <a href="{{ book.file.url }}"></a>
+          {% endif %} 
+      {% endfor %}
     </div>
   </div>
 </div>

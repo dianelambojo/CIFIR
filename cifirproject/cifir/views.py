@@ -17,34 +17,20 @@ from django.utils.decorators import method_decorator
 import zipfile
 from lxml import etree
 
-from selenium import webdriver 
-from selenium.webdriver.common.keys import Keys 
-from selenium.webdriver.chrome.options import Options 
-import time
-import undetected_chromedriver as chromedriver
-
-# import pathlib, pickle
-# from grab import Grab
-# import webbrowser
-# import requests
-# from bs4 import BeautifulSoup
-
-chromedriver.TARGET_VERSION = 94
-chromedriver.install()
 
 # Create your views here.
 def updateBookStatus(item, book_id):
+	print(item, book_id)
 	# revise code to add and remove from favorite, ishaveread, and istoread
-	books = Book.objects.filter(id=book_id)
 	if (item == "favorite"):
-		isFavorite = not books[0].isFavorite
-		Book.objects.filter(id=book_id).update(isFavorite=isFavorite)
+		update_book = Book.objects.filter(id=book_id).update(isFavorite=True)
+		#insert success message here pls hahaha		
 	elif (item == 'have-read'):
-		isHaveRead = not books[0].isHaveRead
-		Book.objects.filter(id=book_id).update(isHaveRead=isHaveRead)
+		update_book = Book.objects.filter(id=book_id).update(isHaveRead=True)
+		#insert success message here pls hahaha		
 	elif (item == 'to-read'):
-		isToRead = not books[0].isToRead
-		Book.objects.filter(id=book_id).update(isToRead=isToRead)
+		update_book = Book.objects.filter(id=book_id).update(isToRead=True)
+		#insert success message here pls hahaha		
 
 def addToCollection(book_id, collection_id):
 	print("book id: ", book_id)
@@ -53,25 +39,6 @@ def addToCollection(book_id, collection_id):
 	collection = Collection.objects.get(id=collection_id)
 	collection.book.add(book)
 
-def setDriverOptions():
-	options = webdriver.ChromeOptions()
-	options.add_experimental_option("detach", True)
-
-	return options
-
-def automateLogin(username, password, url, loginBtnSelector, indicator):
-	driver = webdriver.Chrome(options=setDriverOptions())
-	if indicator == 1:
-		driver.get(url)
-		username_field = driver.find_element_by_css_selector("#username")
-		username_field.send_keys(username)
-		driver.execute_script("document.querySelector('#password').setAttribute('value','"+ password +"')")
-		driver.execute_script("document.querySelector('"+ loginBtnSelector +"').click();")
-	
-	if indicator == 2:
-		driver.get(url)
-
-#CLASSES
 class homePageView(View):
 	def get(self, request):
 		user = User.objects.filter(username=request.user)
@@ -91,6 +58,7 @@ class homePageView(View):
 	def post(self,request):
 		if 'btnUpload' in request.POST:
 			user = User.objects.get(id=request.user.id)
+			title = request.POST.get('book_title')
 			file = request.FILES.get('book_file')
 			print(file)
 			ns = {
@@ -130,25 +98,20 @@ class homePageView(View):
 		if 'removeFromCollection' in request.POST:
 			# insert code here
 			print("insert code here to remove from collection")
+
+			# return redirect('cifir:home_view')
+		# if 'btnUpload' in request.POST:
+		# 		user = User.objects.get(id=request.user.id)
+		# 		title = request.POST.get('book_title')
+		# 		file = request.FILES.get('book_file')
+		# 		a = Book( file = file)
+		# 		book = Book.objects.create(file = file)
+		# 		book.user.add(user)
+		# 		messages.success(request,'Book added!')
+		# else:
+	    #  		messages.error(request, 'Files was not Submitted successfully!')
+	    
 		return redirect('cifir:home_view')
-
-
-	#pdf file format
-	# def post(self, request):
-	#     if request.method == 'POST':
-	#     	if 'btnUpload' in request.POST:
-	#     		user = User.objects.get(id=request.user.id)
-	#     		#title = request.POST.get('book_title')
-	# 	    	file = request.FILES.get('book_file')
-	#     		a = Book( file = file)
-	#     		book = Book.objects.create(file = file)
-	#     		book.user.add(user)
-	#     		messages.success(request,'Book added!')
-
-	#     		return redirect('cifir:home_view')
-	#     else:
-	#     	messages.error(request, 'Files was not Submitted successfully!')
-	#     	return redirect('cifir:home_view')
 
 def files(request):
     if request.method == 'POST':
@@ -300,59 +263,7 @@ class toReadPageView(View):
 
 class networkLibrariesPageView(View):
 	def get(self, request):
-		catalogs = Catalog.objects.all()
-		context = {
-				'catalog' : catalogs,
-				}
-		return render(request,'networklibraries.html', context)
-
-	def post(self, request):
-		if request.method == "POST":
-			username = request.POST.get("username")
-			password = request.POST.get("password")
-			url = request.POST.get("link")
-
-			#convert webElement to string
-			uname = str(username)
-			pword = str(password)
-
-			if "Cambridge Core" in request.POST:
-				loginBtnSelector = '#login-form > div:nth-child(5) > button'
-				automateLogin(username, password, url, loginBtnSelector, 1)
-
-			elif "ProQuest Elibrary" in request.POST:
-				loginBtnSelector = '#login_button'
-				automateLogin(username, password, url, loginBtnSelector, 1)
-
-			elif "Wiley Online Library" in request.POST:
-				driver = webdriver.Chrome(options=setDriverOptions())
-				driver.get(url)
-
-				driver.execute_script("document.querySelector('#username').setAttribute('value','"+ username +"')")
-				password = driver.find_element_by_css_selector("#password")
-				password.send_keys(pword)
-
-				driver.execute_script("document.querySelector('#main-content > div > div > div.container > div > div > div.card.card--light-shadow.login-widget.col-md-6 > div.widget__body > div.login-form > form > div.align-end > span > input').click();")
-
-			elif "Science Direct" in request.POST:
-				driver = webdriver.Chrome(options=setDriverOptions())
-				driver.get(url)
-
-				username = driver.find_element_by_css_selector("#bdd-email")
-				username.send_keys(uname)
-				driver.execute_script("document.querySelector('#bdd-elsPrimaryBtn').click();")
-				password = driver.find_element_by_css_selector("#bdd-password")
-				password.send_keys(pword)
-
-				driver.execute_script("document.querySelector('#bdd-elsPrimaryBtn').click();")
-
-			elif "Directory of Open Access Books" in request.POST:
-				automateLogin(username, password, url, '', 2)
-
-			elif "Zlibrary" in request.POST:
-				automateLogin(username, password, url, '', 2)
-
-			return redirect("cifir:networklibraries_view")
+		return render(request,'networklibraries.html')
 
 class viewBook(View):
 	def get(self, request):
