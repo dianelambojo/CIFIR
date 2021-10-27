@@ -6,7 +6,10 @@
   --gold: #ffd700;
   --maroon: #800000;
 }
-
+.alert i[class^="bi-"]{
+  font-size: 1.5em;
+  line-height: 1;
+}
 /*TOP  NAVBAR */
 
 #spanLogo {

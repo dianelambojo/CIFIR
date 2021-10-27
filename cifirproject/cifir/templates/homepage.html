@@ -1,8 +1,27 @@
 {% extends "base.html" %} {% load static %} {% block content %}
 <br />
+ <!--Alert Modal-->
+      <!-- Button trigger modal -->
+        <a data-toggle="modal" data-target="#exampleModal"></a>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            
+              <div class="alert alert-info alert-dismissible d-flex align-items-center fade show modal-content">
+                <div class="modal-header">
+                  <i class="bi-info-circle-fill"></i><strong class="mx-2">Info!</strong>
+                </div>
+                Please reset your password in Account Setting.
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+              </div>
+            
+          </div>
+        </div>
+    <!--End Alert Modal-->
 {% if user.is_authenticated %}
 <div class="container-fluid">
-  <div class="card">
+     <div class="card">
     <div class="card-header">
       <span>
         <i class="fas fa-book icon-link"></i>

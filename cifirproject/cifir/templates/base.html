@@ -5,27 +5,18 @@
   <head>
     <title>CIFIR</title>
     <!---Bootstrap Link-->
-    <link
-      rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-      crossorigin="anonymous"
-    />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" crossorigin="anonymous"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet">
+
     <!--FontAwesomeLink-->
-    <script
-      src="https://kit.fontawesome.com/982a9b46d2.js"
-      crossorigin="anonymous"
-    ></script>
+    <script src="https://kit.fontawesome.com/982a9b46d2.js" crossorigin="anonymous" ></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
     {% block extrascriptheader %} {% endblock extrascriptheader %}
+  
     <!-- Google fonts-->
-    <link
-      href="https://fonts.googleapis.com/css?family=Merriweather+Sans:400,700"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic"
-      rel="stylesheet"
-      type="text/css"
-    />
+    <link href="https://fonts.googleapis.com/css?family=Merriweather+Sans:400,700" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic" rel="stylesheet" type="text/css" />
 
     <!--CSS LINK-->
     <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
@@ -37,14 +28,13 @@
     <hr />
 
     {% block content %} {% endblock content %}
-
     <div class="fab-wrapper">
       <button id="fab-button">
         <i class="fas fa-plus" data-toggle="modal" data-target="#uploadfile">
         </i>
       </button>
     </div>
-    <!-- Modal -->
+        <!-- Modal -->
     <div
       class="modal fade"
       id="uploadfile"
@@ -136,6 +126,13 @@
           $("#msg").remove();
         }
       }, 2000);
+
+      $(document).ready(function () {
+        setTimeout(function () {
+          $("#exampleModal").modal('show');
+        }, 1000);
+      }); 
+
     </script>
     <!-- <script>
 					$(document).ready(function(){
