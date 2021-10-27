@@ -22,6 +22,7 @@ urlpatterns = [
     path('toread/', views.toReadPageView.as_view(), name="toread_view"),
     path('haveread/', views.haveReadPageView.as_view(), name="haveread_view"),
     path('epub/', views.epubReadpageView.as_view(), name="epub_view"),
+     path('profile/', views.profilePageView.as_view(), name="profile_view"),
     
 
 ]

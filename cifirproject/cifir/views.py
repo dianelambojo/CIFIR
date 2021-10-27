@@ -200,6 +200,10 @@ class audiobooksPageView(View):
 	def get(self, request):
 		return render(request,'audiobooks.html')
 
+class profilePageView(View):
+	def get(self, request):
+		return render(request,'profile.html')
+
 class bookmarksPageView(View):
 	def get(self, request):
 
