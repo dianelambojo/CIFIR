@@ -1,3 +1,4 @@
+from re import template
 from django.shortcuts import render
 from django.views.generic import View
 from .forms import *
@@ -7,10 +8,11 @@ from itertools import chain
 from django.shortcuts import render,redirect
 from django.views.generic import View
 from django.http import HttpResponse, Http404
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import PasswordChangeForm, UserCreationForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User, auth
 from django.contrib import messages
+from django.contrib.auth.views import PasswordChangeView, PasswordChangeDoneView
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
@@ -22,6 +24,8 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options 
 import time
 import undetected_chromedriver as chromedriver
+from django.urls import reverse_lazy
+from .forms import PasswordChangingForm
 
 # import pathlib, pickle
 # from grab import Grab
@@ -204,9 +208,31 @@ class profilePageView(View):
 	def get(self, request):
 		return render(request,'profile.html')
 
+class PasswordChangeView(PasswordChangeView):
+	form_class = PasswordChangeView
+	success_url = reverse_lazy('url cifir/login_view')
+
+class PasswordChangeDoneView(PasswordChangeDoneView):
+	template_name = 'profile.html'
+
+class PasswordResetView(View):
+	def get(self, request):
+		return render(request,'password_reset_form.html')
+
+class PasswordResetDoneView(View):
+	def get(self, request):
+		return render(request,'password_reset_done.html')
+
+class PasswordResetConfirmView(View):
+	def get(self, request):
+		return render(request,'password_reset_confirm.html')
+
+class PasswordResetCompleteView(View):
+	def get(self, request):
+		return render(request,'password_reset_complete.html')
+
 class bookmarksPageView(View):
 	def get(self, request):
-
 		return render(request,'bookmarks.html')
 		
 class epubReadpageView(View):

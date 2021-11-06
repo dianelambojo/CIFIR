@@ -131,7 +131,14 @@
         setTimeout(function () {
           $("#exampleModal").modal('show');
         }, 1000);
-      }); 
+      });
+
+      {% comment %} $(document).ready(function() {
+          if ($.cookie('pop') == null) {
+              $("#exampleModal").modal('show');
+              $.cookie('pop', '1');
+          }, 1000);
+      }); {% endcomment %}
 
     </script>
     <!-- <script>
