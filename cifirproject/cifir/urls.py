@@ -26,21 +26,31 @@ urlpatterns = [
     path('haveread/', views.haveReadPageView.as_view(), name="haveread_view"),
     path('epub/', views.epubReadpageView.as_view(), name="epub_view"),
     path('profile/', views.profilePageView.as_view(), name="profile_view"),
-    path('password/', auth_views.PasswordChangeView.as_view(template_name = 'changePassword.html'),name="changePassword_view"),
+    path('password/', 
+        auth_views.PasswordChangeView.as_view(template_name = 'changePassword.html', 
+        success_url = reverse_lazy('cifir:login_view')),name="changePassword_view"),
 
     #ResetPassword
-    path('password-reset/', auth_views.PasswordResetView.as_view(template_name='password_reset_form.html'), name="password_reset"),
+    path('password-reset/', 
+        auth_views.PasswordResetView.as_view(template_name='password_reset_form.html', success_url = reverse_lazy('cifir:password_reset_done')),
+        name="password_reset"),
                 
-                # subject_template_name='commons/password-reset/password_reset_subject.txt',
-                # email_template_name='commons/password-reset/password_reset_email.html',
-                # success_url='/login/' ), 
-     path('password-reset/done/', auth_views.PasswordResetDoneView.as_view(template_name='password_reset_done.html'),name="password_reset_done"),
+    path('password-reset/done/', 
+        auth_views.PasswordResetDoneView.as_view(template_name='password_reset_done.html'),
+        name="password_reset_done"),
              
-     path('password-reset-confirm/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view( template_name='password_reset_confirm.html'), name="password_reset_confirm"),
+     path('password-reset-confirm/<uidb64>/<token>/',
+        auth_views.PasswordResetConfirmView.as_view(
+            template_name='cifir/templates/password_reset_complete.html',
+            success_url=reverse_lazy('cifir:password_reset_complete')
+        ),
+        name='password_reset_confirm'
+    ),
                 
-      path('password-reset-complete/', auth_views.PasswordResetCompleteView.as_view(template_name='password_reset_complete.html'), name="password_reset_complete"),
+    path('password-reset-complete/', 
+        auth_views.PasswordResetCompleteView.as_view(template_name='password_reset_complete.html'), 
+        name="password_reset_complete"),
                
- 
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
