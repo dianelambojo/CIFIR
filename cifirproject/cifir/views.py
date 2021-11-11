@@ -18,7 +18,6 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 import zipfile
 from lxml import etree
-
 from selenium import webdriver 
 from selenium.webdriver.common.keys import Keys 
 from selenium.webdriver.chrome.options import Options 
@@ -26,6 +25,12 @@ import time
 import undetected_chromedriver as chromedriver
 from django.urls import reverse_lazy
 from .forms import PasswordChangingForm
+from django.contrib import admin
+from django.contrib.auth import get_user_model
+from django.conf import settings
+import csv, sys, os, django, random, datetime
+from django.contrib.auth.backends import ModelBackend
+from pathlib import Path
 
 # import pathlib, pickle
 # from grab import Grab
@@ -167,6 +172,17 @@ def files(request):
         }
     return render(request, 'base.html', context)
 
+class EmailBackend(ModelBackend):
+    def authenticate(self, request, username=None, password=None, **kwargs):
+        UserModel = get_user_model()
+        try:
+            user = UserModel.objects.get(email=username)
+        except UserModel.DoesNotExist:
+            return None
+        else:
+            if user.check_password(password):
+                return user
+        return None
 
 class loginPageView(View):
 	def get(self, request):
@@ -177,20 +193,37 @@ class loginPageView(View):
 	def post(self,request):
 		if request.method == 'POST':
 			if 'loginBtn' in request.POST:
+				users = get_user_model()
 				print('Login Button Clicked!')
-				username = request.POST.get('username')
+				email = request.POST.get('email')
 				password = request.POST.get('password')
 				#user = LibUser.objects.filter(email = email,password = password)
-				user = authenticate(request, username=username, password=password)
-				print(user)
-				if user is not None:
-					#user = LibUser.objects.filter(email = email,password = password)
-					login(request, user)
-					request.session['username'] = username
-					return redirect('cifir:home_view')
+				username = users.objects.filter(email=email)
+				print(username)
+				if username is not None:
+					username = users.objects.get(email=email.lower()).username
+					user = authenticate(username=username, password=password)
+					print(user)
+					if user is not None:
+						login(request,user)
+						request.session['email'] = email
+						return redirect('cifir:home_view')
+					else:
+						messages.info(request, 'Email or password is incorrect')
+						return redirect('cifir:login_view')
 				else:
 					messages.info(request, 'Email or password is incorrect')
 					return redirect('cifir:login_view')
+				
+				# print(user)
+				# if user is not None:
+				# 	#user = LibUser.objects.filter(email = email,password = password)
+				# 	login(request, user)
+				# 	request.session['email'] = email
+				# 	return redirect('cifir:home_view')
+				# else:
+				# 	messages.info(request, 'Email or password is incorrect')
+				# 	return redirect('cifir:login_view')
 			else:
 			 	messages.warning(request, 'Email or password is incorrect')
 			 	return render(request, 'login.html')
@@ -418,5 +451,51 @@ class viewBook(View):
 				messages.success(request,'Collection Deleted Successfuly!')
 
 		return render(request, 'files.html', context)
+
+
+# #IMPORT USERS FROM CSV
+
+Current_Date = datetime.datetime.today().strftime ('%d-%b-%Y')
+User = get_user_model()
+loc1 = 'C:/accounts.csv'
+loc2 = 'C:/accounts-saved'+str(Current_Date)+str(random.randint(0,100))+'.csv'
+# os.rename(loc1,loc2)
+file = loc1
+data = csv.reader(open(file,'r'), delimiter=",")
+
+
+for row in data:
+    if row[1] != "Number":
+        # Post.id = row[0]
+        Post=User()
+        usernameRow = row[3]
+        userUsername = User.objects.filter(username = usernameRow).values_list('username', flat=True).first()
+        print(userUsername)
+        if userUsername == row[3]:
+            print(userUsername)
+            userUsername = User.objects.filter(username = row[3]).values('username')[0]
+            finalUsername = userUsername['username']
+            print("User object: " + finalUsername)
+            print("Row data: " + usernameRow)
+            if finalUsername == usernameRow:
+                print('data are equal')
+            # next(data)
+        else:
+	        Post.first_name = row[1]
+	        Post.last_name=row[2]
+	        Post.username = row[3]
+	        Post.email = row[4]
+	        Post.set_password(row[5])
+	        # Post.last_login = "2018-09-27 05:51:42.521991"
+	        Post.is_superuser = "0"
+	        Post.is_staff = "1"
+	        Post.is_active = "1"
+	        # Post.date_joined = "2018-09-27 05:14:50"
+	        print('data is saved')
+	        Post.save()
+
+
+
+# # #IMPORT USERS FROM CSV-end
 
 
