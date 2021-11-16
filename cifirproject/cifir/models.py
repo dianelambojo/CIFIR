@@ -10,10 +10,8 @@ class Book(models.Model):
 	title = models.CharField(max_length=250)
 	cover = models.ImageField(upload_to='media/')
 	file = models.FileField(upload_to='media/')
-	fileType = models.CharField(max_length=250)
-	noOfPages = models.CharField(max_length=250)
-	chapterCount = models.CharField(max_length=250)
 	user = models.ManyToManyField(User, blank=True)
+
 
 	isFavorite = models.BooleanField(default=False)
 	isHaveRead = models.BooleanField(default=False)

@@ -38,7 +38,10 @@ from pathlib import Path
 # import requests
 # from bs4 import BeautifulSoup
 
+chromedriver.TARGET_VERSION = 92
 chromedriver.TARGET_VERSION = 94
+chromedriver.TARGET_VERSION = 95
+chromedriver.TARGET_VERSION = 96
 chromedriver.install()
 
 # Create your views here.
@@ -69,7 +72,7 @@ def setDriverOptions():
 	return options
 
 def automateLogin(username, password, url, loginBtnSelector, indicator):
-	driver = webdriver.Chrome(options=setDriverOptions())
+	driver = webdriver.Chrome("C:/Program Files (x86)/Google/Update/Install/ChromeSetup.exe",options=setDriverOptions())
 	if indicator == 1:
 		driver.get(url)
 		username_field = driver.find_element_by_css_selector("#username")
@@ -143,21 +146,21 @@ class homePageView(View):
 
 
 	#pdf file format
-	# def post(self, request):
-	#     if request.method == 'POST':
-	#     	if 'btnUpload' in request.POST:
-	#     		user = User.objects.get(id=request.user.id)
-	#     		#title = request.POST.get('book_title')
-	# 	    	file = request.FILES.get('book_file')
-	#     		a = Book( file = file)
-	#     		book = Book.objects.create(file = file)
-	#     		book.user.add(user)
-	#     		messages.success(request,'Book added!')
+	def post(self, request):
+	    if request.method == 'POST':
+	    	if 'btnUpload' in request.POST:
+	    		user = User.objects.get(id=request.user.id)
+	    		title = request.POST.get('book_title')
+		    	file = request.FILES.get('book_file')
+	    		a = Book( file = file)
+	    		book = Book.objects.create(file = file)
+	    		book.user.add(user)
+	    		messages.success(request,'Book added!')
 
-	#     		return redirect('cifir:home_view')
-	#     else:
-	#     	messages.error(request, 'Files was not Submitted successfully!')
-	#     	return redirect('cifir:home_view')
+	    		return redirect('cifir:home_view')
+	    else:
+	    	messages.error(request, 'Files was not Submitted successfully!')
+	    	return redirect('cifir:home_view')
 
 def files(request):
     if request.method == 'POST':
