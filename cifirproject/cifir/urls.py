@@ -14,7 +14,8 @@ urlpatterns = [
     #TURL
     path('login/', views.loginPageView.as_view(), name="login_view"),
     path('logout/', views.logoutPage, name='logout_view'),
-    path('home/', views.homePageView.as_view(), name="home_view"),
+    path('admin/', views.adminPageView.as_view(), name='admin_view'),
+    path('home/', views.homePageView.as_view(), name='home_view'),
     path('collections/', views.collectionsPageView.as_view(), name="collections_view"),
     path('bookmarks/', views.bookmarksPageView.as_view(), name="bookmarks_view"),
     path('audiobooks/', views.audiobooksPageView.as_view(), name="audiobooks_view"),

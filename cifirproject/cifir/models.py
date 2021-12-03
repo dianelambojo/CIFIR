@@ -11,8 +11,6 @@ class Book(models.Model):
 	cover = models.ImageField(upload_to='media/')
 	file = models.FileField(upload_to='media/')
 	user = models.ManyToManyField(User, blank=True)
-
-
 	isFavorite = models.BooleanField(default=False)
 	isHaveRead = models.BooleanField(default=False)
 	isToRead = models.BooleanField(default=False)

@@ -84,6 +84,7 @@ def automateLogin(username, password, url, loginBtnSelector, indicator):
 		driver.get(url)
 
 #CLASSES
+
 class homePageView(View):
 	def get(self, request):
 		user = User.objects.filter(username=request.user)
@@ -100,6 +101,7 @@ class homePageView(View):
 
 		return render(request, 'homepage.html', context)
 
+	
 	def post(self,request):
 		if 'btnUpload' in request.POST:
 			user = User.objects.get(id=request.user.id)
@@ -235,7 +237,10 @@ def logoutPage(request):
 	logout(request)
 	return redirect('cifir:login_view')
 
-
+class adminPageView(View):
+	def get(self, request):
+		return render(request,'admin/base_site.html')
+		
 class audiobooksPageView(View):
 	def get(self, request):
 		return render(request,'audiobooks.html')
