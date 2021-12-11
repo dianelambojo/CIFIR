@@ -31,6 +31,16 @@
   color: var(--iconColor);
   display: inline-flex;
 }
+#navbarNavRight .navbar-nav .nav-item .navbar i {
+  color: var(--iconColor);
+  transition: 0.3s;
+}
+
+#navbarNavRight .navbar-nav .nav-item .navbar i:hover {
+  color: var(--gold);
+  text-shadow: 1px 1px #343a40;
+}
+
 
 #navbarNavRight .navbar-nav .nav-item .navbar i {
   color: var(--iconColor);
@@ -187,8 +197,9 @@ hr {
   padding: 0 40px;
   box-sizing: border=box;
 }
+
 .panel-transparent {
-  background: #343a40;
+  background-image: linear-gradient(-90deg, #ED8854, #E2454F );
   border-radius: 15px;
   align-content: center;
 }
@@ -203,21 +214,34 @@ hr {
 }
 
 #login-button {
+  font-family: 'Roboto';
+  font-weight: 600;
   border: none;
+  color: #ca3943;
   background-color: white;
   padding: 5px 20px;
   transition-duration: 0.2s;
+  border-radius: 15px;
+}
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: rgb(207, 207, 207);
+  opacity: 1; /* Firefox */
 }
 
 #login-button:hover {
   background-color: rgb(255, 240, 158);
 }
 
+.btn-link {
+  color: rgb(254, 255, 188) !important;
+  opacity: 50%;
+  align-items: flex-end;
+}
+
 .login-inputs {
   padding: 5px;
   outline: none;
 }
-
 .login-citlogo {
   width: 250px;
   height: 250px;

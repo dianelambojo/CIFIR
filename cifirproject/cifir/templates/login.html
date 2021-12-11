@@ -10,7 +10,8 @@
 	<!-- Google fonts-->
 	<link href="https://fonts.googleapis.com/css?family=Merriweather+Sans:400,700" rel="stylesheet" />
 	<link href="https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic" rel="stylesheet" type="text/css" />
-	
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+
 	<!--CSS LINK-->
 	<link rel="stylesheet" href="{% static 'css/styles.css' %}">
 	
@@ -21,15 +22,8 @@
 	<div class="collapse navbar-collapse" id="navbarNavTopLeft">
 	  <ul class="navbar-nav">
 			<li class="nav-item active">
-				<a class="navbar" href="#">
-					<span id="spanLogo"><i class="fas fa-swatchbook fa-flip-horizontal"></i></span>
-				</a>
-			</li>
-			<li class="nav-item active">
 				<a class="logolink" href="#">
-					<span id="spanLogo2">
-						<div id="divLogo">CIFIR</div>
-					</span>
+						<img src="{% static 'images/CIFIR_Logo.png' %}" id="divLogo" height="150px" width="150px">
 				</a>
 			</li>
 		</ul>
@@ -110,20 +104,20 @@
             	{% csrf_token %}
                 <h1>LOGIN</h1>
                     <div class="txt_field">
-                        <input class="w-100 login-inputs" type="text" placeholder="Email" name="email" maxlength="150" required="" id="email">
+                        <input class="w-100 login-inputs rounded" type="text" placeholder="Email" name="email" maxlength="150" required="" id="email">
                         <span></span>
 						<br>
 						<br>
                     </div>
                     <div class="txt_field">
-                        <input class="w-100 login-inputs" type="password" placeholder="Password" name="password" autocomplete="new-password" required="" id="password">
+                        <input class="w-100 login-inputs rounded" type="password" placeholder="Password" name="password" autocomplete="new-password" required="" id="password">
                         <span></span>
                     </div>
 					<a class="btn btn-link" href="{% url "cifir:password_reset" %}" role="button" aria-pressed="true">Forgot Password?</a>
 					<a class="btn btn-link" href="{% url "cifir:admin_view" %}" role="button" aria-pressed="true">Admin Dashboard</a>
-					<div class="d-flex justify-content-center">
-                    <input type="submit" value="LOGIN" name="loginBtn" id="login-button">
-				</div>
+					<div class="d-flex justify-content-center ">
+                    	<input type="submit" value="LOGIN" name="loginBtn" id="login-button">
+					</div>
 				<div style='background-color:#FFD700;'>
 					{% if messages %}
 					<ul class="messages">

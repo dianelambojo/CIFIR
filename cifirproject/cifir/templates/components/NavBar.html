@@ -7,7 +7,6 @@
         <li class="nav-item active">
           <a class="logolink" href="#">
               <img src="{% static 'images/CIFIR_Logo.png' %}" id="divLogo" height="150px" width="150px">
-        </span>
           </a>
         </li>
       </ul>
@@ -80,9 +79,7 @@
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <span class="profile-dropdown">
               <i class="fas fa-user mr-2"></i>
-              
-                {{ user.username }}
-              
+                <div class="username">{{ user.username }}</div>
             </span>
             
           </a>
