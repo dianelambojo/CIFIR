@@ -108,10 +108,10 @@ class homePageView(View):
 			file = request.FILES.get('book_file')
 			print(file)
 			ns = {
-			        'n':'urn:oasis:names:tc:opendocument:xmlns:container',
-			        'pkg':'http://www.idpf.org/2007/opf',
-			        'dc':'http://purl.org/dc/elements/1.1/'
-			    }
+					'n':'urn:oasis:names:tc:opendocument:xmlns:container',
+					'pkg':'http://www.idpf.org/2007/opf',
+					'dc':'http://purl.org/dc/elements/1.1/'
+				}
 
 			zip = zipfile.ZipFile(file)
 
@@ -119,12 +119,12 @@ class homePageView(View):
 			tree = etree.fromstring(txt)
 			cfname = tree.xpath('n:rootfiles/n:rootfile/@full-path',namespaces=ns)[0]
 
-			    # grab the metadata block from the contents metafile
+				# grab the metadata block from the contents metafile
 			cf = zip.read(cfname)
 			tree = etree.fromstring(cf)
 			p = tree.xpath('/pkg:package/pkg:metadata',namespaces=ns)[0]
 
-			    # repackage the data
+				# repackage the data
 			res = {}
 			for s in ['title','language','creator','date','identifier']:
 				res[s] = p.xpath('dc:%s/text()'%(s),namespaces=ns)[0]
@@ -149,45 +149,45 @@ class homePageView(View):
 
 	#pdf file format
 	def post(self, request):
-	    if request.method == 'POST':
-	    	if 'btnUpload' in request.POST:
-	    		user = User.objects.get(id=request.user.id)
-	    		title = request.POST.get('book_title')
-		    	file = request.FILES.get('book_file')
-	    		a = Book( file = file)
-	    		book = Book.objects.create(file = file)
-	    		book.user.add(user)
-	    		messages.success(request,'Book added!')
+		if request.method == 'POST':
+			if 'btnUpload' in request.POST:
+				user = User.objects.get(id=request.user.id)
+				title = request.POST.get('book_title')
+				file = request.FILES.get('book_file')
+				a = Book( file = file)
+				book = Book.objects.create(file = file)
+				book.user.add(user)
+				messages.success(request,'Book added!')
 
-	    		return redirect('cifir:home_view')
-	    else:
-	    	messages.error(request, 'Files was not Submitted successfully!')
-	    	return redirect('cifir:home_view')
+				return redirect('cifir:home_view')
+		else:
+			messages.error(request, 'Files was not Submitted successfully!')
+			return redirect('cifir:home_view')
 
 def files(request):
-    if request.method == 'POST':
-        form = BookForm(request.POST,request.FILES)
-        if form.is_valid():
-            form.save()
-            return HttpResponse('The file is saved')
-    else:
-        form = BookForm()
-        context = {
-            'form':form,
-        }
-    return render(request, 'base.html', context)
+	if request.method == 'POST':
+		form = BookForm(request.POST,request.FILES)
+		if form.is_valid():
+			form.save()
+			return HttpResponse('The file is saved')
+	else:
+		form = BookForm()
+		context = {
+			'form':form,
+		}
+	return render(request, 'base.html', context)
 
 class EmailBackend(ModelBackend):
-    def authenticate(self, request, username=None, password=None, **kwargs):
-        UserModel = get_user_model()
-        try:
-            user = UserModel.objects.get(email=username)
-        except UserModel.DoesNotExist:
-            return None
-        else:
-            if user.check_password(password):
-                return user
-        return None
+	def authenticate(self, request, username=None, password=None, **kwargs):
+		UserModel = get_user_model()
+		try:
+			user = UserModel.objects.get(email=username)
+		except UserModel.DoesNotExist:
+			return None
+		else:
+			if user.check_password(password):
+				return user
+		return None
 
 class loginPageView(View):
 	def get(self, request):
@@ -230,8 +230,8 @@ class loginPageView(View):
 				# 	messages.info(request, 'Email or password is incorrect')
 				# 	return redirect('cifir:login_view')
 			else:
-			 	messages.warning(request, 'Email or password is incorrect')
-			 	return render(request, 'login.html')
+				messages.warning(request, 'Email or password is incorrect')
+			return render(request, 'login.html')
 				
 def logoutPage(request):
 	logout(request)
@@ -473,34 +473,34 @@ data = csv.reader(open(file,'r'), delimiter=",")
 
 
 for row in data:
-    if row[1] != "Number":
-        # Post.id = row[0]
-        Post=User()
-        usernameRow = row[3]
-        userUsername = User.objects.filter(username = usernameRow).values_list('username', flat=True).first()
-        print(userUsername)
-        if userUsername == row[3]:
-            print(userUsername)
-            userUsername = User.objects.filter(username = row[3]).values('username')[0]
-            finalUsername = userUsername['username']
-            print("User object: " + finalUsername)
-            print("Row data: " + usernameRow)
-            if finalUsername == usernameRow:
-                print('data are equal')
-            # next(data)
-        else:
-	        Post.first_name = row[1]
-	        Post.last_name=row[2]
-	        Post.username = row[3]
-	        Post.email = row[4]
-	        Post.set_password(row[5])
-	        # Post.last_login = "2018-09-27 05:51:42.521991"
-	        Post.is_superuser = "0"
-	        Post.is_staff = "1"
-	        Post.is_active = "1"
-	        # Post.date_joined = "2018-09-27 05:14:50"
-	        print('data is saved')
-	        Post.save()
+	if row[1] != "Number":
+		# Post.id = row[0]
+		Post=User()
+		usernameRow = row[3]
+		userUsername = User.objects.filter(username = usernameRow).values_list('username', flat=True).first()
+		print(userUsername)
+		if userUsername == row[3]:
+			print(userUsername)
+			userUsername = User.objects.filter(username = row[3]).values('username')[0]
+			finalUsername = userUsername['username']
+			print("User object: " + finalUsername)
+			print("Row data: " + usernameRow)
+			if finalUsername == usernameRow:
+				print('data are equal')
+			# next(data)
+		else:
+			Post.first_name = row[1]
+			Post.last_name=row[2]
+			Post.username = row[3]
+			Post.email = row[4]
+			Post.set_password(row[5])
+			# Post.last_login = "2018-09-27 05:51:42.521991"
+			Post.is_superuser = "0"
+			Post.is_staff = "1"
+			Post.is_active = "1"
+			# Post.date_joined = "2018-09-27 05:14:50"
+			print('data is saved')
+			Post.save()
 
 
 

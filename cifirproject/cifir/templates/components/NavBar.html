@@ -5,14 +5,8 @@
   <div class="collapse navbar-collapse" id="navbarNavTopLeft">
     <ul class="navbar-nav">
         <li class="nav-item active">
-          <a class="navbar" href="#">
-            <span id="spanLogo"><i class="fas fa-swatchbook fa-flip-horizontal"></i></span>
-          </a>
-        </li>
-        <li class="nav-item active">
           <a class="logolink" href="#">
-            <span id="spanLogo2">
-          <div id="divLogo">CIFIR</div>
+              <img src="{% static 'images/CIFIR_Logo.png' %}" id="divLogo" height="150px" width="150px">
         </span>
           </a>
         </li>
@@ -107,69 +101,69 @@
     </ul>
   </div>
 </nav>
-
-<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
-<!--LOW LEFT NAVBAR-->
-  <div class="collapse navbar-collapse" id="navbarLowNavLeft">
-    <ul class="navbar-nav">
+<div class="menu-bar">
+  <nav class="navbar navbar-expand-sm navbar-light">
+    <!--LOW LEFT NAVBAR-->
+    <div class="collapse navbar-collapse" id="navbarLowNavLeft">
+      <ul class="navbar-nav">
         <li class="nav-item active">
           <a class="navbar" href='{% url "cifir:home_view" %}'>
             <span><i class="fas fa-swatchbook"></i></span>
           </a>
-          
+  
         </li>
         <li class="nav-item active">
           <a class="navbar" href='{% url "cifir:collections_view" %}'>
             <span style="color:#FFFFFF;"><i class="far fa-folder"></i></span>
           </a>
-          
+  
         </li>
         <li class="nav-item active">
           <a class="navbar" href='{% url "cifir:bookmarks_view" %}'>
             <span style="color:#FFFFFF;"><i class="far fa-bookmark"></i></span>
           </a>
-          
+  
         </li>
         <li class="nav-item active">
           <a class="navbar" href='{% url "cifir:audiobooks_view" %}'>
             <span style="color:#FFFFFF;"><i class="fas fa-headphones"></i></span>
           </a>
-          
+  
         </li>
         <li class="nav-item active">
           <a class="navbar" href='{% url "cifir:networklibraries_view" %}'>
             <span style="color:#FFFFFF;"><i class="fas fa-globe"></i></span>
           </a>
         </li>
-    </ul>
-  </div>
-
-  <!--LOW RIGHT NAVBAR-->
-  <div class="navbar-text" id="navbarNavLowRight">
-    <ul class="navbar-nav">
+      </ul>
+    </div>
+  
+    <!--LOW RIGHT NAVBAR-->
+    <div class="navbar-text" id="navbarNavLowRight">
+      <ul class="navbar-nav">
         <li class="nav-item">
           <a class="navbar" href='{% url "cifir:favorites_view" %}'>
             <span><i class="far fa-star"></i></span>
           </a>
-          
+  
         </li>
         <li class="nav-item">
           <a class="navbar" href='{% url "cifir:toread_view" %}'>
             <span><i class="far fa-clock"></i></span>
           </a>
-          
+  
         </li>
         <li class="nav-item nav-item-last">
           <a class="navbar" href='{% url "cifir:haveread_view" %}'>
             <span><i class="fas fa-check-double"></i></i></span>
           </a>
-          
+  
         </li>
         <li class="nav-item">
           <a class="navbar" href="#">
             <span><i class="far fa-trash-alt"></i></span>
           </a>
-          
+  
         </li>
         <li class="nav-item">
           <a class="navbar" href="#">
@@ -181,7 +175,8 @@
             <span><i class="far fa-comment-alt"></i></span>
           </a>
         </li>
-    </ul>
-  </div>
-</nav>
+      </ul>
+    </div>
+  </nav>
+</div>
 {% endif %}
