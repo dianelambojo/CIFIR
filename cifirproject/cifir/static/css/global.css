@@ -4,19 +4,19 @@
 
 .i-folders .fa-folder,
 .fa-book {
-  color: #b3373f;
+  color: #ca3943;
 }
 
 .icon-link {
   text-decoration: none !important;
-  color: #b3373f;
+  color: #ca3943;
 }
 
 .icon-link-icon {
-  color: #b3373f;
+  color: #ca3943;
   cursor: pointer;
 }
 
 .icon-link-icon:hover {
-  color: var(--maroon);
+  color: #ED8854;
 }
