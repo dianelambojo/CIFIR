@@ -1,20 +1,21 @@
 from re import template
-from django.shortcuts import render
-from django.views.generic import View
 from .forms import *
 from .models import *
-from .forms import CreateUserForm
+from .forms import CreateUserForm, PasswordChangingForm
 from itertools import chain
-from django.shortcuts import render,redirect
 from django.views.generic import View
+from django.urls import reverse_lazy
+from django.conf import settings
+from django.shortcuts import render,redirect
 from django.http import HttpResponse, Http404
-from django.contrib.auth.forms import PasswordChangeForm, UserCreationForm
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import PasswordChangeForm, UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User, auth
-from django.contrib import messages
+from django.contrib import messages, admin
 from django.contrib.auth.views import PasswordChangeView, PasswordChangeDoneView
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.backends import ModelBackend
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils.decorators import method_decorator
 import zipfile
 from lxml import etree
@@ -23,15 +24,8 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options 
 import time
 import undetected_chromedriver as chromedriver
-from django.urls import reverse_lazy
-from .forms import PasswordChangingForm
-from django.contrib import admin
-from django.contrib.auth import get_user_model
-from django.conf import settings
 import csv, sys, os, django, random, datetime
-from django.contrib.auth.backends import ModelBackend
 from pathlib import Path
-from django.contrib.auth.tokens import PasswordResetTokenGenerator
 import PyPDF2
 from PyPDF2 import PdfFileReader
 import pyttsx3
@@ -41,16 +35,6 @@ from ebooklib import epub
 import ebooklib
 import os
 import nltk
-
-# import pathlib, pickle
-# from grab import Grab
-# import webbrowser
-# import requests
-# from bs4 import BeautifulSoup
-
-
-
-
 
 chromedriver.TARGET_VERSION = 96
 chromedriver.install()
@@ -84,7 +68,7 @@ def setDriverOptions():
 	return options
 
 def automateLogin(username, password, url, loginBtnSelector, indicator):
-	driver = webdriver.Chrome(executable_path=r'C:/Program Files/Google/Chrome/Application/chromedriver.exe')
+	driver = webdriver.Chrome(executable_path=r'C:/Program Files/Google/Chrome/Application/chromedriver.exe', options=setDriverOptions())
 	if indicator == 1:
 		driver.get(url)
 		username_field = driver.find_element_by_css_selector("#username")
@@ -272,7 +256,8 @@ class loginPageView(View):
 				# 	return redirect('cifir:login_view')
 			else:
 			 	messages.warning(request, 'Email or password is incorrect')
-			 	return render(request, 'login.html')
+				
+				return render(request, 'login.html')
 				
 def logoutPage(request):
 	logout(request)
@@ -548,11 +533,15 @@ class viewBook(View):
 		# collection_book_id = Collection_book.filter(id=collection_book_id)
 		book = Book.objects.filter(user=request.user)
 
+		bookCollection = Collection.objects.get(id__in=collection_name)
+		collectionBook = Collection.book.through.objects.filter(collection_id=bookCollection.id)
+
 		context = {
 					'collections' : collection,
 					'collection_names' : collection_name,
 					'collection_books' : collection_book,
 					'books' : book,
+					'collectionBook': collectionBook,
 				}
 
 		if request.method == 'POST':
@@ -607,7 +596,7 @@ for row in data:
             # next(data)
         else:
 	        Post.first_name = row[1]
-	        Post.last_name=row[2]
+			Post.last_name=row[2]
 	        Post.username = row[3]
 	        Post.email = row[4]
 	        Post.set_password(row[5])

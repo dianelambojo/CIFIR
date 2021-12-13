@@ -30,11 +30,11 @@
       </div>
     </div>
     <div class="card-body collection-folders">
-      {% for book in books %}
+      {% for cbook in collectionBook %}
       <form action="/cifir/epub/" method="POST" id="bookform">
         <!-- NO ACTION AND ID YET -->
         {% csrf_token %}
-        {% include './components/TheBook.html' %}
+        {% include './components/CollectionBooks.html' %}
       </form>
       {% endfor %}
     </div>

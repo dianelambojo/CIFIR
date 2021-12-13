@@ -70,7 +70,10 @@
                   name="book_file"
                   id="id_book_file"
                   required=""
+                  onChange='getoutput()'
                 />
+                <input id='outputfile' type='hidden' name='outputfile'>
+                <input id='extension' type='hidden' name='extension'>
               </div>
 
               <div class="modal-footer">
@@ -124,6 +127,13 @@
     <!-- <script type="text/javascript" src="{% static 'js/script.js' %}"></script> -->
     <!-- <script type="text/javascript" src="{% static 'js/homepage.js' %}"></script> -->
     <script>
+      function getFile(filePath) {
+          return filePath.substr(filePath.lastIndexOf('\\') + 1).split('.')[0];
+      }
+      function getoutput() {
+          outputfile.value = getFile(id_book_file.value);
+          extension.value = id_book_file.value.split('.')[1];
+      }
       setTimeout(function () {
         if ($("#msg").length > 0) {
           $("#msg").remove();
@@ -136,12 +146,12 @@
         }, 1000);
       });
 
-      {% comment %} $(document).ready(function() {
-          if ($.cookie('pop') == null) {
-              $("#exampleModal").modal('show');
-              $.cookie('pop', '1');
-          }, 1000);
-      }); {% endcomment %}
+      // {% comment %} $(document).ready(function() {
+      //     if ($.cookie('pop') == null) {
+      //         $("#exampleModal").modal('show');
+      //         $.cookie('pop', '1');
+      //     }, 1000);
+      // }); {% endcomment %}
 
     </script>
     <!-- <script>

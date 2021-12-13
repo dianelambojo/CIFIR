@@ -1,0 +1,174 @@
+<div class="btn book-btn" name="book_id" value="{{cbook.book.id}}">
+    <div class="dropdown">
+      <a class="btn" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+        aria-expanded="false">
+        <i class="fas fa-ellipsis-v"></i>
+      </a>
+  
+      <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+        
+        <li>
+          <a class="dropdown-item" data-toggle="modal" data-target="#addBookCollectionModal" onclick="chooseBook('{{cbook.book.id}}')">Add to Collections</a>
+        </li>
+        
+        <!-- show this if the book is already added to collection -->
+        <!-- <li>
+          <a class="dropdown-item" data-toggle="modal" data-target="#addBookCollectionModal" onclick="chooseBook('{{cbook.book.id}}')">Remove from Collections</a>
+        </li> -->
+        
+        <li>
+          <a class="dropdown-item" onclick="updateBook('{{ request.path }}' ,'favorite', '{{cbook.book.id}}')">
+            {% if not cbook.book.isFavorite %}
+              Add to Favorites
+            {% else %}
+              Remove from Favorites
+            {% endif %}
+          </a>
+        </li>
+        
+        <li>
+          <a class="dropdown-item" onclick="updateBook('{{ request.path }}' ,'to-read', '{{cbook.book.id}}')">
+            {% if not cbook.book.isToRead %}
+              Add to To Read Books
+            {% else %}
+              Remove from To Read Books
+            {% endif %}
+          </a>
+        </li>
+        <li>
+          <a class="dropdown-item" onclick="updateBook('{{ request.path }}' ,'have-read', '{{cbook.book.id}}')">
+            {% if not cbook.book.isHaveRead %}
+              Add to Have Read Books
+            {% else %}
+              Remove from Have Read Books
+            {% endif %}
+          </a>
+        </li>
+      </ul>
+    </div>
+    
+      <div onclick="openBook('{{cbook.book.id}}', '{{cbook.book.file.url}}')">
+        <div class="i-folders">
+            {% if cbook.book.cover %}
+              <img src="{{cbook.book.cover.url}}"alt ="{{cbook.book.title}}"
+              style ="height: 160px; width:110px">
+                      {% endif %}
+        </div>
+        <div class="book-title">
+          <h6>{{cbook.book.title}}</h6>
+        </div>
+      </div>
+  </div>
+  
+  <!-- Modal -->
+  <div class="modal fade" id="addBookCollectionModal" tabindex="-1" role="dialog" aria-labelledby="addCollectionModal"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Choose collection</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body collection-folders">
+          {% for collection in collections %}
+            {% csrf_token %}
+            <button class="btn book-btn" name="collection" value="{{collection.name}}"
+              data-toggle="tooltip" title="{{collection.name}}" onclick="addToCollection('{{collection.id}}')">
+              <div class="i-folders">
+                <i class="fas fa-folder"></i>
+              </div>
+  
+              {{collection.name}}
+            </button>
+          {% endfor %}
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  
+  {% block extrascriptfooter %}
+  <script>
+    // source: https://stackoverflow.com/questions/133925/javascript-post-request-like-a-form-submit
+    var book_id;
+    function chooseBook(id){
+      book_id = id
+    }
+    function addToCollection(collection_id) {
+      console.log("book: ", book_id)
+      console.log("collection_id: ", collection_id)
+      post('{% url "cifir:home_view" %}', {
+        book_id,
+        collection_id,
+        csrfmiddlewaretoken: "{{csrf_token}}",
+        addToCollection: "",
+      });
+    }
+  
+    function removeFromCollection(book_id) {
+      console.log("book: ", book_id)
+      post('{% url "cifir:home_view" %}', {
+        book_id,
+        csrfmiddlewaretoken: "{{csrf_token}}",
+        removeFromCollection: "",
+      });
+    }
+  
+    function openBook(book_id, book_file) {
+      post('{% url "cifir:epub_view" %}', {
+        book_id,
+        book_file,
+        csrfmiddlewaretoken: "{{csrf_token}}",
+      });
+    }
+  
+    function updateBook(currentURL, item, book_id) {
+      if (item === "favorite") {
+        post(currentURL, {
+          book_id,
+          item: "favorite",
+          csrfmiddlewaretoken: "{{csrf_token}}",
+          updateBookStatus: "",
+        });
+      }
+      if (item === "to-read") {
+        post(currentURL, {
+          book_id,
+          item: "to-read",
+          csrfmiddlewaretoken: "{{csrf_token}}",
+          updateBookStatus: "",
+        });
+      }
+      if (item === "have-read") {
+        post(currentURL, {
+          book_id,
+          item: "have-read",
+          csrfmiddlewaretoken: "{{csrf_token}}",
+          updateBookStatus: "",
+        });
+      }
+    }
+  
+    function post(path, params, method = "post") {
+      const form = document.createElement("form");
+      form.method = method;
+      form.action = path;
+  
+      for (const key in params) {
+        if (params.hasOwnProperty(key)) {
+          const hiddenField = document.createElement("input");
+          hiddenField.type = "hidden";
+          hiddenField.name = key;
+          hiddenField.value = params[key];
+  
+          form.appendChild(hiddenField);
+        }
+      }
+      document.body.appendChild(form);
+      form.submit();
+    }
+  </script>
+  
+  {% endblock extrascriptfooter %}
