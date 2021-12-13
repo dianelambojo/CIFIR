@@ -8,7 +8,7 @@
   <div class="card">
     <div class="header-fixed">
       {% for book in books %}
-      <span style="padding-left: 15em;">
+      <span style="padding-left: 10em;">
         <i class="fas fa-book"></i>
         {{book.title}}
         <p id="book1" hidden>{{ book.file }}</p>
@@ -49,9 +49,6 @@
         </div>
       </div>
 
-
-
-
         <span style="padding-left:1em;">
         <select id ="fonts">
           <option value="1">Arial</option>
@@ -75,29 +72,16 @@
       {% endfor %}
     </div>
 
+    <!-- NEXT , PREVIOUS BUTTONS -->
+      <a id="prev" href="#prev" class="arrow">‹</a>
+      <a id="next" href="#next" class="arrow">›</a>
+   <!-- READER -->
+
     <div class="container card-body">
       <div class="row">
-        <button id="prev" class="arrow col-sm" 
-        style="color: #ffd700;
-        margin-top:13rem;
-        background-color:#800000;
-        margin-bottom:23rem;
-        font-size:1em;
-        font-weight: bold;
-        margin-right:5px;
-        ">‹</button>
-        <div id="viewer" class="spreads col-lg-12" style="margin: auto; overflow: hidden; max-width: 1024px; border:solid;">
+        <div id="viewer" class="spreads" >
         </div>
-        <button id="next" class="arrow col-sm"
-        style="color: #ffd700;
-        margin-top:13rem;
-        background-color:#800000;
-        margin-bottom:23rem;
-        font-size:1em;
-        font-weight: bold;
-        margin-left:5px;
-        ">›</button>
-          </div>
+      </div>
     </div>
     
     

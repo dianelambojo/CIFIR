@@ -109,7 +109,7 @@
 
   function removeFromCollection(book_id) {
     console.log("book: ", book_id)
-    post('{% url "cifir:home_view" %}', {
+    post('{% url "cifir:home_view" %}',  {
       book_id,
       csrfmiddlewaretoken: "{{csrf_token}}",
       removeFromCollection: "",
@@ -153,7 +153,7 @@
       });
     }
     if (item === "have-read") {
-      post(currentURL, {
+      post(currentURL,  {
         book_id,
         item: "have-read",
         csrfmiddlewaretoken: "{{csrf_token}}",

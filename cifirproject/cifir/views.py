@@ -29,7 +29,7 @@ from pathlib import Path
 import PyPDF2
 from PyPDF2 import PdfFileReader
 import pyttsx3
-import fitz
+#import fitz
 import pdfplumber
 from ebooklib import epub
 import ebooklib
@@ -161,7 +161,7 @@ class homePageView(View):
 				for s in ['title','language','creator','date','identifier']:
 					res[s] = p.xpath('dc:%s/text()'%(s),namespaces=ns)[0]
 				print(res['title'])
-				book = Book.objects.create(title= res['title'], file = file)
+				book = Book.objects.create(title= res['title'], file = file, book_author=res['creator'])
 				book.user.add(user)
 				messages.success(request,'Book added!')
 
@@ -256,8 +256,7 @@ class loginPageView(View):
 				# 	return redirect('cifir:login_view')
 			else:
 			 	messages.warning(request, 'Email or password is incorrect')
-				
-				return render(request, 'login.html')
+			 	return render(request, 'login.html')
 				
 def logoutPage(request):
 	logout(request)
@@ -595,11 +594,11 @@ for row in data:
                 print('data are equal')
             # next(data)
         else:
-	        Post.first_name = row[1]
-			Post.last_name=row[2]
-	        Post.username = row[3]
-	        Post.email = row[4]
-	        Post.set_password(row[5])
+        	Post.first_name = row[1]
+        	Post.last_name=row[2]
+        	Post.username = row[3]
+        	Post.email = row[4]
+        	Post.set_password(row[5])
 	        # Post.last_login = "2018-09-27 05:51:42.521991"
 	        Post.is_superuser = "0"
 	        Post.is_staff = "1"

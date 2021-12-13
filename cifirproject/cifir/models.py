@@ -8,6 +8,7 @@ from django import forms
 
 class Book(models.Model):
 	title = models.CharField(max_length=250)
+	book_author = models.CharField(max_length=250)
 	cover = models.ImageField(upload_to='media/')
 	file = models.FileField(upload_to='media/')
 	user = models.ManyToManyField(User, blank=True)
@@ -15,18 +16,12 @@ class Book(models.Model):
 	isHaveRead = models.BooleanField(default=False)
 	isToRead = models.BooleanField(default=False)
 
+	isDeleted = models.BooleanField(default=False)
+
 	class Meta:
 		db_table = "Book"
 		verbose_name_plural = "Books"
 
-class Author(models.Model):
-	firstname = models.CharField(max_length=250)
-	lastname = models.CharField(max_length=250)
-	book = models.ManyToManyField(Book, blank=True)
-
-	class Meta:
-		db_table = "Author"
-		verbose_name_plural = "Authors"
 
 class Collection(models.Model):
 	name = models.CharField(max_length=250)
@@ -59,13 +54,12 @@ class Catalog(models.Model):
 		db_table = "Catalog"
 		verbose_name_plural = "Catalogs"
 
-class LibUser(models.Model):
-	firstname = models.CharField(max_length=200)
-	lastname = models.CharField(max_length=200)
-	email = models.EmailField(max_length=200)
-	password = models.CharField(max_length=200, default ='')
-	#password = forms.CharField(widget=forms.PasswordInput)
+class Bookmark(models.Model):
+	bookpage = models.CharField(max_length=250)
+	book = models.ManyToManyField(Book, blank=True)
+	
+	is_removed = models.BooleanField(default=False)
 
 	class Meta:
-		db_table = "LibUser"
-		verbose_name_plural = "LibUsers" 
+		db_table = "Bookmark"
+		verbose_name_plural = "Bookmarks"
