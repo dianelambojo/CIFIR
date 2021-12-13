@@ -15,16 +15,42 @@
       </span>
       <!-- TABLE OF CONTENTS -->
       <span class="text-right">
-      <select id="toc"></select>
+      <select id="toc" style="margin-right: 5em;"></select>
       <!-- END TABLE OF CONTENTS -->
 
+      
+
       <!-- SEARCH, BOOKMARK, CHANGE FONT, FONT SIZE -->
-        <span class="field-search">
+        <!-- <span class="field-search">
           <input class="input-search" type="text" name="search" id="input-search" on/>
           <i class="fas fa-search icon-search" id="btn-search" onclick="search()"></i>
-        </span> 
-        <i class="fas fa-bookmark icon-link icon-link-icon" style="padding-left: .5em;" onclick="bookmarkBook('{{book.id}}')"></i>
-        <i class="far fa-bookmark icon-link icon-link-icon" onclick="bookmarkBook('{{book.id}}')"></i>
+        </span>  -->
+        <i class="fas fa-bookmark icon-link icon-link-icon" style="padding-left: .5em;" id="add-bookmark"></i>
+        <!-- <i class="far fa-bookmark icon-link icon-link-icon"></i> -->
+        <button style="border:none; color: none;" data-toggle="modal" data-target="#bookmarkModal"><i class="fas fa-bars icon-link icon-link-icon"></i></button>
+
+        <div class="modal fade" id="bookmarkModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Bookmarks</h5>
+              
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div id="bookmarksView" class="view">
+                <ul id="bookmarks"> Bookmarks </ul>
+                <li style="display:block"> <a id="bookmark-items"></a></li>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
 
         <span style="padding-left:1em;">
         <select id ="fonts">
@@ -48,32 +74,68 @@
       <!-- SEARCH, BOOKMARK, CHANGE FONT, FONT SIZE - END-->
       {% endfor %}
     </div>
+
+    <div class="container card-body">
+      <div class="row">
+        <button id="prev" class="arrow col-sm" 
+        style="color: #ffd700;
+        margin-top:13rem;
+        background-color:#800000;
+        margin-bottom:23rem;
+        font-size:1em;
+        font-weight: bold;
+        margin-right:5px;
+        ">‹</button>
+        <div id="viewer" class="spreads col-lg-12" style="margin: auto; overflow: hidden; max-width: 1024px; border:solid;">
+        </div>
+        <button id="next" class="arrow col-sm"
+        style="color: #ffd700;
+        margin-top:13rem;
+        background-color:#800000;
+        margin-bottom:23rem;
+        font-size:1em;
+        font-weight: bold;
+        margin-left:5px;
+        ">›</button>
+          </div>
+    </div>
     
-    <div class="card-body">
-      <div id="prev" class="arrow">‹</div>
-      <div id="next" class="arrow">›</div><br> <br>
-      <div id="viewer" class="spreads" style="margin: auto; overflow: hidden; max-width: 1024px"> </div>
+    
+      <div>
+        <form method='POST' action="" enctype="multipart/form-data">
+            {% csrf_token %}
+            <button id="click-me" name="click-me" class="btn btn-lg btn-primary" type="submit" 
+            style="padding: 1px 1px; 
+            margin-left: 7rem;
+            background-color:#800000;
+            color: #ffd700;
+            font-size:1em;
+            font-weight: bold;
+            ">TTS</button>
+        </form>
     </div>
   </div>
 </div>
+
+
 {% endblock content %} {% block extrascriptfooter %}
 
 <script defer>
 
   //--- SEARCH *NOT YET FINISHED* ---//
-  var input = document.getElementById("input-search");
-  // Execute a function when the user releases a key on the keyboard
+  // var input = document.getElementById("input-search");
+  // // Execute a function when the user releases a key on the keyboard
   
-  input.addEventListener("keyup", function (event) {
-    // Number 13 is the "Enter" key on the keyboard
-    if (event.keyCode === 13) {
-      console.log("object");
-      // Cancel the default action, if needed
-      event.preventDefault();
-      // Trigger the button element with a click
-      document.getElementById("btn-search").click();
-    }
-  });
+  // input.addEventListener("keyup", function (event) {
+  //   // Number 13 is the "Enter" key on the keyboard
+  //   if (event.keyCode === 13) {
+  //     console.log("object");
+  //     // Cancel the default action, if needed
+  //     event.preventDefault();
+  //     // Trigger the button element with a click
+  //     document.getElementById("btn-search").click();
+  //   }
+  // });
 
   function search() {
     alert("search");
@@ -82,6 +144,7 @@
 
   // Epub Reader Library
   // https://github.com/futurepress/epub.js
+
 
   var book = ePub();
   var rendition;
@@ -155,7 +218,51 @@
       rendition.on("keyup", keyListener);
       document.addEventListener("keyup", keyListener, false);
 
-    })
+      //BOOKMARK
+       var saveBookMark = function () {
+          console.log("bookmark clicked");
+          console.log(rendition.currentLocation());
+
+          var loc = rendition.currentLocation();
+          var cfi = loc.start.cfi
+          var index = loc.start.index
+          var href = loc.start.href
+
+          console.log(href);
+          
+          var link = document.createElement('button');
+          // var linkText = document.createTextNode("title");
+          // link.appendChild(linkText);
+          // link.title = "title";
+          link.innerHTML = href;
+          // link.innerHTML = href;
+          document.getElementById("bookmark-items").appendChild(link)
+
+          var spineItem = book.spine.get(cfi);
+          var tocItem;
+          if (spineItem.index in book.navigation.toc) {
+            tocItem = book.navigation.toc[spineItem.href];
+            link.textContent = "Page: "+spineItem.href;
+            console.log("tocitem", tocItem);
+            console.log("spine" ,spineItem);
+          } else {
+            link.textContent = cfi;
+          }
+
+          link.addEventListener("click", function(event){
+              // var cfi = href;
+              console.log(cfi);
+              rendition.display(cfi);
+              // event.preventDefault();
+          }, false);
+
+          
+
+    //END-BOOKMARK
+    }
+    var addBookMark = document.getElementById('add-bookmark');
+        addBookMark.addEventListener("click", saveBookMark);
+  })
 
     var title = document.getElementById("title");
 
@@ -186,17 +293,17 @@
       var next = book.package.metadata.direction === "rtl" ?  document.getElementById("prev") : document.getElementById("next");
       var prev = book.package.metadata.direction === "rtl" ?  document.getElementById("next") : document.getElementById("prev");
 
-      if (location.atEnd) {
-        next.style.visibility = "hidden";
-      } else {
-        next.style.visibility = "visible";
-      }
+      // if (location.atEnd) {
+      //   next.style.visibility = "hidden";
+      // } else {
+      //   next.style.visibility = "visible";
+      // }
 
-      if (location.atStart) {
-        prev.style.visibility = "hidden";
-      } else {
-        prev.style.visibility = "visible";
-      }
+      // if (location.atStart) {
+      //   prev.style.visibility = "hidden";
+      // } else {
+      //   prev.style.visibility = "visible";
+      // }
 
     });
 
@@ -237,7 +344,9 @@
       }; 
     });
 
-    //changeFont();
+
+
+    changeFont();
     // rendition.display();
     document.getElementById("increaseFont").addEventListener("click", increaseFontSize);
     document.getElementById("decreaseFont").addEventListener("click", decreaseFontSize);
@@ -457,14 +566,17 @@
 
     
 
-  function bookmarkBook(book_id) {
-    console.log("test");
-    console.log(book_id);
-    // post('{% url "cifir:epub_view" %}', {
-    //   book_id,
-    //   csrfmiddlewaretoken: "{{csrf_token}}",
-    // });
-  }
+  // function bookmarkBook(book_id) {
+  //   console.log("test");
+  //   console.log(book_id);
+  //   // post('{% url "cifir:epub_view" %}', {
+  //   //   book_id,
+  //   //   csrfmiddlewaretoken: "{{csrf_token}}",
+  //   // });
+
+
+     
+  // }
 
   function post(path, params, method = "post") {
     const form = document.createElement("form");
@@ -484,6 +596,8 @@
     document.body.appendChild(form);
     form.submit();
   }
+
+
 
 
 </script>

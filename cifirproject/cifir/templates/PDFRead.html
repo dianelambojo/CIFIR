@@ -1,0 +1,460 @@
+{% extends "base.html" %} {% load static %} {% block extrascriptheader %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/epubjs/dist/epub.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.min.js"
+    integrity="sha512-U5C477Z8VvmbYAoV4HDq17tf4wG6HXPC6/KM9+0/wEXQQ13gmKY2Zb0Z2vu0VNUWch4GlJ+Tl/dfoLOH4i2msw==" crossorigin="anonymous"
+    referrerpolicy="no-referrer"></script>
+
+
+{% endblock extrascriptheader %} {% block content %}
+<div class="container-fluid"> <br>
+  <div class="card">
+    <div class="header-fixed">
+      {% for book in books %}
+      <span style="padding-left: 15em; padding-right: 15em;">
+        <i class="fas fa-book"></i>
+        {{book.title}}
+        <p id="book1" hidden>{{ book.file }}</p>
+      </span>
+      <!-- TABLE OF CONTENTS -->
+      <span class="text-right">
+      <!-- <select id="toc"></select> -->
+      <span id="current_page" style="border:solid; border-width: 1px;">0 of 0</span>
+      <!-- END TABLE OF CONTENTS -->
+
+      
+
+      <!-- SEARCH, BOOKMARK, CHANGE FONT, FONT SIZE -->
+        <!-- <span class="field-search">
+          <input class="input-search" type="text" name="search" id="input-search" on/>
+          <i class="fas fa-search icon-search" id="btn-search" onclick="search()"></i>
+        </span>  -->
+        <i class="fas fa-bookmark icon-link icon-link-icon" style="padding-left: .5em;" id="add-bookmark"></i>
+
+        <button style="border:none; color: none;" data-toggle="modal" data-target="#bookmarkModal"><i class="fas fa-bars icon-link icon-link-icon"></i></button>
+
+        <div class="modal fade" id="bookmarkModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Bookmarks</h5>
+              
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div id="bookmarksView" class="view">
+                <ul id="bookmarks"> Bookmarks </ul>
+                <li style="display:block"> <a id="bookmark-items"></a></li>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+        <!-- <i class="far fa-bookmark icon-link icon-link-icon" onclick="bookmarkBook('{{book.id}}')"></i> -->
+
+        <!-- <span style="padding-left:1em;">
+        <select id ="fonts">
+          <option value="1">Arial</option>
+          <option value="2">Verdana</option>
+          <option value="3">Times New Roman</option>
+          <option value="4">Courier New</option>
+        </select>
+        </span> -->
+
+      <span style="padding-left: 0em;">
+        <a class="btn" id="increaseFont">
+          <span class="icon-font"><i class="fas fa-caret-up icon-link icon-link-icon"></i></span>
+        </a>
+        <a class="btn" id="decreaseFont">
+          <span class="icon-font"><i class="fas fa-caret-down icon-link icon-link-icon"></i></span>
+        </a>
+      </span>
+    
+      </span>
+      <!-- SEARCH, BOOKMARK, CHANGE FONT, FONT SIZE - END-->
+      {% endfor %}
+    </div>
+
+    <div class="container card-body">
+      <div class="row">
+        <button id="previous" class="arrow col-sm" 
+        style="color: #ffd700;
+        margin-top:35rem;
+        background-color:#800000;
+        margin-bottom:43rem;
+        font-size:1rem;
+        font-weight: bold;
+        margin-right:5px;
+        ">‹</button>
+        <div id="viewer" class="spreads col-lg-12" style="overflow: auto; max-width: 1024px; max-height: 1024px; border:solid;
+          text-align: center;">
+          <main>
+            <h3 hidden>Open a PDF file</h3>
+            <canvas class="pdf-viewer hidden">
+
+            </canvas>
+          </main>
+        </div>
+        <button id="next" class="arrow col-sm"
+        style="color: #ffd700;
+        margin-top:35rem;
+        background-color:#800000;
+        margin-bottom:43rem;
+        font-size:1rem;
+        font-weight: bold;
+        margin-left:5px;
+        ">›</button>
+
+          <li hidden>
+            
+            <span id="zoomValue">150%</span>
+            <input type="range" id="zoom" name="cowbell" min="100" max="300" value="150" step="50" disabled>
+          </li>
+        </ul>
+
+          </div>
+        </div>
+        
+        
+      </div>
+    </div>
+
+    <div>
+        <form method='POST' action="" enctype="multipart/form-data">
+            {% csrf_token %}
+            <button id="click-me" name="click-me" class="btn btn-lg btn-primary" type="submit">Click Me</button>
+        </form>
+    </div>
+{% endblock content %} {% block extrascriptfooter %}
+
+<script defer>
+
+  //--- SEARCH *NOT YET FINISHED* ---//
+  // var input = document.getElementById("input-search");
+  // Execute a function when the user releases a key on the keyboard
+  
+  // input.addEventListener("keyup", function (event) {
+  //   // Number 13 is the "Enter" key on the keyboard
+  //   if (event.keyCode === 13) {
+  //     console.log("object");
+  //     // Cancel the default action, if needed
+  //     event.preventDefault();
+  //     // Trigger the button element with a click
+  //     document.getElementById("btn-search").click();
+  //   }
+  // });
+
+  // function search() {
+  //   alert("search");
+  // }
+  //--- END OF SEARCH ---//
+
+
+  console.log('hellooo')
+  var count = 0;
+  var x = 150;
+  const zoomButton = document.getElementById('zoom');
+  const currentPage = document.getElementById('current_page');
+  const viewer = document.querySelector('.pdf-viewer');
+  let currentPDF = {}
+
+function resetCurrentPDF() {
+  currentPDF = {
+    file: null,
+    countOfPages: 0,
+    currentPage: 1,
+    zoom: 1.5
+  }
+}
+
+
+var bookElement = document.getElementById("book1");
+
+var url = window.location.protocol + "//" + window.location.hostname;
+  if (window.location.port) url += ":" + window.location.port;
+
+  fetch(url + "/media/" + bookElement.innerHTML)
+    .then((response) => response.blob())
+    .then(function (myBlob) {
+      console.log(myBlob);
+      if (myBlob.type == 'application/pdf') {
+    const reader = new FileReader();
+    reader.readAsDataURL(myBlob);
+    reader.onload = () => {
+      loadPDF(reader.result);
+      zoomButton.disabled = false;
+    }
+  }
+  else {
+    console.log("The file you are trying to open is not a pdf file!")
+  }
+    });
+
+
+
+zoomButton.addEventListener('input', () => {
+  if (currentPDF.file) {
+    document.getElementById('zoomValue').innerHTML = zoomButton.value + "%";
+    currentPDF.zoom = parseInt(zoomButton.value) / 100;
+    renderCurrentPage();
+  }
+});
+
+document.getElementById('next').addEventListener('click', () => {
+  const isValidPage = currentPDF.currentPage < currentPDF.countOfPages;
+  if (isValidPage) {
+    currentPDF.currentPage += 1;
+    renderCurrentPage();
+  }
+});
+
+document.getElementById('previous').addEventListener('click', () => {
+  const isValidPage = currentPDF.currentPage - 1 > 0;
+  if (isValidPage) {
+    currentPDF.currentPage -= 1;
+    renderCurrentPage();
+  }
+});
+
+document.getElementById('add-bookmark').addEventListener('click', () =>{
+  const bookMark = currentPDF.currentPage;
+
+  console.log("Bookmark button clicked");
+
+  var link = document.createElement('button');
+  link.innerHTML = "Page:" +bookMark;
+  document.getElementById("bookmark-items").appendChild(link)
+
+  link.addEventListener("click", function(event){
+              // var cfi = href;
+              console.log(bookMark);
+              currentPDF.currentPage = bookMark;
+              renderCurrentPage();
+              // event.preventDefault();
+          }, false);
+})
+
+function loadPDF(data) {
+  const pdfFile = pdfjsLib.getDocument(data);
+  resetCurrentPDF();
+  pdfFile.promise.then((doc) => {
+    currentPDF.file = doc;
+    currentPDF.countOfPages = doc.numPages;
+    viewer.classList.remove('hidden');
+    document.querySelector('h3').classList.add("hidden");
+    renderCurrentPage();
+  });
+
+}
+
+function renderCurrentPage() {
+  currentPDF.file.getPage(currentPDF.currentPage).then((page) => {
+    var context = viewer.getContext('2d');
+    var viewport = page.getViewport({ scale: currentPDF.zoom, });
+    viewer.height = viewport.height;
+    viewer.width = viewport.width;
+
+    var renderContext = {
+      canvasContext: context,
+      viewport: viewport
+    };
+    page.render(renderContext);
+  });
+  currentPage.innerHTML = currentPDF.currentPage + ' of ' + currentPDF.countOfPages;
+}
+
+
+
+    //changeFont();
+    // rendition.display();
+    document.getElementById("increaseFont").addEventListener("click", increaseFontSize);
+    document.getElementById("decreaseFont").addEventListener("click", decreaseFontSize);
+    // document.getElementById("fonts").addEventListener('change', changeFont);
+
+
+  //CHANGE FONT FUNCTIONS
+    function increaseFontSize() {
+    console.log("click");
+    if (currentPDF.file) {
+      x+=25;
+      count*=x;
+      document.getElementById('zoomValue').innerHTML = x + "%";
+      currentPDF.zoom = parseInt(x) / 100;
+      renderCurrentPage();
+      count++;
+    }
+    }
+
+    function decreaseFontSize() {
+       console.log("click");
+    if (currentPDF.file) {
+      x-=25;
+      count*=x;
+      document.getElementById('zoomValue').innerHTML = x + "%";
+      currentPDF.zoom = parseInt(x) / 100;
+      renderCurrentPage();
+      count--;
+    }
+    }
+
+    function changeFont() {
+      if(document.getElementById("fonts").value =="1"){
+        console.log("changed");
+        rendition.themes.default({
+          h1: {
+            'font-family': 'Arial',
+          },
+          h2: {
+            'font-family': 'Arial',
+          },
+          h3: {
+            'font-family': 'Arial',
+          },
+          h4: {
+            'font-family': 'Arial',
+          },
+          h5: {
+            'font-family': 'Arial',
+          },
+          h6: {
+            'font-family': 'Arial',
+          },
+          div: {
+            'font-family': 'Arial',
+          },
+          p: {
+            'font-family': 'Arial',
+          },
+    });
+      }
+      else if(document.getElementById("fonts").value =="2"){
+        console.log("changed");
+        rendition.themes.default({
+          h1: {
+            'font-family': 'Verdana',
+          },
+          h2: {
+            'font-family': 'Verdana',
+          },
+          h3: {
+            'font-family': 'Verdana',
+          },
+          h4: {
+            'font-family': 'Verdana',
+          },
+          h5: {
+            'font-family': 'Verdana',
+          },
+          h6: {
+            'font-family': 'Verdana',
+          },
+          div: {
+            'font-family': 'Verdana',
+          },
+          p: {
+            'font-family': 'Verdana',
+          },
+    });
+      }
+      else if(document.getElementById("fonts").value =="3"){
+        console.log("changed");
+        rendition.themes.default({
+          h1: {
+            'font-family': 'Times New Roman',
+          },
+          h2: {
+            'font-family': 'Times New Roman',
+          },
+          h3: {
+            'font-family': 'Times New Roman',
+          },
+          h4: {
+            'font-family': 'Times New Roman',
+          },
+          h5: {
+            'font-family': 'Times New Roman',
+          },
+          h6: {
+            'font-family': 'Times New Roman',
+          },
+          div: {
+            'font-family': 'Times New Roman',
+          },
+          p: {
+            'font-family': 'Times New Roman',
+          },
+    });
+      }
+      else if(document.getElementById("fonts").value =="4"){
+        console.log("changed");
+        rendition.themes.default({
+          h1: {
+            'font-family': 'Courier New',
+          },
+          h2: {
+            'font-family': 'Courier New',
+          },
+          h3: {
+            'font-family': 'Courier New',
+          },
+          h4: {
+            'font-family': 'Courier New',
+          },
+          h5: {
+            'font-family': 'Courier New',
+          },
+          h6: {
+            'font-family': 'Courier New',
+          },
+          div: {
+            'font-family': 'Courier New',
+          },
+          p: {
+            'font-family': 'Courier New',
+          },
+    });
+      }
+    }
+    //CHANGE FONT FUNCTIONS END
+
+
+ 
+  
+    
+
+    
+
+  function bookmarkBook(book_id) {
+    console.log("test");
+    console.log(book_id);
+    // post('{% url "cifir:epub_view" %}', {
+    //   book_id,
+    //   csrfmiddlewaretoken: "{{csrf_token}}",
+    // });
+  }
+
+  function post(path, params, method = "post") {
+    const form = document.createElement("form");
+    form.method = method;
+    form.action = path;
+
+    for (const key in params) {
+      if (params.hasOwnProperty(key)) {
+        const hiddenField = document.createElement("input");
+        hiddenField.type = "hidden";
+        hiddenField.name = key;
+        hiddenField.value = params[key];
+
+        form.appendChild(hiddenField);
+      }
+    }
+    document.body.appendChild(form);
+    form.submit();
+  }
+
+
+</script>
+{% endblock extrascriptfooter %}

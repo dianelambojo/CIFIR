@@ -52,10 +52,10 @@
           {% if book.cover %}
             <img src="{{book.cover.url}}"alt ="{{book.title}}"
             style ="height: 160px; width:110px">
-					{% endif %}
+          {% endif %}
       </div>
       <div class="book-title">
-        <h6>{{ book.title }}</h6>
+        <h6>{{ book.title}}</h6>
       </div>
     </div>
 </div>
@@ -117,11 +117,22 @@
   }
 
   function openBook(book_id, book_file) {
-    post('{% url "cifir:epub_view" %}', {
+    extension = book_file.split('.').pop();
+    console.log(extension)
+    if(extension == "epub") {
+      post('{% url "cifir:epub_view" %}', {
       book_id,
       book_file,
       csrfmiddlewaretoken: "{{csrf_token}}",
     });
+    }
+    else
+      post('{% url "cifir:pdf_view" %}', {
+      book_id,
+      book_file,
+      csrfmiddlewaretoken: "{{csrf_token}}",
+    });
+    
   }
 
   function updateBook(currentURL, item, book_id) {

@@ -5,7 +5,7 @@
         <a data-toggle="modal" data-target="#exampleModal"></a>
 
         <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <!-- <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
           <div class="modal-dialog" role="document">
             
               <div class="alert alert-info alert-dismissible d-flex align-items-center fade show modal-content">
@@ -17,7 +17,7 @@
               </div>
             
           </div>
-        </div>
+        </div> -->
     <!--End Alert Modal-->
 {% if user.is_authenticated %}
 <div class="container-fluid">
@@ -29,7 +29,7 @@
       </span>
     </div>
     <div class="card-body collection-folders">
-      {% for book in books %}
+      <!-- {% for book in books %} -->
       <!-- <form action="/cifir/epub/" method="POST" id="bookform"> -->
       <!-- NO ACTION AND ID YET -->
       <!-- <button
@@ -47,9 +47,9 @@
         </button> -->
       {% include './components/TheBook.html' %}
       <!-- </form> -->
-      {% if book.file %}
+      <!-- {% if book.file %}
       <a href="{{ book.file.url }}"></a>
-      {% endif %} {% endfor %}
+      {% endif %} {% endfor %} -->
     </div>
   </div>
 </div>

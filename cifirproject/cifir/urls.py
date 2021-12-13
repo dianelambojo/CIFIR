@@ -26,6 +26,7 @@ urlpatterns = [
     path('toread/', views.toReadPageView.as_view(), name="toread_view"),
     path('haveread/', views.haveReadPageView.as_view(), name="haveread_view"),
     path('epub/', views.epubReadpageView.as_view(), name="epub_view"),
+    path('pdf/', views.pdfReadpageView.as_view(), name="pdf_view"),
     path('profile/', views.profilePageView.as_view(), name="profile_view"),
     path('password/', 
         auth_views.PasswordChangeView.as_view(template_name = 'changePassword.html', 
@@ -40,11 +41,8 @@ urlpatterns = [
         auth_views.PasswordResetDoneView.as_view(template_name='password_reset_done.html'),
         name="password_reset_done"),
              
-     path('password-reset-confirm/<uidb64>/<token>/',
-        auth_views.PasswordResetConfirmView.as_view(
-            template_name='cifir/templates/password_reset_complete.html',
-            success_url=reverse_lazy('cifir:password_reset_complete')
-        ),
+    path('password-reset-confirm/<uidb64>/<token>/',
+        auth_views.PasswordResetConfirmView.as_view(success_url=reverse_lazy('cifir:password_reset_complete')),
         name='password_reset_confirm'
     ),
                 
