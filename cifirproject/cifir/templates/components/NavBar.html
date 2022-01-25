@@ -1,8 +1,8 @@
 {% load static %}
 {% if user.is_authenticated %}
 <!--TOPLEFT NAVBAR-->
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <div class="collapse navbar-collapse" id="navbarNavTopLeft">
+<nav class="navbar navbar-expand-lg navbar-light bg-light" style="justify-content: space-between;">
+  <div id="navbarNavTopLeft">
     <ul class="navbar-nav">
         <li class="nav-item active">
           <a class="logolink" href="#">
@@ -98,10 +98,9 @@
     </ul>
   </div>
 </nav>
-<div class="menu-bar">
-  <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+  <nav class="navbar navbar-expand-sm navbar-dark bg-dark menu-bar">
 <!--LOW LEFT NAVBAR-->
-  <div class="collapse navbar-collapse" id="navbarLowNavLeft">
+  <div id="navbarLowNavLeft">
     <ul class="navbar-nav">
         <li class="nav-item active">
           <a class="navbar" href='{% url "cifir:home_view" %}' data-toggle="tooltip" title="Books"> 

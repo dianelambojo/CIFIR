@@ -2,6 +2,7 @@
 @import "global.css";
 @import "fab.css";
 
+
 :root {
   --gold: #ED8854;
   --maroon: #E2454F;
@@ -22,7 +23,9 @@
 .logolink:hover {
   text-decoration: none;
 }
-
+.navbar-nav {
+  flex-direction: row;
+}
 #navbarNavRight .navbar-nav .nav-item .navbar {
   display: block;
 }
@@ -56,10 +59,10 @@
   text-decoration: none;
 }
 
-#navbarNavRight .navbar-nav .nav-item.nav-item-last {
+/* #navbarNavRight .navbar-nav .nav-item.nav-item-last {
   border-right: 1px var(--iconColor) solid;
   height: 40px;
-}
+} */
 
 .icon-font {
   color: black;
@@ -89,13 +92,14 @@
 }
 .menu-bar {
   background-image: linear-gradient(-70deg, #ED8854, #E2454F  )!important;
+  justify-content: space-between;
 }
 /* LOWER RIGHT NAV BAR */
 
-#navbarNavLowRight .navbar-nav .nav-item.nav-item-last {
+/* #navbarNavLowRight .navbar-nav .nav-item.nav-item-last {
   border-right: 1px white solid;
   height: 40px;
-}
+} */
 
 #navbarNavLowRight .navbar-nav .nav-item .navbar i {
   color: white;
@@ -107,6 +111,11 @@
   text-shadow: 1px 1px var(--maroon);
 }
 
+/* @media (max-width: 480px) {
+  body {
+        display: inline-block;
+  }
+} */
 /*LEFT NAVBAR*/
 .span {
   color: #ffffff;
@@ -304,6 +313,7 @@ hr {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(160px, 160px));
   gap: 8px;
+  
 }
 
 .modal-body.collection-folders {
@@ -316,13 +326,19 @@ hr {
 .card-header {
   display: flex;
   justify-content: space-between;
+  color: var(--iconColor);
+  font-family: Verdana;
+  font-size: large;
+  font-weight: 600;
 }
 .card-header i {
   margin-top: 4px;
   margin-right: 8px;
+  color: var(--iconColor);
 }
 .card-header i:last-child {
   margin-right: 0px;
+  color: var(--iconColor);
 }
 
 /* EpubRead */
