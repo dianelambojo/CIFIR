@@ -31,6 +31,7 @@ urlpatterns = [
     path('password/', 
         auth_views.PasswordChangeView.as_view(template_name = 'changePassword.html', 
         success_url = reverse_lazy('cifir:login_view')),name="changePassword_view"),
+    
 
     #ResetPassword
     path('password-reset/', 

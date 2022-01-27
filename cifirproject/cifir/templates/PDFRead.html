@@ -12,24 +12,16 @@
   <div class="card">
     <div class="header-fixed">
       {% for book in books %}
-      <span style="padding-left: 15em; padding-right: 15em;">
+      <span style="padding-left: 5em; padding-right: 20em; font-weight: bold">
         <i class="fas fa-book"></i>
         {{book.title}}
         <p id="book1" hidden>{{ book.file }}</p>
       </span>
       <!-- TABLE OF CONTENTS -->
       <span class="text-right">
-      <!-- <select id="toc"></select> -->
-      <span id="current_page" style="border:solid; border-width: 1px;">0 of 0</span>
+      <span id="current_page">0 of 0</span>
       <!-- END TABLE OF CONTENTS -->
 
-      
-
-      <!-- SEARCH, BOOKMARK, CHANGE FONT, FONT SIZE -->
-        <!-- <span class="field-search">
-          <input class="input-search" type="text" name="search" id="input-search" on/>
-          <i class="fas fa-search icon-search" id="btn-search" onclick="search()"></i>
-        </span>  -->
         <i class="fas fa-bookmark icon-link icon-link-icon" style="padding-left: .5em;" id="add-bookmark"></i>
 
         <button style="border:none; color: none;" data-toggle="modal" data-target="#bookmarkModal"><i class="fas fa-bars icon-link icon-link-icon"></i></button>
@@ -68,6 +60,7 @@
         <a class="btn" id="increaseFont">
           <span class="icon-font"><i class="fas fa-caret-up icon-link icon-link-icon"></i></span>
         </a>
+        <span id="zoomValue">100%</span>
         <a class="btn" id="decreaseFont">
           <span class="icon-font"><i class="fas fa-caret-down icon-link icon-link-icon"></i></span>
         </a>
@@ -77,19 +70,30 @@
       <!-- SEARCH, BOOKMARK, CHANGE FONT, FONT SIZE - END-->
       {% endfor %}
     </div>
+     <!-- NEXT , PREVIOUS BUTTONS -->
+      <a id="prev" href="#prev" class="arrow">‹</a>
+      <a id="next" href="#next" class="arrow">›</a>
 
+<!-- TTS -->
+
+  <div>
+        <form method='POST' action="" enctype="multipart/form-data">
+            {% csrf_token %}
+            <button id="click-me" name="click-me" class="btn btn-lg btn-primary " style="padding: 1px 1px; 
+            margin-left: 7rem;
+            background-color:#800000;
+            color: #ffd700;
+            font-size:1em;
+            font-weight: bold;
+            " type="submit">TTS</button>
+        </form>
+    </div>
+
+
+      <!-- READER -->
     <div class="container card-body">
       <div class="row">
-        <button id="previous" class="arrow col-sm" 
-        style="color: #ffd700;
-        margin-top:35rem;
-        background-color:#800000;
-        margin-bottom:43rem;
-        font-size:1rem;
-        font-weight: bold;
-        margin-right:5px;
-        ">‹</button>
-        <div id="viewer" class="spreads col-lg-12" style="overflow: auto; max-width: 1024px; max-height: 1024px; border:solid;
+        <div id="viewer" class="spreads col-lg-12" style="overflow: auto; max-width: 1024px; max-height: 1024px;
           text-align: center;">
           <main>
             <h3 hidden>Open a PDF file</h3>
@@ -98,20 +102,12 @@
             </canvas>
           </main>
         </div>
-        <button id="next" class="arrow col-sm"
-        style="color: #ffd700;
-        margin-top:35rem;
-        background-color:#800000;
-        margin-bottom:43rem;
-        font-size:1rem;
-        font-weight: bold;
-        margin-left:5px;
-        ">›</button>
+       
 
           <li hidden>
             
-            <span id="zoomValue">150%</span>
-            <input type="range" id="zoom" name="cowbell" min="100" max="300" value="150" step="50" disabled>
+            <span id="zoomValue">100%</span>
+            <input type="range" id="zoom" name="cowbell" min="100" max="300" value="100" step="25" disabled>
           </li>
         </ul>
 
@@ -122,12 +118,7 @@
       </div>
     </div>
 
-    <div>
-        <form method='POST' action="" enctype="multipart/form-data">
-            {% csrf_token %}
-            <button id="click-me" name="click-me" class="btn btn-lg btn-primary" type="submit">Click Me</button>
-        </form>
-    </div>
+  
 {% endblock content %} {% block extrascriptfooter %}
 
 <script defer>
@@ -211,7 +202,7 @@ document.getElementById('next').addEventListener('click', () => {
   }
 });
 
-document.getElementById('previous').addEventListener('click', () => {
+document.getElementById('prev').addEventListener('click', () => {
   const isValidPage = currentPDF.currentPage - 1 > 0;
   if (isValidPage) {
     currentPDF.currentPage -= 1;

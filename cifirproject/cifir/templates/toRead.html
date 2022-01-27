@@ -7,24 +7,34 @@
 			<span>
 				<i class="far fa-clock icon-link"></i>
 				<a class="icon-link icon-link-icon" href='{% url "cifir:toread_view" %}'>
-					Have Read
+					To Read
 				</a>
 			</span>
 		</div>
-			<div class="card-body collection-folders">
-				{% for book in books %}
-				<div class="i-folders">
-					{% if book.cover %}
-						<img src="{{book.cover.url}}"alt ="{{book.title}}"
-						style ="height: 160px; width:110px">
-					{% else %}
-						<span class = "text-muted">No Cover</span>
-					{% endif %}
-					<h6>{{book.title}}</h6>
-                </div>
-                {% endfor %}
-				
-		</div>   
+			 <div class="card-body collection-folders">
+      <!-- {% for book in books %} -->
+      <!-- <form action="/cifir/epub/" method="POST" id="bookform"> -->
+      <!-- NO ACTION AND ID YET -->
+      <!-- <button
+          type="submit"
+          class="btn btn-light"
+          name="book"
+          value="{{book.name}}"
+          form="bookform"
+        >
+          <div class="i-folders">
+            <i class="fas fa-book"></i>
+          </div>
+          <h6>{{ book.title}}</h6>
+          <input type="text" name="book_id" value="{{book.id}}" hidden />
+        </button> -->
+      {% include './components/TheBook.html' %}
+      <!-- </form> -->
+      <!-- {% if book.file %}
+      <a href="{{ book.file.url }}"></a>
+      {% endif %} {% endfor %} -->
+    </div>
 	</div>
 </div>
+
 {% endblock content %}

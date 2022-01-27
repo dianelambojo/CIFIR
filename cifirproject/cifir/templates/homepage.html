@@ -82,14 +82,21 @@
     <div class="card-header">
       <span>
         <i class="fas fa-globe icon-link"></i>
-        <span class="icon-link icon-link-icon">Network Libraries</span>
+        <span class="icon-link icon-link-icon">
+          <a
+        class="icon-link icon-link-icon"
+        href='{% url "cifir:networklibraries_view" %}'
+      >
+        Network Libraries
+      </a>
+        </span>
       </span>
     </div>
-    <section class="pt-5">
-      <div class="container">
-        {% include './components/NetworkLibrariesCarousel.html' %}
-      </div>
-    </section>
+   <section class="pt-5 pb-5">
+    <div class="container">
+      {% include './components/NetworkLibrariesCarousel.html' %}
+    </div>
+  </section>
   </div>
 </div>
 {% endif %} {% endblock content %}

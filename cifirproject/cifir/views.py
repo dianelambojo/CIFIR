@@ -17,8 +17,15 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils.decorators import method_decorator
+from django.db.models import Q 
 import zipfile
-from lxml import etree
+
+#epub metadata, book cover etc
+from lxml import etree 
+from PIL import Image
+from io import BytesIO
+from django.core.files.base import ContentFile
+
 from selenium import webdriver 
 from selenium.webdriver.common.keys import Keys 
 from selenium.webdriver.chrome.options import Options 
@@ -35,6 +42,9 @@ from ebooklib import epub
 import ebooklib
 import os
 import nltk
+
+
+import epub_meta
 
 chromedriver.TARGET_VERSION = 96
 chromedriver.install()
@@ -87,8 +97,8 @@ def tts(book_id):
 	
 	print('tts activated')
 	print(book_id)
-	book = Book.objects.get(book_id)
-	pdf = pdfplumber.open(book)
+	#book = Book.objects.filter(id=book_id).get(file)
+	pdf = pdfplumber.open("./media/media/BehindHerEyes.pdf")
 	page = pdf.pages[1]
 	text = page.extract_text()
 	# input_path = r"C:/"
@@ -118,12 +128,12 @@ class homePageView(View):
 	def get(self, request):
 		user = User.objects.filter(username=request.user)
 		collection = Collection.objects.filter(user=request.user).filter(isDeleted=False)
-		catalog = Catalog.objects.all()
+		catalogs = Catalog.objects.all()
 		book = Book.objects.filter(user=request.user)
 
 		context = {
 				'collections' : collection,
-				'catalogs' : catalog,
+				'catalog' : catalogs,
 				'users' : user,
 				'books' : book,
 				}
@@ -139,37 +149,54 @@ class homePageView(View):
 			pdf_extensions = ['.pdf']
 			if ext.lower() in epub_extensions:
 				print(file)
-				ns = {
-				        'n':'urn:oasis:names:tc:opendocument:xmlns:container',
-				        'pkg':'http://www.idpf.org/2007/opf',
-				        'dc':'http://purl.org/dc/elements/1.1/'
-				    }
+	
+				namespaces = {
+				   "calibre":"http://calibre.kovidgoyal.net/2009/metadata",
+				   "dc":"http://purl.org/dc/elements/1.1/",
+				   "dcterms":"http://purl.org/dc/terms/",
+				   "opf":"http://www.idpf.org/2007/opf",
+				   "u":"urn:oasis:names:tc:opendocument:xmlns:container",
+				   "xsi":"http://www.w3.org/2001/XMLSchema-instance",
+				   'pkg':'http://www.idpf.org/2007/opf',
+				}
 
 				zip = zipfile.ZipFile(file)
-
-				txt = zip.read('META-INF/container.xml')
-				tree = etree.fromstring(txt)
-				cfname = tree.xpath('n:rootfiles/n:rootfile/@full-path',namespaces=ns)[0]
-
-				    # grab the metadata block from the contents metafile
-				cf = zip.read(cfname)
-				tree = etree.fromstring(cf)
-				p = tree.xpath('/pkg:package/pkg:metadata',namespaces=ns)[0]
-
-				    # repackage the data
+				t = etree.fromstring(zip.read("META-INF/container.xml"))
+				rootfile_path =  t.xpath("/u:container/u:rootfiles/u:rootfile",namespaces=namespaces)[0].get("full-path")
+				t = etree.fromstring(zip.read(rootfile_path))
+				
+				p = t.xpath('/pkg:package/pkg:metadata',namespaces=namespaces)[0]
+					
+				# repackage the data
 				res = {}
 				for s in ['title','language','creator','date','identifier']:
-					res[s] = p.xpath('dc:%s/text()'%(s),namespaces=ns)[0]
-				print(res['title'])
-				book = Book.objects.create(title= res['title'], file = file, book_author=res['creator'])
-				book.user.add(user)
-				messages.success(request,'Book added!')
+					 res[s] = p.xpath('dc:%s/text()'%(s),namespaces=namespaces)[0]
+			
+				try:
+					cover_id = t.xpath("//opf:metadata/opf:meta[@name='cover']",namespaces=namespaces)[0].get("content")
+					cover_href = t.xpath("//opf:manifest/opf:item[@id='" + cover_id + "']",namespaces=namespaces)[0].get("href")
+					cover_path = os.path.join(os.path.dirname(rootfile_path), cover_href)
 
+					image = Image.open(zip.open(cover_path))		
+						#image.show()
+					image_io = BytesIO()
+					image.save(image_io, format='jpeg', quality=100) # you can change format and quality
+					# save to model
+					image_name = "cover"
+					book = Book.objects.create(title= res['title'], file = file, book_author=res['creator'])
+					book.user.add(user)
+					book.cover.save(image_name, ContentFile(image_io.getvalue()))
+
+				except KeyError:
+					book = Book.objects.create(title= res['title'], file = file, book_author=res['creator'], cover="media/epub_cover_default.png")
+					book.user.add(user)
+					messages.success(request,'Book added!')
+				
 				return redirect('cifir:home_view')
 
 			if ext.lower() in pdf_extensions:
 				#pdf file format
-				book = Book.objects.create(title= file.name, file = file)
+				book = Book.objects.create(title= file.name, file = file, cover="media/pdf_cover_default.png")
 				book.user.add(user)
 				messages.success(request,'Book added!')
 
@@ -333,6 +360,19 @@ def password_reset_request(request):
 	return render(request=request, template_name="password_reset_form.html", context={"password_reset_form":password_reset_form})
 
 
+# class bookmarksPageView(View):
+# 	def get(self, request):
+# 		return render(request,'homepage.html')
+
+# 	def bookmark_page(request):
+#  		if request.method == 'POST':
+#  			bookmark = Bookmark.objects.get()
+#  			bookmark.bookpage =  request.POST['bookpage']
+#  			bookmark.book = request.POST['book_id']
+#  			bookmark.save()
+#  			message = 'update successful'
+
+#  			return HttpResponse(message)
 class bookmarksPageView(View):
 	def get(self, request):
 		return render(request,'bookmarks.html')
@@ -353,17 +393,50 @@ class epubReadpageView(View):
 			book_id = request.POST.get('book_id', None)
 			user = User.objects.filter(username=request.user)
 			book = Book.objects.filter(user=request.user).filter(id=book_id)
+			
+			numlist=[]
+			# currentBookID = Book.objects.get(id=book_id)
+			bookmarks = Bookmark.book.through.objects.filter(book_id=book_id)
+			print(bookmarks)
+			for b in bookmarks:
+				print(b.bookmark_id, b.book_id)
+				x = b.book_id
+				numlist.append(b.bookmark_id)
+
+			print(numlist)
+			allBookmarks = Bookmark.objects.filter(Q(id__in=numlist))
+			for i in allBookmarks:
+				print(i.bookpage)
+
 
 			context = {
 						'books' : book,
+						'allBookmarks': allBookmarks,
 					}
 			print(book_id)
+			print('asa dapit')
 			if 'click-me' in request.POST:
 				print('read request')
 				print(book)
-				# tts(book_id)
+				#tts(book_id)
 				messages.success(request,"Text To Speech Starting...")
 				return render(request, 'EpubRead.html', context)
+				
+
+			if 'add-bookmark' in request.POST:
+				currentBook = request.POST.get('currentBook', None)
+				print('saves bookmark link')
+				print(currentBook)
+				bookmark = request.POST.get('bookmarkId')
+				index = request.POST.get('bookmarkIndex')
+				print(bookmark)
+				
+				bookId = Book.objects.get(id=currentBook)
+				print(bookId.title)
+				bmark = Bookmark(bookpage=bookmark, page_index = index)
+				bmark.save()
+				bmark.book.add(currentBook)
+				return render(request, 'EpubRead.html')
 
 		return render(request, 'EpubRead.html', context)
 
@@ -391,9 +464,9 @@ class pdfReadpageView(View):
 
 		if 'click-me' in request.POST:
 			print('read request')
-			# tts(book_id)
+			tts(book)
 
-			# return HttpResponse(tts())
+			#return HttpResponse(tts(book_id))
 
 		return render(request, 'PDFRead.html', context)
 

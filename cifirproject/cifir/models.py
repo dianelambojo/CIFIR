@@ -57,6 +57,7 @@ class Catalog(models.Model):
 class Bookmark(models.Model):
 	bookpage = models.CharField(max_length=250)
 	book = models.ManyToManyField(Book, blank=True)
+	page_index = models.CharField(max_length=250)
 	
 	is_removed = models.BooleanField(default=False)
 
