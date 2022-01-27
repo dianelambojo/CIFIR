@@ -282,8 +282,8 @@ class loginPageView(View):
 				# 	messages.info(request, 'Email or password is incorrect')
 				# 	return redirect('cifir:login_view')
 			else:
-			 	messages.warning(request, 'Email or password is incorrect')
-			 	return render(request, 'login.html')
+				messages.warning(request, 'Email or password is incorrect')
+				return render(request, 'login.html')
 				
 def logoutPage(request):
 	logout(request)
