@@ -10,9 +10,9 @@
 {% endblock extrascriptheader %} {% block content %}
 <div class="container-fluid"> <br>
   <div class="card">
-    <div class="header-fixed">
+    <div class="header-fixed" style="justify-content: space-between; padding: 1rem; display: inline-block;text-align: center;">
       {% for book in books %}
-      <span style="padding-left: 5em; padding-right: 20em; font-weight: bold">
+      <span style="padding-left: 1em; padding-right: 2em; font-weight: bold">
         <i class="fas fa-book"></i>
         {{book.title}}
         <p id="book1" hidden>{{ book.file }}</p>
@@ -74,22 +74,6 @@
       <a id="prev" href="#prev" class="arrow">‹</a>
       <a id="next" href="#next" class="arrow">›</a>
 
-<!-- TTS -->
-
-  <div>
-        <form method='POST' action="" enctype="multipart/form-data">
-            {% csrf_token %}
-            <button id="click-me" name="click-me" class="btn btn-lg btn-primary " style="padding: 1px 1px; 
-            margin-left: 7rem;
-            background-color:#800000;
-            color: #ffd700;
-            font-size:1em;
-            font-weight: bold;
-            " type="submit">TTS</button>
-        </form>
-    </div>
-
-
       <!-- READER -->
     <div class="container card-body">
       <div class="row">
@@ -113,7 +97,21 @@
 
           </div>
         </div>
+        <!-- TTS -->
         
+        <div>
+          <form method='POST' action="" enctype="multipart/form-data">
+            {% csrf_token %}
+            <button id="click-me" name="click-me" class="btn btn-lg btn-primary " style="padding: 1px 1px; 
+                    margin-left: 7rem;
+                    background-color:#800000;
+                    color: #ffd700;
+                    font-size:1em;
+                    font-weight: bold;
+                    " type="submit">TTS</button>
+          </form>
+        </div>
+
         
       </div>
     </div>

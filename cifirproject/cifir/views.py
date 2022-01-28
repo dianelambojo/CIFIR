@@ -33,18 +33,8 @@ import time
 import undetected_chromedriver as chromedriver
 import csv, sys, os, django, random, datetime
 from pathlib import Path
-import PyPDF2
-from PyPDF2 import PdfFileReader
-import pyttsx3
-#import fitz
-import pdfplumber
-from ebooklib import epub
-import ebooklib
 import os
-import nltk
 
-
-import epub_meta
 
 chromedriver.TARGET_VERSION = 96
 chromedriver.install()

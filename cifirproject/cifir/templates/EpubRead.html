@@ -6,9 +6,9 @@
 {% endblock extrascriptheader %} {% block content %}
 <div class="container-fluid"> <br>
   <div class="card">
-    <div class="header-fixed">
+    <div class="header-fixed" >
       {% for book in books %}
-      <span style="padding-left: 10em;">
+      <span style="padding-left: 1em;">
         <i class="fas fa-book"></i>
         {{book.title}}
         <p id="book1" hidden>{{ book.file }}</p>
@@ -16,7 +16,7 @@
       </span>
       <!-- TABLE OF CONTENTS -->
       <span class="text-right">
-      <select id="toc" style="margin-right: 5em;"></select>
+      <select id="toc" style="margin-right: 1em;"></select>
       <!-- END TABLE OF CONTENTS -->
 
       
