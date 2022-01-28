@@ -139,6 +139,7 @@ class homePageView(View):
 			pdf_extensions = ['.pdf']
 			if ext.lower() in epub_extensions:
 				print(file)
+				print('')
 	
 				namespaces = {
 				   "calibre":"http://calibre.kovidgoyal.net/2009/metadata",
@@ -152,6 +153,10 @@ class homePageView(View):
 
 				zip = zipfile.ZipFile(file)
 				t = etree.fromstring(zip.read("META-INF/container.xml"))
+
+				for i in t:
+					print(i)
+				print('')
 				rootfile_path =  t.xpath("/u:container/u:rootfiles/u:rootfile",namespaces=namespaces)[0].get("full-path")
 				t = etree.fromstring(zip.read(rootfile_path))
 				
@@ -385,26 +390,25 @@ class epubReadpageView(View):
 			book = Book.objects.filter(user=request.user).filter(id=book_id)
 			
 			numlist=[]
-			# currentBookID = Book.objects.get(id=book_id)
 			bookmarks = Bookmark.book.through.objects.filter(book_id=book_id)
-			print(bookmarks)
 			for b in bookmarks:
-				print(b.bookmark_id, b.book_id)
 				x = b.book_id
 				numlist.append(b.bookmark_id)
 
-			print(numlist)
 			allBookmarks = Bookmark.objects.filter(Q(id__in=numlist))
-			for i in allBookmarks:
-				print(i.bookpage)
 
+			if allBookmarks.exists():
+				context = {
+							'books' : book,
+							'allBookmarks': allBookmarks,
+							'currentPage': allBookmarks.order_by('-id')[0].bookpage,
+						}
+			else:
+				context = {
+							'books' : book,
+							'allBookmarks': allBookmarks,
+						}
 
-			context = {
-						'books' : book,
-						'allBookmarks': allBookmarks,
-					}
-			print(book_id)
-			print('asa dapit')
 			if 'click-me' in request.POST:
 				print('read request')
 				print(book)
@@ -415,18 +419,46 @@ class epubReadpageView(View):
 
 			if 'add-bookmark' in request.POST:
 				currentBook = request.POST.get('currentBook', None)
-				print('saves bookmark link')
-				print(currentBook)
 				bookmark = request.POST.get('bookmarkId')
 				index = request.POST.get('bookmarkIndex')
-				print(bookmark)
 				
 				bookId = Book.objects.get(id=currentBook)
-				print(bookId.title)
-				bmark = Bookmark(bookpage=bookmark, page_index = index)
-				bmark.save()
-				bmark.book.add(currentBook)
-				return render(request, 'EpubRead.html')
+
+				checkList=[]
+				bookId = Book.objects.get(id=currentBook)
+
+				getBookmarks = Bookmark.objects.filter(book=bookId.id)
+				for mark in getBookmarks:
+					checkList.append(mark.bookpage)
+
+				if bookmark in checkList:
+					user = User.objects.filter(username=request.user)
+					book = Book.objects.filter(user=request.user).filter(id=currentBook)
+
+					numlist=[]
+					bookmarks = Bookmark.book.through.objects.filter(book_id=currentBook)
+					for b in bookmarks:
+						numlist.append(b.bookmark_id)
+
+					allBookmarks = Bookmark.objects.filter(Q(id__in=numlist))
+
+					latest = Bookmark.objects.filter(Q(id__in=numlist)).last().bookpage
+
+					context = {
+						'books' : book,
+						'allBookmarks': allBookmarks,
+						'currentPage': latest,
+					}
+				else:
+					bmark = Bookmark(bookpage=bookmark, page_index = index)
+					bmark.save()
+					bmark.book.add(currentBook)
+
+				# with requests.Session() as s:
+				# 	s.get('https://httpbin.org/cookies/set/sessioncookie/123456789')
+				# 	r = s.get('https://httpbin.org/cookies')
+				# https://www.py4u.net/discuss/22338
+				# return render(request, 'EpubRead.html')
 
 		return render(request, 'EpubRead.html', context)
 
@@ -443,20 +475,70 @@ class pdfReadpageView(View):
 		return render(request,'PDFRead.html', context)
 
 	def post(self,request):
-		context = {}
-		book_id = request.POST.get('book_id', None)
-		user = User.objects.filter(username=request.user)
-		book = Book.objects.filter(user=request.user).filter(id=book_id)
+		if request.method == "POST":
+			# context = {}
+			book_id = request.POST.get('book_id', None)
+			user = User.objects.filter(username=request.user)
+			book = Book.objects.filter(user=request.user).filter(id=book_id)
 
-		context = {
-					'books' : book,
-				}
+			numlist=[]
+			bookmarks = Bookmark.book.through.objects.filter(book_id=book_id)
+			for b in bookmarks:
+				numlist.append(b.bookmark_id)
 
-		if 'click-me' in request.POST:
-			print('read request')
-			tts(book)
+			allBookmarks = Bookmark.objects.filter(Q(id__in=numlist))
 
-			#return HttpResponse(tts(book_id))
+			if allBookmarks.exists():
+				context = {
+							'books' : book,
+							'allBookmarks': allBookmarks,
+							'currentPage': allBookmarks.order_by('-id')[0].bookpage,
+						}
+			else:
+				context = {
+							'books' : book,
+							'allBookmarks': allBookmarks,
+						}
+
+			if 'click-me' in request.POST:
+				print('read request')
+				tts(book)
+
+				#return HttpResponse(tts(book_id))
+
+			if 'add-bookmark' in request.POST:
+				currentBook = request.POST.get('currentBook', None)
+				bookmark = request.POST.get('bookmarkId')
+
+				checkList=[]
+				bookId = Book.objects.get(id=currentBook)
+
+				getBookmarks = Bookmark.objects.filter(book=bookId.id)
+				for mark in getBookmarks:
+					checkList.append(mark.bookpage)
+
+				if bookmark in checkList:
+					user = User.objects.filter(username=request.user)
+					book = Book.objects.filter(user=request.user).filter(id=currentBook)
+
+					numlist=[]
+					bookmarks = Bookmark.book.through.objects.filter(book_id=currentBook)
+					for b in bookmarks:
+						numlist.append(b.bookmark_id)
+
+					allBookmarks = Bookmark.objects.filter(Q(id__in=numlist))
+
+					latest = Bookmark.objects.filter(Q(id__in=numlist)).last().bookpage
+
+					context = {
+						'books' : book,
+						'allBookmarks': allBookmarks,
+						'currentPage': latest,
+					}
+				else:
+					bmark = Bookmark(bookpage=bookmark, page_index = bookmark)
+					bmark.save()
+					bmark.book.add(currentBook)	
 
 		return render(request, 'PDFRead.html', context)
 

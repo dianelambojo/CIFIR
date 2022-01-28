@@ -22,6 +22,8 @@ class Book(models.Model):
 		db_table = "Book"
 		verbose_name_plural = "Books"
 
+	def __str__(self):
+		return self.title
 
 class Collection(models.Model):
 	name = models.CharField(max_length=250)
@@ -33,6 +35,9 @@ class Collection(models.Model):
 		db_table = "Collection"
 		verbose_name_plural = "Collections"
 
+	def __str__(self):
+		return self.name
+
 class Note(models.Model):
 	book = models.ForeignKey(Book, on_delete=models.CASCADE, null=True, blank=True, related_name="notes_book")
 	title = models.CharField(max_length=250)
@@ -41,6 +46,9 @@ class Note(models.Model):
 	class Meta:
 		db_table = "Note"
 		verbose_name_plural = "Notes"
+
+	def __str__(self):
+		return self.title
 
 class Catalog(models.Model):
 	name = models.CharField(max_length=250)
@@ -54,13 +62,20 @@ class Catalog(models.Model):
 		db_table = "Catalog"
 		verbose_name_plural = "Catalogs"
 
+	def __str__(self):
+		return self.name
+
 class Bookmark(models.Model):
 	bookpage = models.CharField(max_length=250)
 	book = models.ManyToManyField(Book, blank=True)
 	page_index = models.CharField(max_length=250)
 	
-	is_removed = models.BooleanField(default=False)
+	is_removed = models.BooleanField(default=False)	
 
 	class Meta:
 		db_table = "Bookmark"
 		verbose_name_plural = "Bookmarks"
+
+	def __str__(self):
+		bookTitle = self.book.all().first()
+		return bookTitle.title

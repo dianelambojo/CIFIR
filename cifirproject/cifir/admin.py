@@ -8,6 +8,7 @@ admin.site.register(Book)
 admin.site.register(Collection)
 admin.site.register(Note)
 admin.site.register(Catalog)
+admin.site.register(Bookmark)
 
 
 class UserAdmin(ImportExportModelAdmin):

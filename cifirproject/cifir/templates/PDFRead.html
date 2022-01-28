@@ -22,7 +22,19 @@
       <span id="current_page">0 of 0</span>
       <!-- END TABLE OF CONTENTS -->
 
-        <i class="fas fa-bookmark icon-link icon-link-icon" style="padding-left: .5em;" id="add-bookmark"></i>
+      <!-- SEARCH, BOOKMARK, CHANGE FONT, FONT SIZE -->
+        <!-- <span class="field-search">
+          <input class="input-search" type="text" name="search" id="input-search" on/>
+          <i class="fas fa-search icon-search" id="btn-search" onclick="search()"></i>
+        </span>  -->
+        <form method="POST" enctype="multipart\form-data" id='bookmark-submit'> 
+          {% csrf_token %}
+          <button type="submit" class="fas fa-bookmark icon-link icon-link-icon" style="padding-left: .5em;" id="add-bookmark" name="add-bookmark"></button>
+          <input type="text" id="bookmarkId" name="bookmarkId" hidden>
+          <input type="text" id="bookmarkIndex" name="bookmarkIndex" hidden>
+          <input type="text" id="currentBook" name="currentBook" value="{{ book.id }}" hidden>
+          <input type="text" value="{{ currentPage }}" id="current-page" hidden>
+        </form>
 
         <button style="border:none; color: none;" data-toggle="modal" data-target="#bookmarkModal"><i class="fas fa-bars icon-link icon-link-icon"></i></button>
 
@@ -36,10 +48,29 @@
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" style="overflow-y: scroll; height: 500px;">
               <div id="bookmarksView" class="view">
-                <ul id="bookmarks"> Bookmarks </ul>
-                <li style="display:block"> <a id="bookmark-items"></a></li>
+                <div id="bookmarksView" class="view">
+                  <h6>{{ book.title }}</h6>
+                <!-- <ul id="bookmarks"> Bookmarks </ul> -->
+                <!-- <h6>Bookmarks</h6> -->
+                  <!-- <div class="bookmark-items" id="bookmark-items"> -->
+                  <ul style="display: table; margin: 0 auto;">
+                  {% for bookmark in allBookmarks %}
+                    <!-- <button class="child child{{ bookmark.id }}" id="{{ bookmark.id }}" value="{{ bookmark.id }}"> Index: {{ bookmark.id }} </button> -->
+                    <!-- <input name="{{ bookmark.page_index  }}" value="Index: {{ bookmark.page_index }}"/> -->
+                  <!-- <li style="display:block"> <a id="bookmark-items"> </a></li> -->
+                    <!-- <input type="text" id="x" value="{{ bookmark.id }}"> --> 
+                    <!-- <button id="bookmark-items" value='{{ bookmark.bookpage }}'> Index: {{ bookmark.page_index }} </button> -->
+                    <li style="display: block;">
+                      <div style="margin-bottom: 5px;">
+                        <button style="width: 150%;" class="mark" id="bookmark-items{{ bookmark.id }}" value='{{ bookmark.bookpage }}'> <i class="fa fa-bookmark" style="padding-right: 5px; color: darkred;"></i> <span style="font-weight: bold;">  Page {{ bookmark.page_index }} </span></button>
+                      </div>
+                    </li>
+                  {% endfor %}
+                  </ul>
+                  <!-- </div> -->
+              </div>
               </div>
             </div>
           </div>
@@ -208,23 +239,111 @@ document.getElementById('prev').addEventListener('click', () => {
   }
 });
 
-document.getElementById('add-bookmark').addEventListener('click', () =>{
-  const bookMark = currentPDF.currentPage;
+// document.getElementById('add-bookmark').addEventListener('click', () =>{
+//   const bookMark = currentPDF.currentPage;
 
-  console.log("Bookmark button clicked");
+//   console.log("Bookmark button clicked");
 
-  var link = document.createElement('button');
-  link.innerHTML = "Page:" +bookMark;
-  document.getElementById("bookmark-items").appendChild(link)
+//   var link = document.createElement('button');
+//   link.innerHTML = "Page:" +bookMark;
+//   document.getElementById("bookmark-items").appendChild(link)
 
-  link.addEventListener("click", function(event){
-              // var cfi = href;
-              console.log(bookMark);
-              currentPDF.currentPage = bookMark;
-              renderCurrentPage();
-              // event.preventDefault();
-          }, false);
+//   link.addEventListener("click", function(event){
+//               // var cfi = href;
+//               console.log(bookMark);
+//               currentPDF.currentPage = bookMark;
+//               renderCurrentPage();
+//               // event.preventDefault();
+//           }, false);
+// })
+
+document.addEventListener('keydown',(event) => {
+  var code = event.keyCode;
+  // console.log(code);
+
+  if(code == 37) {
+    console.log('key left is pressed');
+    const isValidPage = currentPDF.currentPage < currentPDF.countOfPages;
+          if (isValidPage) {
+            currentPDF.currentPage += 1;
+            renderCurrentPage();
+          }
+  }
+
+  if(code == 39) {
+    console.log('key right is pressed');
+    const isValidPage = currentPDF.currentPage < currentPDF.countOfPages;
+          if (isValidPage) {
+            currentPDF.currentPage += 1;
+            renderCurrentPage();
+          }
+  }
 })
+
+
+
+//BOOKMARK
+     var saveBookMark = function () {
+        console.log("bookmark clicked");
+
+        var thispage = currentPDF.currentPage;
+        console.log(thispage);
+        document.getElementById('bookmarkId').value = thispage;
+
+
+        // var spineItem = book.spine.get(cfi);
+        // var tocItem;
+        // if (spineItem.index in book.navigation.toc) {
+        //   tocItem = book.navigation.toc[spineItem.href];
+        //   // link.textContent = "Page: "+spineItem.href;
+        //   //bookmarkLink
+        //   console.log(href);
+        //   document.getElementById('bookmarkId').value =  cfi;
+        //   document.getElementById('bookmarkIndex').value = index;
+        //   console.log("tocitem", tocItem);
+        //   console.log("spine" ,spineItem);
+        // } 
+
+  //END-BOOKMARK
+  }
+
+  $(".mark").on("click", function(e) {
+      console.log('goto this bookmark')
+
+      console.log($(this).attr('id'));
+
+      var id = $(this).attr('id');
+      console.log('ID: '+id);
+
+      var newLoc = document.getElementById(id).value;
+
+      console.log(newLoc);
+      const isValidPage = newLoc < currentPDF.countOfPages;
+        if (isValidPage) {
+          currentPDF.currentPage = Number(newLoc);
+          renderCurrentPage();
+        }
+  });
+
+addBookMarkBtn = document.getElementById('add-bookmark');
+addBookMarkBtn.addEventListener("click",saveBookMark);
+
+var addBookMark = document.getElementById('bookmark-submit');
+
+addBookMark.onsubmit = function(){
+  // console.log("hello submit");
+
+  setTimeout(() => {
+    // console.log("hello sad");
+    window.location.reload();
+
+
+    console.log('reload');
+    var lastBookmarked = document.getElementById("current-page").value;
+    console.log(lastBookmarked);
+
+  }, 500);
+};
 
 function loadPDF(data) {
   const pdfFile = pdfjsLib.getDocument(data);
@@ -235,6 +354,11 @@ function loadPDF(data) {
     viewer.classList.remove('hidden');
     document.querySelector('h3').classList.add("hidden");
     renderCurrentPage();
+
+    var lastBookmarked = document.getElementById("current-page").value;
+    currentPDF.currentPage = Number(lastBookmarked);
+    renderCurrentPage();
+    
   });
 
 }
@@ -416,14 +540,14 @@ function renderCurrentPage() {
 
     
 
-  function bookmarkBook(book_id) {
-    console.log("test");
-    console.log(book_id);
-    // post('{% url "cifir:epub_view" %}', {
-    //   book_id,
-    //   csrfmiddlewaretoken: "{{csrf_token}}",
-    // });
-  }
+  // function bookmarkBook(book_id) {
+  //   console.log("test");
+  //   console.log(book_id);
+  //   // post('{% url "cifir:epub_view" %}', {
+  //   //   book_id,
+  //   //   csrfmiddlewaretoken: "{{csrf_token}}",
+  //   // });
+  // }
 
   function post(path, params, method = "post") {
     const form = document.createElement("form");
