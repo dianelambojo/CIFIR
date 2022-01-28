@@ -356,8 +356,19 @@ function loadPDF(data) {
     renderCurrentPage();
 
     var lastBookmarked = document.getElementById("current-page").value;
-    currentPDF.currentPage = Number(lastBookmarked);
-    renderCurrentPage();
+    // console.log(typeof lastBookmarked)
+
+    if(lastBookmarked==''){
+      currentPDF.currentPage = 1;
+      renderCurrentPage();
+    }
+    else{
+      currentPDF.currentPage = Number(lastBookmarked);
+      renderCurrentPage();      
+    }
+
+    // currentPDF.currentPage = Number(lastBookmarked);
+    // renderCurrentPage();
     
   });
 
