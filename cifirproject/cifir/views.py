@@ -20,6 +20,8 @@ from django.utils.decorators import method_decorator
 from django.db.models import Q 
 import zipfile
 
+import pdfplumber
+import pyttsx3
 #epub metadata, book cover etc
 from lxml import etree 
 from PIL import Image
@@ -79,17 +81,19 @@ def automateLogin(username, password, url, loginBtnSelector, indicator):
 	if indicator == 2:
 		driver.get(url)
 
-def tts(book_id):
-	# pdf = "C:/Users/HP/Documents/Project Trials/TrialTexttoSpeech/textTospeech/TTS/BehindHerEyes.pdf"
-	# pdfFileObject = open(r'C:\Users\HP\Documents\Project Trials\TrialTexttoSpeech\textTospeech\TTS\\BehindHerEyes.pdf', 'rb')
-	books = Book.objects.filter(id=book_id)
-	print(book_id)
-	
+def tts(bookFile,currentPage):
+
+	bookFile = bookFile
+	currentPage = int(currentPage)
+	print(bookFile)
 	print('tts activated')
-	print(book_id)
-	#book = Book.objects.filter(id=book_id).get(file)
-	pdf = pdfplumber.open("./media/media/BehindHerEyes.pdf")
-	page = pdf.pages[1]
+	print(currentPage)
+
+	path = "./media/" + bookFile
+	print(path)
+
+	pdf = pdfplumber.open(path)
+	page = pdf.pages[currentPage]
 	text = page.extract_text()
 	# input_path = r"C:/"
 	# german_corpus = []
@@ -500,9 +504,13 @@ class pdfReadpageView(View):
 							'allBookmarks': allBookmarks,
 						}
 
-			if 'click-me' in request.POST:
+			if 'tts-btn' in request.POST:
+				bookFile = request.POST.get('bookFile')
+				currentPage = request.POST.get('currentpage')
+				print(bookFile)
+				print(currentPage)
 				print('read request')
-				tts(book)
+				tts(bookFile,currentPage)
 
 				#return HttpResponse(tts(book_id))
 

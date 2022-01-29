@@ -87,6 +87,18 @@
         </select>
         </span> -->
 
+      <!-- TTS -->
+        
+        <div>
+          <form method='POST' action="" enctype="multipart/form-data" id="tts-btn">
+            {% csrf_token %}
+            <button id="tts-btn" name="tts-btn" class="btn btn-lg btn-primary " type="submit">TTS</button>
+            <input type="text" id="bookFile" name="bookFile" value="{{ book.file }}" hidden>
+            <input type="text"  id="currentpage" name="currentpage" hidden >
+        </form>
+
+        </div>
+
       <span style="padding-left: 0em;">
         <a class="btn" id="increaseFont">
           <span class="icon-font"><i class="fas fa-caret-up icon-link icon-link-icon"></i></span>
@@ -128,20 +140,7 @@
 
           </div>
         </div>
-        <!-- TTS -->
         
-        <div>
-          <form method='POST' action="" enctype="multipart/form-data">
-            {% csrf_token %}
-            <button id="click-me" name="click-me" class="btn btn-lg btn-primary " style="padding: 1px 1px; 
-                    margin-left: 7rem;
-                    background-color:#800000;
-                    color: #ffd700;
-                    font-size:1em;
-                    font-weight: bold;
-                    " type="submit">TTS</button>
-          </form>
-        </div>
 
         
       </div>
@@ -185,7 +184,7 @@ function resetCurrentPDF() {
   currentPDF = {
     file: null,
     countOfPages: 0,
-    currentPage: 1,
+    currentPage: 0,
     zoom: 1.5
   }
 }
@@ -307,6 +306,17 @@ document.addEventListener('keydown',(event) => {
   //END-BOOKMARK
   }
 
+  var TTSclicked = function(){
+     console.log("tts clicked from script");
+     var thispage = currentPDF.currentPage-1;
+     console.log(thispage);
+     document.getElementById('currentpage').value = thispage;
+  }
+
+
+ttsbtnclicked = document.getElementById('tts-btn');
+ttsbtnclicked.addEventListener("click",TTSclicked);
+
   $(".mark").on("click", function(e) {
       console.log('goto this bookmark')
 
@@ -324,6 +334,8 @@ document.addEventListener('keydown',(event) => {
           renderCurrentPage();
         }
   });
+
+
 
 addBookMarkBtn = document.getElementById('add-bookmark');
 addBookMarkBtn.addEventListener("click",saveBookMark);
