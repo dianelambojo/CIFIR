@@ -10,44 +10,77 @@
 {% endblock extrascriptheader %} {% block content %}
 <div class="container-fluid"> <br>
   <div class="card">
-    <div class="header-fixed" style="justify-content: space-between; padding: 1rem; display: inline-block;text-align: center;">
+    <div class="header-fixed" style="justify-content: space-between; padding: 1rem; display: inline-block;text-align: center;" >
+      <!--  -->
       {% for book in books %}
       <span style="padding-left: 1em; padding-right: 2em; font-weight: bold">
         <i class="fas fa-book"></i>
         {{book.title}}
         <p id="book1" hidden>{{ book.file }}</p>
       </span>
-      <!-- TABLE OF CONTENTS -->
+      <!--Pages -->
       <span class="text-right">
       <span id="current_page">0 of 0</span>
       <!-- END TABLE OF CONTENTS -->
+
+        <!-- Cog-->
+          <button style="border:none; color: none; align-items: flex-end; " data-toggle="modal" data-target="#fontsModal">
+            <i class="fas fa-cog icon-link icon-link-icon"></i></button>
+        <!-- Cog Modal-->
+        <div class="modal fade" id="fontsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+          aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+        
+              <div class="modal-body" style="height: 100px; align-content: center;">
+                <span style="padding-left: 0em;">
+                  <a class="btn" id="increaseFont">
+                    <span class="icon-font"><i class="fas fa-caret-up icon-link icon-link-icon"></i></span>
+                  </a>
+                  <span id="zoomValue">100%</span>
+                  <a class="btn" id="decreaseFont">
+                    <span class="icon-font"><i class="fas fa-caret-down icon-link icon-link-icon"></i></span>
+                  </a>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
 
       <!-- SEARCH, BOOKMARK, CHANGE FONT, FONT SIZE -->
         <!-- <span class="field-search">
           <input class="input-search" type="text" name="search" id="input-search" on/>
           <i class="fas fa-search icon-search" id="btn-search" onclick="search()"></i>
         </span>  -->
+
+        <!-- Bookmark -->
         <form method="POST" enctype="multipart\form-data" id='bookmark-submit'> 
           {% csrf_token %}
-          <button type="submit" class="fas fa-bookmark icon-link icon-link-icon" style="padding-left: .5em;" id="add-bookmark" name="add-bookmark"></button>
+          <button type="submit" class="fas fa-bookmark icon-link icon-link-icon" style="border:none; color: none" id="add-bookmark" name="add-bookmark"></button>
           <input type="text" id="bookmarkId" name="bookmarkId" hidden>
           <input type="text" id="bookmarkIndex" name="bookmarkIndex" hidden>
           <input type="text" id="currentBook" name="currentBook" value="{{ book.id }}" hidden>
           <input type="text" value="{{ currentPage }}" id="current-page" hidden>
         </form>
-
-        <button style="border:none; color: none;" data-toggle="modal" data-target="#bookmarkModal"><i class="fas fa-bars icon-link icon-link-icon"></i></button>
-
+        <!-- StickyNote -->
+        <button style="border:none; color: none;" data-toggle="modal" data-target="#bookmarkModal"><i class="fas fa-sticky-note icon-link icon-link-icon"></i></button>
         <div class="modal fade" id="bookmarkModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title" id="exampleModalLabel">Bookmarks</h5>
-              
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
+            <!-- StickyNote Modal -->
             <div class="modal-body" style="overflow-y: scroll; height: 500px;">
               <div id="bookmarksView" class="view">
                 <div id="bookmarksView" class="view">
@@ -87,27 +120,6 @@
         </select>
         </span> -->
 
-      <!-- TTS -->
-        
-        <div>
-          <form method='POST' action="" enctype="multipart/form-data" id="tts-btn">
-            {% csrf_token %}
-            <button id="tts-btn" name="tts-btn" class="btn btn-lg btn-primary " type="submit">TTS</button>
-            <input type="text" id="bookFile" name="bookFile" value="{{ book.file }}" hidden>
-            <input type="text"  id="currentpage" name="currentpage" hidden >
-        </form>
-
-        </div>
-
-      <span style="padding-left: 0em;">
-        <a class="btn" id="increaseFont">
-          <span class="icon-font"><i class="fas fa-caret-up icon-link icon-link-icon"></i></span>
-        </a>
-        <span id="zoomValue">100%</span>
-        <a class="btn" id="decreaseFont">
-          <span class="icon-font"><i class="fas fa-caret-down icon-link icon-link-icon"></i></span>
-        </a>
-      </span>
     
       </span>
       <!-- SEARCH, BOOKMARK, CHANGE FONT, FONT SIZE - END-->
@@ -140,7 +152,22 @@
 
           </div>
         </div>
-        
+        <!-- TTS -->
+        <div class="tts-buttons" style="text-align: end;">
+          <form method='POST' action="" enctype="multipart/form-data" id="tts-btn">
+            {% csrf_token %}
+            <!-- Play -->
+            <button id="ttsplay-btn" name="ttsplay-btn" style="border-radius: .2em ;" type="submit">
+              <i class="fas fa-play" style="color: #E2454F;"></i>
+            </button>
+            <input type="text" id="bookFile" name="bookFile" value="{{ book.file }}" hidden>
+            <input type="text" id="currentpage" name="currentpage" hidden>
+            <!-- Pause -->
+            <button id="ttspause-btn" name="ttspause-btn" style="border-radius: .2em ;" type="submit">
+              <i class="fas fa-stop" style="color: #E2454F;"></i>
+            </button>
+          </form>
+        </div>
 
         
       </div>

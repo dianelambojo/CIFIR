@@ -184,8 +184,8 @@ hr {
 
 /* LOGIN */
 .login {
-  top: 600px;
-  width: 600px;
+  top: 400px;
+  width: 500px;
   border-radius: 10px;
 }
 .login-body {
@@ -467,3 +467,5 @@ hr {
 #book-viewer iframe {
   padding: 40px 40px;
 }
+
+
