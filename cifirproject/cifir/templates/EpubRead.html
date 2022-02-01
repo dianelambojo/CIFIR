@@ -6,6 +6,7 @@
 {% endblock extrascriptheader %} {% block content %}
 <div class="container-fluid"> <br>
 	<div class="card">
+		<!--  HEADER -->
 		<div class="header-fixed" style="justify-content: space-between; padding: 1rem; display: inline-block;text-align: center;" >
 			{% for book in books %}
 			<span style="padding-left: 1em;">
@@ -14,11 +15,12 @@
 				<p id="book1" hidden>{{ book.file }}</p>
 				<p id="book_id" hidden>{{ book.id }}</p>
 			</span>
-			
+
+			<span class="text-right">
 			<!-- TABLE OF CONTENTS -->
-				<span class="text-right">
-					<select id="toc" style="margin-right: 1em;"></select>
-				</span>
+
+			<select id="toc" style="margin-right: 1em;"></select>
+				
 			<!-- END TABLE OF CONTENTS -->
 
 			<!-- SEARCH, BOOKMARK, CHANGE FONT, FONT SIZE -->
@@ -76,6 +78,7 @@
 						<input type="text" id="currentBook" name="currentBook" value="{{ book.id }}" hidden>
 						<input type="text" value="{{ currentPage }}" id="current-page" hidden>
 					</form>
+
 					<!-- StickyNote -->
 					<button style="border:none; color: none;" data-toggle="modal" data-target="#bookmarkModal"><i class="fas fa-sticky-note icon-link icon-link-icon"></i></button>
 					<div class="modal fade" id="bookmarkModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -109,16 +112,16 @@
 							</div>
 						</div>
 					</div>
-
 			<!-- SEARCH, BOOKMARK, CHANGE FONT, FONT SIZE - END-->
-			{% endfor %}
+			</span>
 		</div>
+		<!--  HEADER END -->
 
 		<!-- NEXT , PREVIOUS BUTTONS -->
 			<a id="prev" href="#prev" class="arrow">‹</a>
 			<a id="next" href="#next" class="arrow">›</a>
+	 
 	 <!-- READER -->
-
 		<div class="container card-body">
 			<div class="row">
 				<div id="viewer" class="spreads" >
@@ -126,6 +129,7 @@
 			</div>
 		</div>
 
+		<!-- TTS -->
 			<div class="tts-buttons" style="text-align: end;">
 				<form method='POST' action="" enctype="multipart/form-data">
 					{% csrf_token %}
@@ -139,10 +143,10 @@
 					</button>
 				</form>
 			</div>
-
+		<!-- TTS END-->
+    {% endfor %}
 	</div>
 </div>
-
 
 {% endblock content %} {% block extrascriptfooter %}
 
@@ -642,23 +646,6 @@
 
 	}
 
- 
-	
-		
-
-		
-
-	// function bookmarkBook(book_id) {
-	//   console.log("test");
-	//   console.log(book_id);
-	//   // post('{% url "cifir:epub_view" %}', {
-	//   //   book_id,
-	//   //   csrfmiddlewaretoken: "{{csrf_token}}",
-	//   // });
-
-
-		 
-	// }
 
 	function post(path, params, method = "post") {
 		const form = document.createElement("form");
@@ -678,9 +665,6 @@
 		document.body.appendChild(form);
 		form.submit();
 	}
-
-
-
 
 </script>
 {% endblock extrascriptfooter %}

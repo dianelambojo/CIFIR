@@ -10,6 +10,8 @@
 {% endblock extrascriptheader %} {% block content %}
 <div class="container-fluid"> <br>
   <div class="card">
+
+    <!--  HEADER -->
     <div class="header-fixed" style="justify-content: space-between; padding: 1rem; display: inline-block;text-align: center;" >
       <!--  -->
       {% for book in books %}
@@ -18,10 +20,10 @@
         {{book.title}}
         <p id="book1" hidden>{{ book.file }}</p>
       </span>
+
       <!--Pages -->
       <span class="text-right">
       <span id="current_page">0 of 0</span>
-      <!-- END TABLE OF CONTENTS -->
 
         <!-- Cog-->
           <button style="border:none; color: none; align-items: flex-end; " data-toggle="modal" data-target="#fontsModal">
@@ -51,9 +53,6 @@
             </div>
           </div>
         </div>
-
-
-
       <!-- SEARCH, BOOKMARK, CHANGE FONT, FONT SIZE -->
         <!-- <span class="field-search">
           <input class="input-search" type="text" name="search" id="input-search" on/>
@@ -109,27 +108,16 @@
           </div>
         </div>
       </div>
-        <!-- <i class="far fa-bookmark icon-link icon-link-icon" onclick="bookmarkBook('{{book.id}}')"></i> -->
+    </span>
+  </div>
+  <!--  HEADER END -->
+  <!-- SEARCH, BOOKMARK, CHANGE FONT, FONT SIZE - END-->
 
-        <!-- <span style="padding-left:1em;">
-        <select id ="fonts">
-          <option value="1">Arial</option>
-          <option value="2">Verdana</option>
-          <option value="3">Times New Roman</option>
-          <option value="4">Courier New</option>
-        </select>
-        </span> -->
+  <!-- NEXT , PREVIOUS BUTTONS -->
+  <a id="prev" href="#prev" class="arrow">‹</a>
+  <a id="next" href="#next" class="arrow">›</a>
 
-    
-      </span>
-      <!-- SEARCH, BOOKMARK, CHANGE FONT, FONT SIZE - END-->
-      {% endfor %}
-    </div>
-     <!-- NEXT , PREVIOUS BUTTONS -->
-      <a id="prev" href="#prev" class="arrow">‹</a>
-      <a id="next" href="#next" class="arrow">›</a>
-
-      <!-- READER -->
+  <!-- READER -->
     <div class="container card-body">
       <div class="row">
         <div id="viewer" class="spreads col-lg-12" style="overflow: auto; max-width: 1024px; max-height: 1024px;
@@ -137,43 +125,38 @@
           <main>
             <h3 hidden>Open a PDF file</h3>
             <canvas class="pdf-viewer hidden">
-
             </canvas>
           </main>
         </div>
-       
 
-          <li hidden>
-            
-            <span id="zoomValue">100%</span>
-            <input type="range" id="zoom" name="cowbell" min="100" max="300" value="100" step="25" disabled>
-          </li>
-        </ul>
-
-          </div>
-        </div>
-        <!-- TTS -->
-        <div class="tts-buttons" style="text-align: end;">
-          <form method='POST' action="" enctype="multipart/form-data" id="tts-btn">
-            {% csrf_token %}
-            <!-- Play -->
-            <button id="ttsplay-btn" name="ttsplay-btn" style="border-radius: .2em ;" type="submit">
-              <i class="fas fa-play" style="color: #E2454F;"></i>
-            </button>
-            <input type="text" id="bookFile" name="bookFile" value="{{ book.file }}" hidden>
-            <input type="text" id="currentpage" name="currentpage" hidden>
-            <!-- Pause -->
-            <button id="ttspause-btn" name="ttspause-btn" style="border-radius: .2em ;" type="submit">
-              <i class="fas fa-stop" style="color: #E2454F;"></i>
-            </button>
-          </form>
-        </div>
-
-        
+        <!-- ZOOM HIDDEN-->
+        <li hidden>
+          <span id="zoomValue">100%</span>
+          <input type="range" id="zoom" name="cowbell" min="100" max="300" value="100" step="25" disabled>
+        </li>
       </div>
     </div>
 
-  
+    <!-- TTS -->
+    <div class="tts-buttons" style="text-align: end;">
+      <form method='POST' action="" enctype="multipart/form-data" id="tts-btn">
+        {% csrf_token %}
+        <!-- Play -->
+        <button id="tts-btn" name="tts-btn" style="border-radius: .2em ;" type="submit">
+          <i class="fas fa-play" style="color: #E2454F;"></i>
+        </button>
+        <input type="text" id="bookFile" name="bookFile" value="{{ book.file }}" hidden>
+        <input type="text" id="currentpage" name="currentpage" hidden>
+        <!-- Pause -->
+        <button id="ttspause-btn" name="ttspause-btn" style="border-radius: .2em ;" type="submit">
+          <i class="fas fa-stop" style="color: #E2454F;"></i>
+        </button>
+      </form>
+    </div>
+    <!-- TTS END-->
+    {% endfor %}
+  </div>
+</div>
 {% endblock content %} {% block extrascriptfooter %}
 
 <script defer>
@@ -306,7 +289,19 @@ document.addEventListener('keydown',(event) => {
   }
 })
 
+//TTS
+  var TTSclicked = function(){
+     console.log("tts clicked from script");
+     var thispage = currentPDF.currentPage-1;
+     console.log(thispage);
+     document.getElementById('currentpage').value = thispage;
+  }
 
+
+ttsbtnclicked = document.getElementById('tts-btn');
+ttsbtnclicked.addEventListener("click",TTSclicked);
+
+//TTS END
 
 //BOOKMARK
      var saveBookMark = function () {
@@ -333,16 +328,7 @@ document.addEventListener('keydown',(event) => {
   //END-BOOKMARK
   }
 
-  var TTSclicked = function(){
-     console.log("tts clicked from script");
-     var thispage = currentPDF.currentPage-1;
-     console.log(thispage);
-     document.getElementById('currentpage').value = thispage;
-  }
 
-
-ttsbtnclicked = document.getElementById('tts-btn');
-ttsbtnclicked.addEventListener("click",TTSclicked);
 
   $(".mark").on("click", function(e) {
       console.log('goto this bookmark')
@@ -430,12 +416,9 @@ function renderCurrentPage() {
 }
 
 
-
-    //changeFont();
-    // rendition.display();
     document.getElementById("increaseFont").addEventListener("click", increaseFontSize);
     document.getElementById("decreaseFont").addEventListener("click", decreaseFontSize);
-    // document.getElementById("fonts").addEventListener('change', changeFont);
+
 
 
   //CHANGE FONT FUNCTIONS
@@ -463,141 +446,8 @@ function renderCurrentPage() {
     }
     }
 
-    function changeFont() {
-      if(document.getElementById("fonts").value =="1"){
-        console.log("changed");
-        rendition.themes.default({
-          h1: {
-            'font-family': 'Arial',
-          },
-          h2: {
-            'font-family': 'Arial',
-          },
-          h3: {
-            'font-family': 'Arial',
-          },
-          h4: {
-            'font-family': 'Arial',
-          },
-          h5: {
-            'font-family': 'Arial',
-          },
-          h6: {
-            'font-family': 'Arial',
-          },
-          div: {
-            'font-family': 'Arial',
-          },
-          p: {
-            'font-family': 'Arial',
-          },
-    });
-      }
-      else if(document.getElementById("fonts").value =="2"){
-        console.log("changed");
-        rendition.themes.default({
-          h1: {
-            'font-family': 'Verdana',
-          },
-          h2: {
-            'font-family': 'Verdana',
-          },
-          h3: {
-            'font-family': 'Verdana',
-          },
-          h4: {
-            'font-family': 'Verdana',
-          },
-          h5: {
-            'font-family': 'Verdana',
-          },
-          h6: {
-            'font-family': 'Verdana',
-          },
-          div: {
-            'font-family': 'Verdana',
-          },
-          p: {
-            'font-family': 'Verdana',
-          },
-    });
-      }
-      else if(document.getElementById("fonts").value =="3"){
-        console.log("changed");
-        rendition.themes.default({
-          h1: {
-            'font-family': 'Times New Roman',
-          },
-          h2: {
-            'font-family': 'Times New Roman',
-          },
-          h3: {
-            'font-family': 'Times New Roman',
-          },
-          h4: {
-            'font-family': 'Times New Roman',
-          },
-          h5: {
-            'font-family': 'Times New Roman',
-          },
-          h6: {
-            'font-family': 'Times New Roman',
-          },
-          div: {
-            'font-family': 'Times New Roman',
-          },
-          p: {
-            'font-family': 'Times New Roman',
-          },
-    });
-      }
-      else if(document.getElementById("fonts").value =="4"){
-        console.log("changed");
-        rendition.themes.default({
-          h1: {
-            'font-family': 'Courier New',
-          },
-          h2: {
-            'font-family': 'Courier New',
-          },
-          h3: {
-            'font-family': 'Courier New',
-          },
-          h4: {
-            'font-family': 'Courier New',
-          },
-          h5: {
-            'font-family': 'Courier New',
-          },
-          h6: {
-            'font-family': 'Courier New',
-          },
-          div: {
-            'font-family': 'Courier New',
-          },
-          p: {
-            'font-family': 'Courier New',
-          },
-    });
-      }
-    }
     //CHANGE FONT FUNCTIONS END
 
-
- 
-  
-    
-
-    
-
-  // function bookmarkBook(book_id) {
-  //   console.log("test");
-  //   console.log(book_id);
-  //   // post('{% url "cifir:epub_view" %}', {
-  //   //   book_id,
-  //   //   csrfmiddlewaretoken: "{{csrf_token}}",
-  //   // });
-  // }
 
   function post(path, params, method = "post") {
     const form = document.createElement("form");

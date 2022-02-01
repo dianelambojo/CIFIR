@@ -135,6 +135,53 @@ class homePageView(View):
 		return render(request, 'homepage.html', context)
 
 	def post(self,request):
+		if request.method == "POST":
+			username = request.POST.get("username")
+			password = request.POST.get("password")
+			url = request.POST.get("link")
+
+			#convert webElement to string
+			uname = str(username)
+			pword = str(password)
+
+			if "Cambridge Core" in request.POST:
+				loginBtnSelector = '#login-form > div:nth-child(5) > button'
+				automateLogin(username, password, url, loginBtnSelector, 1)
+
+			elif "ProQuest Elibrary" in request.POST:
+				loginBtnSelector = '#login_button'
+				automateLogin(username, password, url, loginBtnSelector, 1)
+
+			elif "Wiley Online Library" in request.POST:
+				driver = webdriver.Chrome(options=setDriverOptions())
+				driver.get(url)
+
+				driver.execute_script("document.querySelector('#username').setAttribute('value','"+ username +"')")
+				password = driver.find_element_by_css_selector("#password")
+				password.send_keys(pword)
+
+				driver.execute_script("document.querySelector('#main-content > div > div > div.container > div > div > div.card.card--light-shadow.login-widget.col-md-6 > div.widget__body > div.login-form > form > div.align-end > span > input').click();")
+
+			elif "Science Direct" in request.POST:
+				driver = webdriver.Chrome(options=setDriverOptions())
+				driver.get(url)
+
+				username = driver.find_element_by_css_selector("#bdd-email")
+				username.send_keys(uname)
+				driver.execute_script("document.querySelector('#bdd-elsPrimaryBtn').click();")
+				password = driver.find_element_by_css_selector("#bdd-password")
+				password.send_keys(pword)
+
+				driver.execute_script("document.querySelector('#bdd-elsPrimaryBtn').click();")
+
+			elif "Directory of Open Access Books" in request.POST:
+				automateLogin(username, password, url, '', 2)
+
+			elif "Zlibrary" in request.POST:
+				automateLogin(username, password, url, '', 2)
+
+			
+
 		if 'btnUpload' in request.POST:
 			user = User.objects.get(id=request.user.id)
 			file = request.FILES.get('book_file')
@@ -208,7 +255,7 @@ class homePageView(View):
 		if 'addToCollection' in request.POST:
 			print('hi there')
 			addToCollection(request.POST.get('book_id'), request.POST.get('collection_id'))
-			return redirect('cifir:home_view')
+			return redirect('cifir:collections_view')
 		if 'removeFromCollection' in request.POST:
 			# insert code here
 			print("insert code here to remove from collection")
@@ -512,7 +559,7 @@ class pdfReadpageView(View):
 				print('read request')
 				tts(bookFile,currentPage)
 
-				#return HttpResponse(tts(book_id))
+				#return redirect('cifir:pdf_view')
 
 			if 'add-bookmark' in request.POST:
 				currentBook = request.POST.get('currentBook', None)
@@ -676,6 +723,29 @@ class viewBook(View):
 		return render(request, 'files.html', context)
 
 	def post(self,request):
+		
+		if request.method == 'POST':
+			if 'editCollectionBtn' in request.POST:
+				print('clicked')
+				collection_new_name = request.POST.get("name")
+				collection_id = request.POST.get("id")
+				print(collection_new_name)
+				update_collection = Collection.objects.filter(id=collection_id).update(name=collection_new_name)
+				print('save')
+
+				messages.success(request,'Collection Edited Successfuly!')
+				return redirect('cifir:collections_view')
+
+			elif 'deleteCollectionBtn' in request.POST:	
+
+				print('Delete Button Clicked')
+				collection_id = request.POST.get("id")
+				collection = Collection.objects.filter(id = collection_id).update(isDeleted=True)
+				print('Collection Deleted')
+
+				messages.success(request,'Collection Deleted Successfuly!')
+				return redirect('cifir:collections_view')
+
 		context = {}
 		collection = request.POST.get('collection', None)
 		collection_book = request.POST.get('collection_book', None)
@@ -696,26 +766,7 @@ class viewBook(View):
 					'collectionBook': collectionBook,
 				}
 
-		if request.method == 'POST':
-			if 'editCollectionBtn' in request.POST:
-				print('clicked')
-				collection_new_name = request.POST.get("name")
-				collection_id = request.POST.get("id")
-				print(collection_new_name)
-				update_collection = Collection.objects.filter(id=collection_id).update(name=collection_new_name)
-				print('save')
-
-				messages.success(request,'Collection Edited Successfuly!')
-
-			elif 'deleteCollectionBtn' in request.POST:	
-
-				print('Delete Button Clicked')
-				collection_id = request.POST.get("id")
-				collection = Collection.objects.filter(id = collection_id).update(isDeleted=True)
-				print('Collection Deleted')
-
-				messages.success(request,'Collection Deleted Successfuly!')			
-
+		
 		return render(request, 'files.html', context)
 
 
