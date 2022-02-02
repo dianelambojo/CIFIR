@@ -37,7 +37,20 @@ import csv, sys, os, django, random, datetime
 from pathlib import Path
 import os
 
+import nltk
+from django.contrib.auth.views import PasswordResetView
+from django.contrib.messages.views import SuccessMessageMixin
 
+
+class ResetPasswordView(SuccessMessageMixin, PasswordResetView):
+    template_name = 'resetpass/password_reset.html'
+    email_template_name = 'resetpass/password_reset_email.html'
+    subject_template_name = 'resetpass/password_reset_subject'
+    success_message = "We've emailed you instructions for setting your password, " \
+                      "if an account exists with the email you entered. You should receive them shortly." \
+                      " If you don't receive an email, " \
+                      "please make sure you've entered the address you registered with, and check your spam folder."
+    success_url = reverse_lazy('cifir:login_view')
 chromedriver.TARGET_VERSION = 96
 chromedriver.install()
 
@@ -116,6 +129,23 @@ def tts(bookFile,currentPage):
 	return text
 	# pdf.close()
 
+# def success(request, uid): 
+# 	templates = render_to_string('resetpass/password_reset_email.html',{'name': request.user.profile.first_name})
+
+# 	email = EmailMessage(
+# 		'Thank you for loggin in'
+# 		templates, 
+# 		settings.EMAIL_HOST_USER,
+# 		[request.user.profile.email],
+# 	)
+
+# 	email.fail_silently=False
+# 	email.send()
+
+# 	project = Project.objects.get(id=uid)
+# 	context = {'project':project}
+
+# 	return render(request, 'resetpass/password_reset_confir.html', context)
 
 #CLASSES
 class homePageView(View):
@@ -310,23 +340,18 @@ class loginPageView(View):
 						request.session['email'] = email
 						if user.check_password(123456):
 							messages.info(request, "Please reset your password in Account Setting.")
-						return redirect('cifir:home_view')
+							return redirect('cifir:home_view')
+
+						elif user is not None and user.is_superuser:
+							login(request, user)
+							return redirect('cifir:admin_view')
 					else:
 						messages.info(request, 'Email or password is incorrect')
 						return redirect('cifir:login_view')
 				else:
 					messages.info(request, 'Email or password is incorrect')
 					return redirect('cifir:login_view')
-				
-				# print(user)
-				# if user is not None:
-				# 	#user = LibUser.objects.filter(email = email,password = password)
-				# 	login(request, user)
-				# 	request.session['email'] = email
-				# 	return redirect('cifir:home_view')
-				# else:
-				# 	messages.info(request, 'Email or password is incorrect')
-				# 	return redirect('cifir:login_view')
+			
 			else:
 				messages.warning(request, 'Email or password is incorrect')
 				return render(request, 'login.html')
@@ -337,7 +362,14 @@ def logoutPage(request):
 
 class adminPageView(View):
 	def get(self, request):
-		return render(request,'admin/base_site.html')
+		user = User.objects.all()
+		catalog = Catalog.objects.all()
+
+		context = {
+				'users' : user,
+				'catalogs' : catalog,
+				}
+		return render(request,'admin/admin.html', context)
 
 class audiobooksPageView(View):
 	def get(self, request):
@@ -354,21 +386,21 @@ class PasswordChangeView(PasswordChangeView):
 class PasswordChangeDoneView(PasswordChangeDoneView):
 	template_name = 'profile.html'
 
-class PasswordResetView(View):
-	def get(self, request):
-		return render(request,'password_reset_form.html')
+# class PasswordResetView(View):
+# 	def get(self, request):
+# 		return render(request,'password_reset_form.html')
 
-class PasswordResetDoneView(View):
-	def get(self, request):
-		return render(request,'password_reset_done.html')
+# class PasswordResetDoneView(View):
+# 	def get(self, request):
+# 		return render(request,'password_reset_done.html')
 
-class PasswordResetConfirmView(View):
-	def get(self, request):
-		return render(request,'password_reset_confirm.html')
+# class PasswordResetConfirmView(View):
+# 	def get(self, request):
+# 		return render(request,'password_reset_confirm.html')
 
-class PasswordResetCompleteView(View):
-	def get(self, request):
-		return render(request,'password_reset_complete.html')
+# class PasswordResetCompleteView(View):
+# 	def get(self, request):
+# 		return render(request,'password_reset_complete.html')
 
 class TokenGenerator(PasswordResetTokenGenerator):
     def _make_hash_value(self, user, timestamp):
@@ -377,33 +409,33 @@ class TokenGenerator(PasswordResetTokenGenerator):
         )
         account_activation_token = TokenGenerator()
 
-def password_reset_request(request):
-	if request.method == "POST":
-		password_reset_form = PasswordResetForm(request.POST)
-		if password_reset_form.is_valid():
-			data = password_reset_form.cleaned_data['email']
-			associated_users = User.objects.filter(Q(email=data))
-			if associated_users.exists():
-				for user in associated_users:
-					subject = "Password Reset Requested"
-					email_template_name = "password_reset_email.txt"
-					c = {
-					"email":'imcastbound@gmail.com',
-					'domain':'127.0.0.1:8000',
-					'site_name': 'CIFIR',
-					"uid": urlsafe_base64_encode(force_bytes(user.pk)),
-					"user": user,
-					'token': default_token_generator.make_token(user),
-					'protocol': 'http',
-					}
-					email = render_to_string(email_template_name, c)
-					try:
-						send_mail(subject, email, 'admin@example.com' , ['imcastbound@gmail.com'], fail_silently=False)
-					except BadHeaderError:
-						return HttpResponse('Invalid header found.')
-					return redirect ("/password_reset/done/")
-	password_reset_form = PasswordResetForm()
-	return render(request=request, template_name="password_reset_form.html", context={"password_reset_form":password_reset_form})
+# def password_reset_request(request):
+# 	if request.method == "POST":
+# 		password_reset_form = PasswordResetForm(request.POST)
+# 		if password_reset_form.is_valid():
+# 			data = password_reset_form.cleaned_data['email']
+# 			associated_users = User.objects.filter(Q(email=data))
+# 			if associated_users.exists():
+# 				for user in associated_users:
+# 					subject = "Password Reset Requested"
+# 					email_template_name = "password_reset_email.txt"
+# 					c = {
+# 					"email":'imcastbound@gmail.com',
+# 					'domain':'127.0.0.1:8000',
+# 					'site_name': 'CIFIR',
+# 					"uid": urlsafe_base64_encode(force_bytes(user.pk)),
+# 					"user": user,
+# 					'token': default_token_generator.make_token(user),
+# 					'protocol': 'http',
+# 					}
+# 					email = render_to_string(email_template_name, c)
+# 					try:
+# 						send_mail(subject, email, 'admin@example.com' , ['imcastbound@gmail.com'], fail_silently=False)
+# 					except BadHeaderError:
+# 						return HttpResponse('Invalid header found.')
+# 					return redirect ("/password_reset/done/")
+# 	password_reset_form = PasswordResetForm()
+# 	return render(request=request, template_name="password_reset_form.html", context={"password_reset_form":password_reset_form})
 
 
 # class bookmarksPageView(View):
@@ -421,8 +453,7 @@ def password_reset_request(request):
 #  			return HttpResponse(message)
 class bookmarksPageView(View):
 	def get(self, request):
-		return render(request,'bookmarks.html')
-		
+		return render(request,'bookmarks.html')		
 class epubReadpageView(View):
 	def get(self, request):
 		book_id = request.POST.get('book_id', None)

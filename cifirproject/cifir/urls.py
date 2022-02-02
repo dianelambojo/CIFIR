@@ -31,26 +31,35 @@ urlpatterns = [
         success_url = reverse_lazy('cifir:login_view')),name="changePassword_view"),
     
 
-    #ResetPassword
-    path('password-reset/', 
-        auth_views.PasswordResetView.as_view(template_name='password_reset_form.html', success_url = reverse_lazy('cifir:password_reset_done')),
-        name="password_reset"),
-                
-    path('password-reset/done/', 
-        auth_views.PasswordResetDoneView.as_view(template_name='password_reset_done.html'),
-        name="password_reset_done"),
-             
-    path('password-reset-confirm/<uidb64>/<token>/',
-        auth_views.PasswordResetConfirmView.as_view(success_url=reverse_lazy('cifir:password_reset_complete')),
-        name='password_reset_confirm'
-    ),
-                
-    path('password-reset-complete/', 
-        auth_views.PasswordResetCompleteView.as_view(template_name='password_reset_complete.html'), 
-        name="password_reset_complete"),
 
-    path('password-change-done',auth_views.PasswordChangeDoneView.as_view(template_name = 'changePassword_done', 
-        ),name="password_change_done"),
+    path('password-reset/', views.ResetPasswordView.as_view(), name='password_reset'),
+    path('password-reset-confirm/<uidb64>/<token>/',
+         auth_views.PasswordResetConfirmView.as_view(template_name='resetpass/password_reset_confirm.html'),
+         name='password_reset_confirm'),
+    path('password-reset-complete/',
+         auth_views.PasswordResetCompleteView.as_view(template_name='resetpass/password_reset_complete.html'),
+         name='password_reset_complete'),
+
+    #ResetPassword
+    # path('password-reset/', 
+    #     auth_views.PasswordResetView.as_view(template_name='password_reset_form.html', success_url = reverse_lazy('cifir:password_reset_done')),
+    #     name="password_reset"),
+                
+    # path('password-reset/done/', 
+    #     auth_views.PasswordResetDoneView.as_view(template_name='password_reset_done.html'),
+    #     name="password_reset_done"),
+             
+    # path('password-reset-confirm/<uidb64>/<token>/',
+    #     auth_views.PasswordResetConfirmView.as_view(success_url=reverse_lazy('cifir:password_reset_complete')),
+    #     name='password_reset_confirm'
+    # ),
+                
+    # path('password-reset-complete/', 
+    #     auth_views.PasswordResetCompleteView.as_view(template_name='password_reset_complete.html'), 
+    #     name="password_reset_complete"),
+
+    # path('password-change-done',auth_views.PasswordChangeDoneView.as_view(template_name = 'changePassword_done', 
+    #     ),name="password_change_done"),
 
                
 ]

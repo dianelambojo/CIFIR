@@ -22,6 +22,7 @@ function stayLoggedIn() {
     setCookie("password",encryptedPassword,30);
     return null;
 }
+
 window.onload {
     var loggedIn = getCookie("logged_in");
     if(loggedIn == true) {
