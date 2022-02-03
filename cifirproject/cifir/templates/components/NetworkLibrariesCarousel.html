@@ -1,94 +1,52 @@
 {% load static %} {% block content %}
 <div class="row">
   <div class="col-12">
-    <div
-      id="carouselExampleIndicators"
-      class="carousel slide"
-      data-ride="carousel"
-    >
-      <div class="carousel-inner">
-        <div class="carousel-item active">
-          <div class="row">
-            {% for cat in catalog %}
+    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <div class="row">
+              {% for cat in catalog %}
 
-            <div class="col-md-4 mb-3">
-              <div class="card">
-                <form method="POST" action="" enctype="multipart/form-data">
-                {% csrf_token %}
-                  <div class="embed-responsive embed-responsive-4by3">
-                    {% if cat.cover %}
-                    <img alt="Card image cap" class="card-img-top embed-responsive-item" src="{{ cat.cover }}" />
-                    {% endif %}
-                  </div>
-                  <div class="card-body">
-                    <h4 class="card-title">{{ cat.name }}</h4>
-                    <p class="card-text">
-                      {{ cat.description }}
-                    </p>
-                    <input type="hidden" name="link" id="link" value="{{ cat.link }}">
-                    <input type="hidden" name="username" id="username" value="{{ cat.defaultUsername }}">
-                    <input type="hidden" name="password" id="password" value="{{ cat.defaultPassword }}">
-                    <div class="card-read-more">
-                      <br />
-                      <button type="submit" id="{{ cat.name }}" name="{{ cat.name }}" class="btn btn-close-all">Go to {{ cat.name }}</button>
-              <div class="col-md-4 mb-3">
-                <div class="card">
-                  <form method="POST" action="" enctype="multipart/form-data">
-                  {% csrf_token %}
-                    <div class="embed-responsive embed-responsive-4by3">
-                      {% if cat.cover %}
-                      <img alt="Card image cap" class="card-img-top embed-responsive-item" src="{{ cat.cover }}" />
-                      {% endif %}
+                <div class="col-md-4 mb-3">
+                  <div class="card">
+                    <form method="POST" action="" enctype="multipart/form-data">
+                      {% csrf_token %}
 
-                    </div>
-                    <div class="card-body">
-                      <h4 class="card-title">{{ cat.name }}</h4>
-                      <p class="card-text">
-                        {{ cat.description }}
-                      </p>
-                      <input type="hidden" name="link" id="link" value="{{ cat.link }}">
-                      <input type="hidden" name="username" id="username" value="{{ cat.defaultUsername }}">
-                      <input type="hidden" name="password" id="password" value="{{ cat.defaultPassword }}">
-                      <div class="card-read-more">
-                        <br>
-                            <div class = 'countBtn'>
-                              <button id="{{ cat.name }}" name="{{ cat.name }}" class="btn btn-primary">Go to {{ cat.name }}</button>
-                            </div>
-                            <div class = 'countNum'>
-                              <h4> 0 </h4>
-                            </div>
-                            <script type="text/javascript" src="{% static 'javascript/counter.js' %}"></script>
+                      <div class="embed-responsive embed-responsive-4by3">
+                        {% if cat.cover %}
+                        <img alt="Card image cap" class="card-img-top embed-responsive-item" src="{{ cat.cover }}" />
+                        {% endif %}
                       </div>
-                    </div>
-                  </form>
+
+                      <div class="card-body">
+                        <h4 class="card-title">{{ cat.name }}</h4>
+                        <p class="card-text">
+                          {{ cat.description }}
+                        </p>
+                        <input type="hidden" name="link" id="link" value="{{ cat.link }}">
+                        <input type="hidden" name="username" id="username" value="{{ cat.defaultUsername }}">
+                        <input type="hidden" name="password" id="password" value="{{ cat.defaultPassword }}">
+                      
+                        <div class="card-read-more">
+                          <br>
+                              <div class = 'countBtn'>
+                                <button id="{{ cat.name }}" name="{{ cat.name }}" class="btn btn-close-all">Go to {{ cat.name }}</button>
+                              </div>
+                              <div class = 'countNum'>
+                                <h4> 0 </h4>
+                              </div>
+                              <script type="text/javascript" src="{% static 'javascript/counter.js' %}"></script>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
                 </div>
-              </div>
-            {% endfor %}
+              {% endfor %}
+            </div>
           </div>
         </div>
-      </div>
     </div>
   </div>
-</div>
-  <!-- <div class="col-7 text-right">
-    <a
-      class="btn btn-primary mb-3 mr-1 carousel-btn"
-      href="#carouselExampleIndicators"
-      role="button"
-      data-slide="prev"
-    >
-      <i class="fa fa-arrow-left"></i>
-    </a>
-    <a
-      class="btn btn-primary mb-3 carousel-btn"
-      href="#carouselExampleIndicators"
-      role="button"
-      data-slide="next"
-    >
-      <i class="fa fa-arrow-right"></i>
-    </a>
-  </div> -->
-
 </div>
 
 {% endblock content %}

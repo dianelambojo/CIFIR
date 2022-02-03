@@ -57,6 +57,7 @@ class Catalog(models.Model):
 	cover = models.CharField(max_length=250)
 	defaultUsername = models.CharField(max_length=150)
 	defaultPassword = models.CharField(max_length=100)
+	count = models.IntegerField(max_length=500)
 
 	class Meta:
 		db_table = "Catalog"
