@@ -19,13 +19,13 @@ from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q 
-import zipfile
 
 import pdfplumber
 import pyttsx3
 #import keyboard
 #epub metadata, book cover etc
-from lxml import etree 
+from lxml import etree
+import zipfile
 from PIL import Image
 from io import BytesIO
 from django.core.files.base import ContentFile
@@ -43,6 +43,9 @@ import nltk
 from django.contrib.auth.views import PasswordResetView
 from django.contrib.messages.views import SuccessMessageMixin
 
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 class ResetPasswordView(SuccessMessageMixin, PasswordResetView):
     template_name = 'resetpass/password_reset.html'
@@ -79,22 +82,41 @@ def addToCollection(book_id, collection_id):
 	print('book added')
 
 def setDriverOptions():
-	options = webdriver.ChromeOptions()
+	options = chromedriver.ChromeOptions()
 	options.add_experimental_option("detach", True)
 
 	return options
 
-def automateLogin(username, password, url, loginBtnSelector, indicator):
-	driver = webdriver.Chrome(executable_path=r'C:/Program Files/Google/Chrome/Application/chromedriver.exe', options=setDriverOptions())
+def automateLogin(request, username, password, url, loginBtnSelector, indicator):
+	driver = chromedriver.Chrome(options=setDriverOptions())
 	if indicator == 1:
-		driver.get(url)
-		username_field = driver.find_element_by_css_selector("#username")
-		username_field.send_keys(username)
-		driver.execute_script("document.querySelector('#password').setAttribute('value','"+ password +"')")
-		driver.execute_script("document.querySelector('"+ loginBtnSelector +"').click();")
+		try:
+			driver.get(url)
+			username_field = driver.find_element_by_css_selector("#username")
+			username_field.send_keys(username)
+			driver.execute_script("document.querySelector('#password').setAttribute('value','"+ password +"')")
+			driver.execute_script("document.querySelector('"+ loginBtnSelector +"').click();")
+
+			# print(driver)
+
+			# r = Robot()                          
+			# r.keyPress(KeyEvent.VK_CONTROL)
+			# r.keyPress(KeyEvent.VK_T)
+			# r.keyRelease(KeyEvent.VK_CONTROL) 
+			# r.keyRelease(KeyEvent.VK_T)
+			# # To switch to the new tab
+			# tabs = driver.getWindowHandles()
+			# driver.switchTo().window(tabs.get(1))
+			# # To navigate to new link/URL in 2nd new tab
+			# driver.get("http://facebook.com")
+		except:
+			messages.success(request,'Failed to access the database. Try Again Later.')
 	
 	if indicator == 2:
-		driver.get(url)
+		try:
+			driver.get(url)
+		except:
+			messages.success(request,'Failed to access the database. Try Again Later.')
 
 def tts(bookFile,currentPage):
 
@@ -171,14 +193,14 @@ class homePageView(View):
 
 			if "Cambridge Core" in request.POST:
 				loginBtnSelector = '#login-form > div:nth-child(5) > button'
-				automateLogin(username, password, url, loginBtnSelector, 1)
+				automateLogin(request, username, password, url, loginBtnSelector, 1)
 
 			elif "ProQuest Elibrary" in request.POST:
 				loginBtnSelector = '#login_button'
-				automateLogin(username, password, url, loginBtnSelector, 1)
+				automateLogin(request, username, password, url, loginBtnSelector, 1)
 
 			elif "Wiley Online Library" in request.POST:
-				driver = webdriver.Chrome(options=setDriverOptions())
+				driver = chromedriver.Chrome(options=setDriverOptions())
 				driver.get(url)
 
 				driver.execute_script("document.querySelector('#username').setAttribute('value','"+ username +"')")
@@ -188,7 +210,7 @@ class homePageView(View):
 				driver.execute_script("document.querySelector('#main-content > div > div > div.container > div > div > div.card.card--light-shadow.login-widget.col-md-6 > div.widget__body > div.login-form > form > div.align-end > span > input').click();")
 
 			elif "Science Direct" in request.POST:
-				driver = webdriver.Chrome(options=setDriverOptions())
+				driver = chromedriver.Chrome(options=setDriverOptions())
 				driver.get(url)
 
 				username = driver.find_element_by_css_selector("#bdd-email")
@@ -200,11 +222,10 @@ class homePageView(View):
 				driver.execute_script("document.querySelector('#bdd-elsPrimaryBtn').click();")
 
 			elif "Directory of Open Access Books" in request.POST:
-				automateLogin(username, password, url, '', 2)
+				automateLogin(request, username, password, url, '', 2)
 
 			elif "Zlibrary" in request.POST:
-				automateLogin(username, password, url, '', 2)
-
+				automateLogin(request, username, password, url, '', 2)
 			
 
 		if 'btnUpload' in request.POST:
@@ -705,14 +726,14 @@ class networkLibrariesPageView(View):
 
 			if "Cambridge Core" in request.POST:
 				loginBtnSelector = '#login-form > div:nth-child(5) > button'
-				automateLogin(username, password, url, loginBtnSelector, 1)
+				automateLogin(request, username, password, url, loginBtnSelector, 1)
 
 			elif "ProQuest Elibrary" in request.POST:
 				loginBtnSelector = '#login_button'
-				automateLogin(username, password, url, loginBtnSelector, 1)
+				automateLogin(request, username, password, url, loginBtnSelector, 1)
 
 			elif "Wiley Online Library" in request.POST:
-				driver = webdriver.Chrome(options=setDriverOptions())
+				driver = chromedriver.Chrome(options=setDriverOptions())
 				driver.get(url)
 
 				driver.execute_script("document.querySelector('#username').setAttribute('value','"+ username +"')")
@@ -722,7 +743,7 @@ class networkLibrariesPageView(View):
 				driver.execute_script("document.querySelector('#main-content > div > div > div.container > div > div > div.card.card--light-shadow.login-widget.col-md-6 > div.widget__body > div.login-form > form > div.align-end > span > input').click();")
 
 			elif "Science Direct" in request.POST:
-				driver = webdriver.Chrome(options=setDriverOptions())
+				driver = chromedriver.Chrome(options=setDriverOptions())
 				driver.get(url)
 
 				username = driver.find_element_by_css_selector("#bdd-email")
@@ -734,10 +755,10 @@ class networkLibrariesPageView(View):
 				driver.execute_script("document.querySelector('#bdd-elsPrimaryBtn').click();")
 
 			elif "Directory of Open Access Books" in request.POST:
-				automateLogin(username, password, url, '', 2)
+				automateLogin(request, username, password, url, '', 2)
 
 			elif "Zlibrary" in request.POST:
-				automateLogin(username, password, url, '', 2)
+				automateLogin(request, username, password, url, '', 2)
 
 			return redirect("cifir:networklibraries_view")
 
