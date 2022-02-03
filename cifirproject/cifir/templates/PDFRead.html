@@ -10,66 +10,73 @@
 {% endblock extrascriptheader %} {% block content %}
 <div class="container-fluid"> <br>
   <div class="card">
-
     <!--  HEADER -->
-    <div class="header-fixed" style="justify-content: space-between; padding: 1rem; display: inline-block;text-align: center;" >
-      <!--  -->
+    <div class="card-header" style="font-size: 13px">
       {% for book in books %}
-      <span style="padding-left: 1em; padding-right: 2em; font-weight: bold">
+      <span style="font-size: 13px">
         <i class="fas fa-book"></i>
         {{book.title}}
         <p id="book1" hidden>{{ book.file }}</p>
       </span>
 
-      <!--Pages -->
-      <span class="text-right">
-      <span id="current_page">0 of 0</span>
+       <!-- NO OF PAGES -->
+       <div style="display: flex; text-align: center;">
+          <span id="current_page" >0 of 0</span>
+        </div>
 
-        <!-- Cog-->
-          <button style="border:none; color: none; align-items: flex-end; " data-toggle="modal" data-target="#fontsModal">
-            <i class="fas fa-cog icon-link icon-link-icon"></i></button>
+      <span class="text-right">
+       <!-- TOC, NO OF PAGES, FONT SETTINGS -->
+      <div class="container">
+        <div class="row">
+          <div class="col">
+            <!-- Cog-->
+            <button style="border:none; color: none;" data-toggle="modal" data-target="#fontsModal">
+              <i class="fas fa-cog icon-link icon-link-icon"></i></button>
+          </div>
+          <div class="col">
+            <!-- Bookmark -->
+            <form method="POST" enctype="multipart\form-data" id='bookmark-submit'>
+              {% csrf_token %}
+              <button type="submit" class="fas fa-bookmark icon-link icon-link-icon" style="border:none; color: none" id="add-bookmark" name="add-bookmark"></button>
+              <input type="text" id="bookmarkId" name="bookmarkId" hidden>
+              <input type="text" id="bookmarkIndex" name="bookmarkIndex" hidden>
+              <input type="text" id="currentBook" name="currentBook" value="{{ book.id }}" hidden>
+              <input type="text" value="{{ currentPage }}" id="current-page" hidden>
+            </form>
+          </div>
+          <div class="col-sm">
+            <!-- StickyNote -->
+            <button style="border:none; color: none;" data-toggle="modal" data-target="#bookmarkModal"><i class="fas fa-sticky-note icon-link icon-link-icon"></i></button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- MODALS -->
         <!-- Cog Modal-->
         <div class="modal fade" id="fontsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
           aria-hidden="true">
           <div class="modal-dialog" role="document">
             <div class="modal-content">
-              <div class="modal-header">
+              <div class="modal-header"> Font Size
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
-        
-              <div class="modal-body" style="height: 100px; align-content: center;">
-                <span style="padding-left: 0em;">
-                  <a class="btn" id="increaseFont">
-                    <span class="icon-font"><i class="fas fa-caret-up icon-link icon-link-icon"></i></span>
+              <div class="modal-body" style="height: 100px; display: flex; align-items: center; justify-content: center;">
+                <span style="padding-left: 2em;"> 
+                  <a class="btn" id="decreaseFont">
+                    <span class="icon-font"><i class="fas fa-minus icon-link icon-link-icon"></i></span>
                   </a>
                   <span id="zoomValue">100%</span>
-                  <a class="btn" id="decreaseFont">
-                    <span class="icon-font"><i class="fas fa-caret-down icon-link icon-link-icon"></i></span>
+                  <a class="btn" id="increaseFont">
+                    <span class="icon-font"><i class="fas fa-plus icon-link icon-link-icon"></i></span>
                   </a>
                 </span>
               </div>
             </div>
           </div>
         </div>
-      <!-- SEARCH, BOOKMARK, CHANGE FONT, FONT SIZE -->
-        <!-- <span class="field-search">
-          <input class="input-search" type="text" name="search" id="input-search" on/>
-          <i class="fas fa-search icon-search" id="btn-search" onclick="search()"></i>
-        </span>  -->
-
-        <!-- Bookmark -->
-        <form method="POST" enctype="multipart\form-data" id='bookmark-submit'> 
-          {% csrf_token %}
-          <button type="submit" class="fas fa-bookmark icon-link icon-link-icon" style="border:none; color: none" id="add-bookmark" name="add-bookmark"></button>
-          <input type="text" id="bookmarkId" name="bookmarkId" hidden>
-          <input type="text" id="bookmarkIndex" name="bookmarkIndex" hidden>
-          <input type="text" id="currentBook" name="currentBook" value="{{ book.id }}" hidden>
-          <input type="text" value="{{ currentPage }}" id="current-page" hidden>
-        </form>
-        <!-- StickyNote -->
-        <button style="border:none; color: none;" data-toggle="modal" data-target="#bookmarkModal"><i class="fas fa-sticky-note icon-link icon-link-icon"></i></button>
+        <!-- StickyNote Bookmark-->
         <div class="modal fade" id="bookmarkModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
@@ -84,24 +91,15 @@
               <div id="bookmarksView" class="view">
                 <div id="bookmarksView" class="view">
                   <h6>{{ book.title }}</h6>
-                <!-- <ul id="bookmarks"> Bookmarks </ul> -->
-                <!-- <h6>Bookmarks</h6> -->
-                  <!-- <div class="bookmark-items" id="bookmark-items"> -->
                   <ul style="display: table; margin: 0 auto;">
                   {% for bookmark in allBookmarks %}
-                    <!-- <button class="child child{{ bookmark.id }}" id="{{ bookmark.id }}" value="{{ bookmark.id }}"> Index: {{ bookmark.id }} </button> -->
-                    <!-- <input name="{{ bookmark.page_index  }}" value="Index: {{ bookmark.page_index }}"/> -->
-                  <!-- <li style="display:block"> <a id="bookmark-items"> </a></li> -->
-                    <!-- <input type="text" id="x" value="{{ bookmark.id }}"> --> 
-                    <!-- <button id="bookmark-items" value='{{ bookmark.bookpage }}'> Index: {{ bookmark.page_index }} </button> -->
                     <li style="display: block;">
                       <div style="margin-bottom: 5px;">
-                        <button style="width: 150%;" class="mark" id="bookmark-items{{ bookmark.id }}" value='{{ bookmark.bookpage }}'> <i class="fa fa-bookmark" style="padding-right: 5px; color: darkred;"></i> <span style="font-weight: bold;">  Page {{ bookmark.page_index }} </span></button>
+                        <button style="width: 150%; border:none; color: none; font-size: 15px" class="mark" id="bookmark-items{{ bookmark.id }}" value='{{ bookmark.bookpage }}'> <i class="fa fa-bookmark" style="padding-right: 5px; color: darkred;"></i> <span style="font-weight: bold;">  Page {{ bookmark.page_index }} </span></button>
                       </div>
                     </li>
                   {% endfor %}
                   </ul>
-                  <!-- </div> -->
               </div>
               </div>
             </div>
@@ -111,49 +109,51 @@
     </span>
   </div>
   <!--  HEADER END -->
-  <!-- SEARCH, BOOKMARK, CHANGE FONT, FONT SIZE - END-->
-
-  <!-- NEXT , PREVIOUS BUTTONS -->
-  <a id="prev" href="#prev" class="arrow">‹</a>
-  <a id="next" href="#next" class="arrow">›</a>
+  <!-- TOC, NO OF PAGES, FONT SETTINGS END-->
 
   <!-- READER -->
     <div class="container card-body">
       <div class="row">
-        <div id="viewer" class="spreads col-lg-12" style="overflow: auto; max-width: 1024px; max-height: 1024px;
+        <div id="viewer" class="spreads" style="overflow: auto; max-width: 1024px; max-height: 1024px;
           text-align: center;">
           <main>
             <h3 hidden>Open a PDF file</h3>
             <canvas class="pdf-viewer hidden">
             </canvas>
           </main>
+           <!-- NEXT , PREVIOUS BUTTONS -->
+          <a id="prev" href="#prev" class="arrow">‹</a>
+          <a id="next" href="#next" class="arrow">›</a>
         </div>
 
-        <!-- ZOOM HIDDEN-->
-        <li hidden>
-          <span id="zoomValue">100%</span>
-          <input type="range" id="zoom" name="cowbell" min="100" max="300" value="100" step="25" disabled>
-        </li>
+          <!-- ZOOM HIDDEN-->
+          <li hidden>
+            <span id="zoomValue">100%</span>
+            <input type="range" id="zoom" name="cowbell" min="100" max="300" value="100" step="25" disabled>
+          </li>
+
+          
       </div>
     </div>
-
     <!-- TTS -->
-    <div class="tts-buttons" style="text-align: end;">
-      <form method='POST' action="" enctype="multipart/form-data" id="tts-btn">
-        {% csrf_token %}
-        <!-- Play -->
-        <button id="tts-btn" name="tts-btn" style="border-radius: .2em ;" type="submit">
-          <i class="fas fa-play" style="color: #E2454F;"></i>
-        </button>
-        <input type="text" id="bookFile" name="bookFile" value="{{ book.file }}" hidden>
-        <input type="text" id="currentpage" name="currentpage" hidden>
-        <!-- Pause -->
-        <button id="ttspause-btn" name="ttspause-btn" style="border-radius: .2em ;" type="submit">
-          <i class="fas fa-stop" style="color: #E2454F;"></i>
-        </button>
-      </form>
+    <div class="card-header" style="display: flex; align-items: center; justify-content: center;">
+      <div class="tts-buttons">
+        <form method='POST' action="" enctype="multipart/form-data" id="tts-btn">
+          {% csrf_token %}
+          <!-- Play -->
+          <button id="tts-btn" name="tts-btn" class="btn btn-close-all" style="border-radius: .2em ;" type="submit">
+            <i class="fas fa-play" style="color: #FFFFFF;"></i>
+          </button>
+          <input type="text" id="bookFile" name="bookFile" value="{{ book.file }}" hidden>
+          <input type="text" id="currentpage" name="currentpage" hidden>
+          <!-- Pause -->
+          <button id="ttspause-btn" name="ttspause-btn" class="btn btn-close-all" style="border-radius: .2em ;" type="submit">
+            <i class="fas fa-stop" style="color: #FFFFFF;"></i>
+          </button>
+        </form>
+      </div>
     </div>
-    <!-- TTS END-->
+    <!-- TTS END -->
     {% endfor %}
   </div>
 </div>

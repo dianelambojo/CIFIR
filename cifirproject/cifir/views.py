@@ -17,11 +17,13 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
 from django.db.models import Q 
 import zipfile
 
 import pdfplumber
 import pyttsx3
+#import keyboard
 #epub metadata, book cover etc
 from lxml import etree 
 from PIL import Image
@@ -126,26 +128,19 @@ def tts(bookFile,currentPage):
 	speak.say(text)
 	speak.runAndWait()
 
+	# if keyboard.is_pressed("Esc"):
+	# 	speak.stop()
+
 	return text
 	# pdf.close()
 
-# def success(request, uid): 
-# 	templates = render_to_string('resetpass/password_reset_email.html',{'name': request.user.profile.first_name})
+def ttsStop():
+	speak = pyttsx3.init('sapi5')
+	voices = speak.getProperty('voices')
+	speak.setProperty("rate", 178)
+	speak.setProperty("voice", voices[0].id)
 
-# 	email = EmailMessage(
-# 		'Thank you for loggin in'
-# 		templates, 
-# 		settings.EMAIL_HOST_USER,
-# 		[request.user.profile.email],
-# 	)
-
-# 	email.fail_silently=False
-# 	email.send()
-
-# 	project = Project.objects.get(id=uid)
-# 	context = {'project':project}
-
-# 	return render(request, 'resetpass/password_reset_confir.html', context)
+	speak.stop()
 
 #CLASSES
 class homePageView(View):
@@ -290,6 +285,7 @@ class homePageView(View):
 			# insert code here
 			print("insert code here to remove from collection")
 
+
 def files(request):
     if request.method == 'POST':
         form = BookForm(request.POST,request.FILES)
@@ -321,6 +317,7 @@ class loginPageView(View):
 		print(users)
 		return render(request, 'login.html')
 
+
 	def post(self,request):
 		if request.method == 'POST':
 			if 'loginBtn' in request.POST:
@@ -328,26 +325,24 @@ class loginPageView(View):
 				print('Login Button Clicked!')
 				email = request.POST.get('email')
 				password = request.POST.get('password')
-				#user = LibUser.objects.filter(email = email,password = password)
 				username = users.objects.filter(email=email)
 				print(username)
-				if username is not None:
-					username = users.objects.get(email=email.lower()).username
-					user = authenticate(username=username, password=password)
-					print(user)
-					if user is not None:
-						login(request,user)
-						request.session['email'] = email
+				#if username is not None:
+				username = users.objects.get(email=email.lower()).username
+				user = authenticate(username=username, password=password)
+				print(user)
+					
+				if user is not None:
+					login(request,user)
+					request.session['email'] = email
+
+					if request.user.is_superuser:
+						return redirect('cifir:admin_view')
+					else:
 						if user.check_password(123456):
 							messages.info(request, "Please reset your password in Account Setting.")
-							return redirect('cifir:home_view')
+					return redirect('cifir:home_view')
 
-						elif user is not None and user.is_superuser:
-							login(request, user)
-							return redirect('cifir:admin_view')
-					else:
-						messages.info(request, 'Email or password is incorrect')
-						return redirect('cifir:login_view')
 				else:
 					messages.info(request, 'Email or password is incorrect')
 					return redirect('cifir:login_view')
@@ -355,10 +350,11 @@ class loginPageView(View):
 			else:
 				messages.warning(request, 'Email or password is incorrect')
 				return render(request, 'login.html')
-				
+			
 def logoutPage(request):
 	logout(request)
 	return redirect('cifir:login_view')
+
 
 class adminPageView(View):
 	def get(self, request):
@@ -497,7 +493,7 @@ class epubReadpageView(View):
 				#tts(book_id)
 				messages.success(request,"Text To Speech Starting...")
 				return render(request, 'EpubRead.html', context)
-				
+			
 
 			if 'add-bookmark' in request.POST:
 				currentBook = request.POST.get('currentBook', None)
@@ -591,6 +587,9 @@ class pdfReadpageView(View):
 				tts(bookFile,currentPage)
 
 				#return redirect('cifir:pdf_view')
+
+			if 'ttspause-btn' in request.POST:
+				ttsStop()
 
 			if 'add-bookmark' in request.POST:
 				currentBook = request.POST.get('currentBook', None)

@@ -49,12 +49,13 @@
                                     <div class="col-md-6 pt-md-0 pt-3"> 
                                         <label for="phone">Password</label> 
                                         <input type="password" class="bg-light form-control" value='{{user.password}}' placeholder="password"> 
-                                        <a href="{% url "cifir:changePassword_view" %}" class="btn btn-link" role="button" aria-pressed="true">Change Password</a>
+                                        <a href="{% url "cifir:changePassword_view" %}" class="btn btn-link-pass" role="button" aria-pressed="true">Change Password</a>
                                     </div>
                                 </div>
                         </div>  
                         <div class="py-3 pb-4 border-bottom"> 
-                            <button class="btn btn-primary mr-3" type="submit">Save Changes</button> <button class="btn border button">Cancel</button>
+                            <button class="btn btn-close-all">Cancel</button>
+                            <button class="btn btn-all mr-3" type="submit">Save Changes</button> 
                         </div>
                 {% endif %}
             </div>

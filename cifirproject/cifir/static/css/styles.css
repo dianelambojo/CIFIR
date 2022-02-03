@@ -242,8 +242,14 @@ hr {
   background-color: rgb(255, 240, 158);
 }
 
+.btn-link-pass {
+  color: #ED8854 !important;
+  opacity: 100%;
+  align-items: flex-end;
+}
+
 .btn-link {
-  color: rgb(254, 255, 188) !important;
+  color: white !important;
   opacity: 50%;
   align-items: flex-end;
 }
@@ -342,6 +348,8 @@ hr {
   color: var(--iconColor);
 }
 
+
+
 /* EpubRead */
 
 [id^="epubjs-container"] {
@@ -372,7 +380,7 @@ hr {
 
 /*EPUB READ */
 #viewer.spreads {
-  width: 900px;
+  width: 1500px;
   height: 600px;
   box-shadow: 0 0 4px #ccc;
   border-radius: 5px;
@@ -412,18 +420,18 @@ hr {
   }
 
   #prev {
-    left: 150px;
+    left: 15px;
   }
 
   #next {
-    right: 150px;
+    right: 15px;
   }
 
 .arrow {
   position: fixed;
   top: 50%;
   margin-top: -32px;
-  font-size: 64px;
+  font-size: 50px;
   color: #E2454F;
   font-family: arial, sans-serif;
   font-weight: bold;
@@ -468,7 +476,6 @@ hr {
   padding: 40px 40px;
 }
 
-<<<<<<< Updated upstream
 
 .btn-all {
     color: white;
@@ -479,6 +486,3 @@ hr {
     color: white;
     background-color: #E2454F;
 }
-
-=======
->>>>>>> Stashed changes
