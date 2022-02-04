@@ -17,6 +17,7 @@
         <i class="fas fa-book"></i>
         {{book.title}}
         <p id="book1" hidden>{{ book.file }}</p>
+        <input type="text" id="bookId" name="bookId" value="{{ book.id }}" hidden>
       </span>
 
        <!-- NO OF PAGES -->
@@ -196,7 +197,7 @@ function resetCurrentPDF() {
     countOfPages: 0,
     currentPage: 0,
     zoom: 1.5
-  }
+  }   
 }
 
 
@@ -236,6 +237,20 @@ document.getElementById('next').addEventListener('click', () => {
   const isValidPage = currentPDF.currentPage < currentPDF.countOfPages;
   if (isValidPage) {
     currentPDF.currentPage += 1;
+
+    if (window.localStorage.length === 0){
+      localStorage.setItem(document.getElementById('bookId').value, currentPDF.currentPage);
+    }else{
+      console.log('else');
+      if (localStorage.getItem(document.getElementById('bookId').value) !== null){
+        console.log("Book Already exist in the array");
+        localStorage.setItem(document.getElementById('bookId').value, currentPDF.currentPage);
+        console.log(localStorage.getItem(document.getElementById('bookId').value));
+      }else{
+        localStorage.setItem(document.getElementById('bookId').value, currentPDF.currentPage);
+      }
+    } 
+
     renderCurrentPage();
   }
 });
@@ -244,6 +259,20 @@ document.getElementById('prev').addEventListener('click', () => {
   const isValidPage = currentPDF.currentPage - 1 > 0;
   if (isValidPage) {
     currentPDF.currentPage -= 1;
+
+    if (window.localStorage.length === 0){
+      localStorage.setItem(document.getElementById('bookId').value, currentPDF.currentPage);
+    }else{
+      console.log('else');
+      if (localStorage.getItem(document.getElementById('bookId').value) !== null){
+        console.log("Book Already exist in the array");
+        localStorage.setItem(document.getElementById('bookId').value, currentPDF.currentPage);
+        console.log(localStorage.getItem(document.getElementById('bookId').value));
+      }else{
+        localStorage.setItem(document.getElementById('bookId').value, currentPDF.currentPage);
+      }
+    }
+
     renderCurrentPage();
   }
 });
@@ -356,12 +385,9 @@ addBookMarkBtn.addEventListener("click",saveBookMark);
 var addBookMark = document.getElementById('bookmark-submit');
 
 addBookMark.onsubmit = function(){
-  // console.log("hello submit");
 
   setTimeout(() => {
-    // console.log("hello sad");
     window.location.reload();
-
 
     console.log('reload');
     var lastBookmarked = document.getElementById("current-page").value;
@@ -378,19 +404,31 @@ function loadPDF(data) {
     currentPDF.countOfPages = doc.numPages;
     viewer.classList.remove('hidden');
     document.querySelector('h3').classList.add("hidden");
-    renderCurrentPage();
 
-    var lastBookmarked = document.getElementById("current-page").value;
-    // console.log(typeof lastBookmarked)
-
-    if(lastBookmarked==''){
+    if (window.localStorage.length === 0){
+      // localStorage.setItem(document.getElementById('bookId').value, 1);
       currentPDF.currentPage = 1;
       renderCurrentPage();
+    }else{
+      // window.localStorage.clear();
+      currentPDF.currentPage = Number(localStorage.getItem(document.getElementById('bookId').value));
+      renderCurrentPage();
     }
-    else{
-      currentPDF.currentPage = Number(lastBookmarked);
-      renderCurrentPage();      
-    }
+
+    // currentPDF.currentPage = localStorage.getItem(document.getElementById('bookId').value)
+    // renderCurrentPage();
+
+    // var lastBookmarked = document.getElementById("current-page").value;
+
+    // if(lastBookmarked == ''){
+    //   currentPDF.currentPage = localStorage.getItem(document.getElementById('bookId').value);
+    //   renderCurrentPage();
+    // }
+    // else{
+    //   // currentPDF.currentPage = Number(lastBookmarked);/
+    //   currentPDF.currentPage = localStorage.getItem(document.getElementById('bookId').value);
+    //   renderCurrentPage();      
+    // }
 
     // currentPDF.currentPage = Number(lastBookmarked);
     // renderCurrentPage();
