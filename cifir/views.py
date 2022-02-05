@@ -46,7 +46,8 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options 
 import time
 import undetected_chromedriver as chromedriver
-import csv, sys, os, django, random, datetime
+import csv, sys, os, django, random
+from datetime import datetime
 from pathlib import Path
 import os
 
