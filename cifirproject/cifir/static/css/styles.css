@@ -335,7 +335,7 @@ hr {
   justify-content: space-between;
   color: var(--iconColor);
   font-family: Verdana;
-  font-size: large;
+  font-size: small;
   font-weight: 600;
 }
 .card-header i {

@@ -15,7 +15,7 @@ class Book(models.Model):
 	isFavorite = models.BooleanField(default=False)
 	isHaveRead = models.BooleanField(default=False)
 	isToRead = models.BooleanField(default=False)
-
+	isAddedToCol = models.BooleanField(default=False)
 	isDeleted = models.BooleanField(default=False)
 
 	class Meta:

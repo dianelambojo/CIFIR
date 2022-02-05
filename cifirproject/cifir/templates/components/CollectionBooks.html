@@ -9,14 +9,21 @@
   
       <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
         
-        <li>
+        <!-- <li>
           <a class="dropdown-item" data-toggle="modal" data-target="#addBookCollectionModal" onclick="chooseBook('{{cbook.book.id}}')">Add to Collections</a>
-        </li>
-        
+        </li> -->
         <!-- show this if the book is already added to collection -->
         <!-- <li>
           <a class="dropdown-item" data-toggle="modal" data-target="#addBookCollectionModal" onclick="chooseBook('{{cbook.book.id}}')">Remove from Collections</a>
         </li> -->
+        <a class="dropdown-item" onclick="updateBook('{{ request.path }}' ,'to-collection', '{{cbook.book.id}}')">
+          {% if not cbook.book.isAddedToCol %}
+            Add to Collections
+          {% else %}
+            Remove from Collections
+          {% endif %}
+        </a>
+
         
         <li>
           <a class="dropdown-item" onclick="updateBook('{{ request.path }}' ,'favorite', '{{cbook.book.id}}')">
