@@ -1,3 +1,5 @@
+import django
+django.setup()
 from re import template
 from .forms import *
 from .models import *
@@ -20,9 +22,17 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q 
 
+#pdf
 import pdfplumber
 import pyttsx3
-#import keyboard
+import multiprocessing as mp
+import keyboard
+
+#epub
+from ebooklib import epub
+import ebooklib
+from bs4 import BeautifulSoup
+
 #epub metadata, book cover etc
 from lxml import etree
 import zipfile
@@ -39,7 +49,6 @@ import csv, sys, os, django, random, datetime
 from pathlib import Path
 import os
 
-import nltk
 from django.contrib.auth.views import PasswordResetView
 from django.contrib.messages.views import SuccessMessageMixin
 
@@ -118,7 +127,27 @@ def automateLogin(request, username, password, url, loginBtnSelector, indicator)
 		except:
 			messages.success(request,'Failed to access the database. Try Again Later.')
 
-def tts(bookFile,currentPage):
+
+
+
+
+def epubtotext(bookFile):
+	bookFile = bookFile
+
+	input_path = "./media/" + bookFile
+
+	book = epub.read_epub(input_path)
+
+	for item in book.get_items():
+		if item.get_type() == ebooklib.ITEM_DOCUMENT:
+			soup = BeautifulSoup(item.get_body_content(), 'html.parser')
+			text = [para.get_text() for para in soup.find_all('p')]
+			txt = soup.text.replace('\n', '' '').strip()
+			# print(txt)
+			speak(txt)
+	
+
+def pdftotext(bookFile,currentPage):
 
 	bookFile = bookFile
 	currentPage = int(currentPage)
@@ -130,39 +159,42 @@ def tts(bookFile,currentPage):
 	print(path)
 
 	pdf = pdfplumber.open(path)
+
+	#1 page only
 	page = pdf.pages[currentPage]
-	text = page.extract_text()
-	# input_path = r"C:/"
-	# german_corpus = []
-	# book = epub.read_epub(os.path.join(input_path,'1541217285_wuthering-heights_g7Cc0CH.epub'))
-	# for doc in book.get_items():
-	# 	doc_content = str(doc.content)
- #    	for w in nltk.word_tokenize(doc_content):
- #    		german_corpus.append(w.lower())
+	text = page.extract_text()	
 
-	print(text)
+	#print(text)
+	speak(text)
 
+	# start from currentpage until sa mga next
+	# totalpages = len(pdf.pages)
+	# for i in range(currentPage, totalpages ):
+	#     page = pdf.pages[i]
+	#     page_content = page.extract_text()
+
+	# speak(page_content)
+
+def speak(text):
+	
+	p = mp.Process(target=speakfunc, args=(text,))
+	p.start()
+	while p.is_alive():
+		if keyboard.is_pressed('spacebar'):
+			p.terminate()
+		else:
+			continue
+	p.join()
+
+def speakfunc(text):
 	speak = pyttsx3.init('sapi5')
 	voices = speak.getProperty('voices')
 	speak.setProperty("rate", 178)
 	speak.setProperty("voice", voices[0].id)
-
 	speak.say(text)
 	speak.runAndWait()
 
-	# if keyboard.is_pressed("Esc"):
-	# 	speak.stop()
 
-	return text
-	# pdf.close()
-
-def ttsStop():
-	speak = pyttsx3.init('sapi5')
-	voices = speak.getProperty('voices')
-	speak.setProperty("rate", 178)
-	speak.setProperty("voice", voices[0].id)
-
-	speak.stop()
 
 #CLASSES
 class homePageView(View):
@@ -228,85 +260,86 @@ class homePageView(View):
 				automateLogin(request, username, password, url, '', 2)
 			
 
-		if 'btnUpload' in request.POST:
-			user = User.objects.get(id=request.user.id)
-			file = request.FILES.get('book_file')
-			ext = os.path.splitext(file.name)[1]  # [0] returns path+filename
-			epub_extensions = ['.epub']
-			pdf_extensions = ['.pdf']
-			if ext.lower() in epub_extensions:
-				print(file)
-				print('')
-	
-				namespaces = {
-				   "calibre":"http://calibre.kovidgoyal.net/2009/metadata",
-				   "dc":"http://purl.org/dc/elements/1.1/",
-				   "dcterms":"http://purl.org/dc/terms/",
-				   "opf":"http://www.idpf.org/2007/opf",
-				   "u":"urn:oasis:names:tc:opendocument:xmlns:container",
-				   "xsi":"http://www.w3.org/2001/XMLSchema-instance",
-				   'pkg':'http://www.idpf.org/2007/opf',
-				}
+			if 'btnUpload' in request.POST:
+				user = User.objects.get(id=request.user.id)
+				file = request.FILES.get('book_file')
+				ext = os.path.splitext(file.name)[1]  # [0] returns path+filename
+				epub_extensions = ['.epub']
+				pdf_extensions = ['.pdf']
+				if ext.lower() in epub_extensions:
+					print(file)
+					print('')
+		
+					namespaces = {
+					   "calibre":"http://calibre.kovidgoyal.net/2009/metadata",
+					   "dc":"http://purl.org/dc/elements/1.1/",
+					   "dcterms":"http://purl.org/dc/terms/",
+					   "opf":"http://www.idpf.org/2007/opf",
+					   "u":"urn:oasis:names:tc:opendocument:xmlns:container",
+					   "xsi":"http://www.w3.org/2001/XMLSchema-instance",
+					   'pkg':'http://www.idpf.org/2007/opf',
+					}
 
-				zip = zipfile.ZipFile(file)
-				t = etree.fromstring(zip.read("META-INF/container.xml"))
+					zip = zipfile.ZipFile(file)
+					t = etree.fromstring(zip.read("META-INF/container.xml"))
 
-				for i in t:
-					print(i)
-				print('')
-				rootfile_path =  t.xpath("/u:container/u:rootfiles/u:rootfile",namespaces=namespaces)[0].get("full-path")
-				t = etree.fromstring(zip.read(rootfile_path))
-				
-				p = t.xpath('/pkg:package/pkg:metadata',namespaces=namespaces)[0]
+					for i in t:
+						print(i)
+					print('')
+					rootfile_path =  t.xpath("/u:container/u:rootfiles/u:rootfile",namespaces=namespaces)[0].get("full-path")
+					t = etree.fromstring(zip.read(rootfile_path))
 					
-				# repackage the data
-				res = {}
-				for s in ['title','language','creator','date','identifier']:
-					 res[s] = p.xpath('dc:%s/text()'%(s),namespaces=namespaces)[0]
-			
-				try:
-					cover_id = t.xpath("//opf:metadata/opf:meta[@name='cover']",namespaces=namespaces)[0].get("content")
-					cover_href = t.xpath("//opf:manifest/opf:item[@id='" + cover_id + "']",namespaces=namespaces)[0].get("href")
-					cover_path = os.path.join(os.path.dirname(rootfile_path), cover_href)
+					p = t.xpath('/pkg:package/pkg:metadata',namespaces=namespaces)[0]
+						
+					# repackage the data
+					res = {}
+					for s in ['title','language','creator','date','identifier']:
+						 res[s] = p.xpath('dc:%s/text()'%(s),namespaces=namespaces)[0]
+				
+					try:
+						cover_id = t.xpath("//opf:metadata/opf:meta[@name='cover']",namespaces=namespaces)[0].get("content")
+						cover_href = t.xpath("//opf:manifest/opf:item[@id='" + cover_id + "']",namespaces=namespaces)[0].get("href")
+						cover_path = os.path.join(os.path.dirname(rootfile_path), cover_href)
 
-					image = Image.open(zip.open(cover_path))		
-						#image.show()
-					image_io = BytesIO()
-					image.save(image_io, format='jpeg', quality=100) # you can change format and quality
-					# save to model
-					image_name = "cover"
-					book = Book.objects.create(title= res['title'], file = file, book_author=res['creator'])
-					book.user.add(user)
-					book.cover.save(image_name, ContentFile(image_io.getvalue()))
+						image = Image.open(zip.open(cover_path))		
+							#image.show()
+						image_io = BytesIO()
+						image.save(image_io, format='jpeg', quality=100) # you can change format and quality
+						# save to model
+						image_name = "cover"
+						book = Book.objects.create(title= res['title'], file = file, book_author=res['creator'])
+						book.user.add(user)
+						book.cover.save(image_name, ContentFile(image_io.getvalue()))
 
-				except KeyError:
-					book = Book.objects.create(title= res['title'], file = file, book_author=res['creator'], cover="media/epub_cover_default.png")
+					except KeyError:
+						book = Book.objects.create(title= res['title'], file = file, book_author=res['creator'], cover="media/epub_cover_default.png")
+						book.user.add(user)
+						messages.success(request,'Book added!')
+					
+					return redirect('cifir:home_view')
+
+				if ext.lower() in pdf_extensions:
+					#pdf file format
+					book = Book.objects.create(title= file.name, file = file, cover="media/pdf_cover_default.png")
 					book.user.add(user)
 					messages.success(request,'EPub added!')
 				
 				return redirect('cifir:home_view')
 
-			if ext.lower() in pdf_extensions:
-				#pdf file format
-				book = Book.objects.create(title= file.name, file = file, cover="media/pdf_cover_default.png")
-				book.user.add(user)
-				messages.success(request,'PDF added!')
-
+			if 'updateBookStatus' in request.POST:
+				updateBookStatus(request.POST.get('item'), request.POST.get('book_id'))
+				messages.success(request,"Book updated!")
 				return redirect('cifir:home_view')
+			if 'addToCollection' in request.POST:
+				print('hi there')
+				addToCollection(request.POST.get('book_id'), request.POST.get('collection_id'))
+				return redirect('cifir:collections_view')
+			if 'removeFromCollection' in request.POST:
+				# insert code here
+				print("insert code here to remove from collection")
 
-		if 'updateBookStatus' in request.POST:
-			updateBookStatus(request.POST.get('item'), request.POST.get('book_id'))
-			messages.success(request,"Book updated!")
+			
 			return redirect('cifir:home_view')
-		if 'addToCollection' in request.POST:
-			print('hi there')
-			addToCollection(request.POST.get('book_id'), request.POST.get('collection_id'))
-			messages.success(request,"Book added to Collection")
-			return redirect('cifir:collections_view')
-		if 'removeFromCollection' in request.POST:
-			# insert code here
-			print("insert code here to remove from collection")
-
 
 def files(request):
     if request.method == 'POST':
@@ -512,11 +545,11 @@ class epubReadpageView(View):
 							'allBookmarks': allBookmarks,
 						}
 
-			if 'click-me' in request.POST:
+			if 'tts-btn' in request.POST:
+				bookFile = request.POST.get('bookFile')
+				print(bookFile)
 				print('read request')
-				print(book)
-				#tts(book_id)
-				messages.success(request,"Text To Speech Starting...")
+				epubtotext(bookFile)
 				return render(request, 'EpubRead.html', context)
 			
 
@@ -609,12 +642,7 @@ class pdfReadpageView(View):
 				print(bookFile)
 				print(currentPage)
 				print('read request')
-				tts(bookFile,currentPage)
-
-				#return redirect('cifir:pdf_view')
-
-			if 'ttspause-btn' in request.POST:
-				ttsStop()
+				pdftotext(bookFile,currentPage)
 
 			if 'add-bookmark' in request.POST:
 				currentBook = request.POST.get('currentBook', None)
@@ -645,10 +673,11 @@ class pdfReadpageView(View):
 						'allBookmarks': allBookmarks,
 						'currentPage': latest,
 					}
+					
 				else:
 					bmark = Bookmark(bookpage=bookmark, page_index = bookmark)
 					bmark.save()
-					bmark.book.add(currentBook)	
+					bmark.book.add(currentBook)
 
 		return render(request, 'PDFRead.html', context)
 
@@ -827,44 +856,44 @@ class viewBook(View):
 
 # #IMPORT USERS FROM CSV
 
-Current_Date = datetime.datetime.today().strftime ('%d-%b-%Y')
-User = get_user_model()
-loc1 = 'C:/accounts.csv'
-# loc2 = 'C:/accounts-saved'+str(Current_Date)+str(random.randint(0,100))+'.csv'
-# os.rename(loc1,loc2)
-file = loc1
-data = csv.reader(open(file,'r'), delimiter=",")
+# Current_Date = datetime.datetime.today().strftime ('%d-%b-%Y')
+# User = get_user_model()
+# loc1 = 'C:/accounts.csv'
+# # loc2 = 'C:/accounts-saved'+str(Current_Date)+str(random.randint(0,100))+'.csv'
+# # os.rename(loc1,loc2)
+# file = loc1
+# data = csv.reader(open(file,'r'), delimiter=",")
 
 
-for row in data:
-    if row[1] != "Number":
-        # Post.id = row[0]
-        Post=User()
-        usernameRow = row[3]
-        userUsername = User.objects.filter(username = usernameRow).values_list('username', flat=True).first()
-        print(userUsername)
-        if userUsername == row[3]:
-            print(userUsername)
-            userUsername = User.objects.filter(username = row[3]).values('username')[0]
-            finalUsername = userUsername['username']
-            print("User object: " + finalUsername)
-            print("Row data: " + usernameRow)
-            if finalUsername == usernameRow:
-                print('data are equal')
-            # next(data)
-        else:
-        	Post.first_name = row[1]
-        	Post.last_name=row[2]
-        	Post.username = row[3]
-        	Post.email = row[4]
-        	Post.set_password(row[5])
-	        # Post.last_login = "2018-09-27 05:51:42.521991"
-	        Post.is_superuser = "0"
-	        Post.is_staff = "1"
-	        Post.is_active = "1"
-	        # Post.date_joined = "2018-09-27 05:14:50"
-	        print('data is saved')
-	        Post.save()
+# for row in data:
+#     if row[1] != "Number":
+#         # Post.id = row[0]
+#         Post=User()
+#         usernameRow = row[3]
+#         userUsername = User.objects.filter(username = usernameRow).values_list('username', flat=True).first()
+#         print(userUsername)
+#         if userUsername == row[3]:
+#             print(userUsername)
+#             userUsername = User.objects.filter(username = row[3]).values('username')[0]
+#             finalUsername = userUsername['username']
+#             print("User object: " + finalUsername)
+#             print("Row data: " + usernameRow)
+#             if finalUsername == usernameRow:
+#                 print('data are equal')
+#             # next(data)
+#         else:
+#         	Post.first_name = row[1]
+#         	Post.last_name=row[2]
+#         	Post.username = row[3]
+#         	Post.email = row[4]
+#         	Post.set_password(row[5])
+# 	        # Post.last_login = "2018-09-27 05:51:42.521991"
+# 	        Post.is_superuser = "0"
+# 	        Post.is_staff = "1"
+# 	        Post.is_active = "1"
+# 	        # Post.date_joined = "2018-09-27 05:14:50"
+# 	        print('data is saved')
+# 	        Post.save()
 
 
 

@@ -21,9 +21,9 @@
           <div class="card-read-more" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
             <div class = 'countBtn'>
               <!-- <button id="{{ cat.name }}" name="{{ cat.name }}" class="btn btn-close-all">Go to {{ cat.name }}</button> -->
-              <button type="submit" id="{{ cat.name }}" name="{{ cat.name }}" class="btn btn-primary" style="width: 250px;">Go to {{ cat.name }}</button>
+              <button type="submit" id="{{ cat.name }}" name="{{ cat.name }}" class="btn btn-all" style="width: 250px;">Go to {{ cat.name }}</button>
             </div>
-            <div class = 'countNum'>
+            <div class = 'countNum' hidden>
               <h4> 0 </h4>
             </div>
             <script type="text/javascript" src="{% static 'javascript/counter.js' %}"></script>

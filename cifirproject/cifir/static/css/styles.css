@@ -530,7 +530,7 @@ hr {
 }
 
 .btn-next{
-  background-color: #800000;
+  background-color: #ED8854;
   color: #FFFFFF;
   position: absolute;
   z-index: 1000;
@@ -540,15 +540,15 @@ hr {
 }
 
 .btn-next:hover{
-  background-color: #800000;
-  color: #F4CC3C;
+  background-color: #ED8854;
+  color: #E2454F;
   width: 70px;
   height: 70px;
   border-radius: 50%;
 }
 
 .btn-prev{
-  background-color: #800000;
+  background-color: #ED8854;
   color: #FFFFFF;
   position: absolute;
   z-index: 1000;
@@ -558,8 +558,8 @@ hr {
 }
 
 .btn-prev:hover{
-  background-color: #800000;
-  color: #F4CC3C;
+  background-color: #ED8854;
+  color: #E2454F;
   width: 70px;
   height: 70px;
   border-radius: 50%;

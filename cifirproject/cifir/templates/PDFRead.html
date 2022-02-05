@@ -115,8 +115,7 @@
   <!-- READER -->
     <div class="container card-body">
       <div class="row">
-        <div id="viewer" class="spreads" style="overflow: auto; max-width: 1024px; max-height: 1024px;
-          text-align: center;">
+        <div id="viewer" class="spreads" style="overflow: auto; text-align: center;">
           <main>
             <h3 hidden>Open a PDF file</h3>
             <canvas class="pdf-viewer hidden">
@@ -132,8 +131,6 @@
             <span id="zoomValue">100%</span>
             <input type="range" id="zoom" name="cowbell" min="100" max="300" value="100" step="25" disabled>
           </li>
-
-          
       </div>
     </div>
     <!-- TTS -->
@@ -303,7 +300,7 @@ document.addEventListener('keydown',(event) => {
     console.log('key left is pressed');
     const isValidPage = currentPDF.currentPage < currentPDF.countOfPages;
           if (isValidPage) {
-            currentPDF.currentPage += 1;
+            currentPDF.currentPage -= 1;
             renderCurrentPage();
           }
   }
@@ -394,6 +391,9 @@ addBookMark.onsubmit = function(){
     console.log(lastBookmarked);
 
   }, 500);
+
+  
+
 };
 
 function loadPDF(data) {
