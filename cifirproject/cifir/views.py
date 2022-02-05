@@ -613,6 +613,13 @@ class favoritesPageView(View):
 
 		return render(request, 'favorites.html', context)
 
+	def post(self, request):
+		if request.method == "POST":
+			if 'updateBookStatus' in request.POST:
+					updateBookStatus(request.POST.get('item'), request.POST.get('book_id'))
+					return redirect('cifir:favorites_view')
+
+
 
 class haveReadPageView(View):
 	def get(self, request):
@@ -626,6 +633,12 @@ class haveReadPageView(View):
 
 		return render(request,'haveRead.html', context)
 
+	def post(self, request):
+		if request.method == "POST":
+			if 'updateBookStatus' in request.POST:
+					updateBookStatus(request.POST.get('item'), request.POST.get('book_id'))
+					return redirect('cifir:haveread_view')
+
 class toReadPageView(View):
 	def get(self, request):
 		user = User.objects.filter(username=request.user)
@@ -637,6 +650,12 @@ class toReadPageView(View):
 				}
 
 		return render(request,'toRead.html', context)
+
+	def post(self, request):
+		if request.method == "POST":
+			if 'updateBookStatus' in request.POST:
+					updateBookStatus(request.POST.get('item'), request.POST.get('book_id'))
+					return redirect('cifir:toread_view')
 
 class networkLibrariesPageView(View):
 	def get(self, request):
