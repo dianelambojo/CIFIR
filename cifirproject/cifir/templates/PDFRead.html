@@ -275,23 +275,7 @@ document.getElementById('prev').addEventListener('click', () => {
   }
 });
 
-// document.getElementById('add-bookmark').addEventListener('click', () =>{
-//   const bookMark = currentPDF.currentPage;
 
-//   console.log("Bookmark button clicked");
-
-//   var link = document.createElement('button');
-//   link.innerHTML = "Page:" +bookMark;
-//   document.getElementById("bookmark-items").appendChild(link)
-
-//   link.addEventListener("click", function(event){
-//               // var cfi = href;
-//               console.log(bookMark);
-//               currentPDF.currentPage = bookMark;
-//               renderCurrentPage();
-//               // event.preventDefault();
-//           }, false);
-// })
 
 document.addEventListener('keydown',(event) => {
   var code = event.keyCode;
@@ -337,20 +321,6 @@ ttsbtnclicked.addEventListener("click",TTSclicked);
         var thispage = currentPDF.currentPage;
         console.log(thispage);
         document.getElementById('bookmarkId').value = thispage;
-
-
-        // var spineItem = book.spine.get(cfi);
-        // var tocItem;
-        // if (spineItem.index in book.navigation.toc) {
-        //   tocItem = book.navigation.toc[spineItem.href];
-        //   // link.textContent = "Page: "+spineItem.href;
-        //   //bookmarkLink
-        //   console.log(href);
-        //   document.getElementById('bookmarkId').value =  cfi;
-        //   document.getElementById('bookmarkIndex').value = index;
-        //   console.log("tocitem", tocItem);
-        //   console.log("spine" ,spineItem);
-        // } 
 
   //END-BOOKMARK
   }
@@ -416,23 +386,6 @@ function loadPDF(data) {
       renderCurrentPage();
     }
 
-    // currentPDF.currentPage = localStorage.getItem(document.getElementById('bookId').value)
-    // renderCurrentPage();
-
-    // var lastBookmarked = document.getElementById("current-page").value;
-
-    // if(lastBookmarked == ''){
-    //   currentPDF.currentPage = localStorage.getItem(document.getElementById('bookId').value);
-    //   renderCurrentPage();
-    // }
-    // else{
-    //   // currentPDF.currentPage = Number(lastBookmarked);/
-    //   currentPDF.currentPage = localStorage.getItem(document.getElementById('bookId').value);
-    //   renderCurrentPage();      
-    // }
-
-    // currentPDF.currentPage = Number(lastBookmarked);
-    // renderCurrentPage();
     
   });
 

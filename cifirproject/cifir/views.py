@@ -17,15 +17,15 @@ from django.contrib.auth.views import PasswordChangeView, PasswordChangeDoneView
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.backends import ModelBackend
-from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q 
 
-#pdf
-import pdfplumber
+#tts
 import pyttsx3
 import multiprocessing as mp
+#pdf
+import pdfplumber
 import keyboard
 
 #epub
@@ -40,6 +40,7 @@ from PIL import Image
 from io import BytesIO
 from django.core.files.base import ContentFile
 
+#automate login
 from selenium import webdriver 
 from selenium.webdriver.common.keys import Keys 
 from selenium.webdriver.chrome.options import Options 
@@ -49,22 +50,11 @@ import csv, sys, os, django, random, datetime
 from pathlib import Path
 import os
 
-from django.contrib.auth.views import PasswordResetView
-from django.contrib.messages.views import SuccessMessageMixin
-
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-class ResetPasswordView(SuccessMessageMixin, PasswordResetView):
-    template_name = 'resetpass/password_reset.html'
-    email_template_name = 'resetpass/password_reset_email.html'
-    subject_template_name = 'resetpass/password_reset_subject'
-    success_message = "We've emailed you instructions for setting your password, " \
-                      "if an account exists with the email you entered. You should receive them shortly." \
-                      " If you don't receive an email, " \
-                      "please make sure you've entered the address you registered with, and check your spam folder."
-    success_url = reverse_lazy('cifir:login_view')
+
 chromedriver.TARGET_VERSION = 96
 chromedriver.install()
 
@@ -106,18 +96,6 @@ def automateLogin(request, username, password, url, loginBtnSelector, indicator)
 			driver.execute_script("document.querySelector('#password').setAttribute('value','"+ password +"')")
 			driver.execute_script("document.querySelector('"+ loginBtnSelector +"').click();")
 
-			# print(driver)
-
-			# r = Robot()                          
-			# r.keyPress(KeyEvent.VK_CONTROL)
-			# r.keyPress(KeyEvent.VK_T)
-			# r.keyRelease(KeyEvent.VK_CONTROL) 
-			# r.keyRelease(KeyEvent.VK_T)
-			# # To switch to the new tab
-			# tabs = driver.getWindowHandles()
-			# driver.switchTo().window(tabs.get(1))
-			# # To navigate to new link/URL in 2nd new tab
-			# driver.get("http://facebook.com")
 		except:
 			messages.success(request,'Failed to access the database. Try Again Later.')
 	
@@ -126,9 +104,6 @@ def automateLogin(request, username, password, url, loginBtnSelector, indicator)
 			driver.get(url)
 		except:
 			messages.success(request,'Failed to access the database. Try Again Later.')
-
-
-
 
 
 def epubtotext(bookFile):
@@ -143,10 +118,8 @@ def epubtotext(bookFile):
 			soup = BeautifulSoup(item.get_body_content(), 'html.parser')
 			text = [para.get_text() for para in soup.find_all('p')]
 			txt = soup.text.replace('\n', '' '').strip()
-			# print(txt)
-			speak(txt)
+			tts(txt)
 	
-
 def pdftotext(bookFile,currentPage):
 
 	bookFile = bookFile
@@ -162,22 +135,19 @@ def pdftotext(bookFile,currentPage):
 
 	#1 page only
 	page = pdf.pages[currentPage]
-	text = page.extract_text()	
-
-	#print(text)
-	speak(text)
+	text = page.extract_text()
+	tts(text)
 
 	# start from currentpage until sa mga next
 	# totalpages = len(pdf.pages)
 	# for i in range(currentPage, totalpages ):
 	#     page = pdf.pages[i]
 	#     page_content = page.extract_text()
+	# tts(page_content)
 
-	# speak(page_content)
-
-def speak(text):
+def tts(text):
 	
-	p = mp.Process(target=speakfunc, args=(text,))
+	p = mp.Process(target=speak, args=(text,))
 	p.start()
 	while p.is_alive():
 		if keyboard.is_pressed('spacebar'):
@@ -186,14 +156,13 @@ def speak(text):
 			continue
 	p.join()
 
-def speakfunc(text):
+def speak(text):
 	speak = pyttsx3.init('sapi5')
 	voices = speak.getProperty('voices')
 	speak.setProperty("rate", 178)
 	speak.setProperty("voice", voices[0].id)
 	speak.say(text)
 	speak.runAndWait()
-
 
 
 #CLASSES
@@ -215,6 +184,7 @@ class homePageView(View):
 
 	def post(self,request):
 		if request.method == "POST":
+			#NETWORK LIBRARIES
 			username = request.POST.get("username")
 			password = request.POST.get("password")
 			url = request.POST.get("link")
@@ -260,13 +230,16 @@ class homePageView(View):
 				automateLogin(request, username, password, url, '', 2)
 			
 
+			#UPLOAD BOOK
 			if 'btnUpload' in request.POST:
 				user = User.objects.get(id=request.user.id)
 				file = request.FILES.get('book_file')
 				ext = os.path.splitext(file.name)[1]  # [0] returns path+filename
 				epub_extensions = ['.epub']
 				pdf_extensions = ['.pdf']
-				if ext.lower() in epub_extensions:
+
+				#EPUB FILE FORMAT
+				if ext.lower() in epub_extensions: 
 					print(file)
 					print('')
 		
@@ -301,8 +274,7 @@ class homePageView(View):
 						cover_href = t.xpath("//opf:manifest/opf:item[@id='" + cover_id + "']",namespaces=namespaces)[0].get("href")
 						cover_path = os.path.join(os.path.dirname(rootfile_path), cover_href)
 
-						image = Image.open(zip.open(cover_path))		
-							#image.show()
+						image = Image.open(zip.open(cover_path))
 						image_io = BytesIO()
 						image.save(image_io, format='jpeg', quality=100) # you can change format and quality
 						# save to model
@@ -319,10 +291,10 @@ class homePageView(View):
 					return redirect('cifir:home_view')
 
 				if ext.lower() in pdf_extensions:
-					#pdf file format
+					#PDF FILE FORMAT
 					book = Book.objects.create(title= file.name, file = file, cover="media/pdf_cover_default.png")
 					book.user.add(user)
-					messages.success(request,'EPub added!')
+					messages.success(request,'PDF added!')
 				
 				return redirect('cifir:home_view')
 
@@ -338,7 +310,6 @@ class homePageView(View):
 				# insert code here
 				print("insert code here to remove from collection")
 
-			
 			return redirect('cifir:home_view')
 
 def files(request):
@@ -410,7 +381,6 @@ class loginPageView(View):
 			
 def logoutPage(request):
 	logout(request)
-	messages.error(request,"Logged out successfully")
 	return redirect('cifir:login_view')
 
 
@@ -425,9 +395,6 @@ class adminPageView(View):
 				}
 		return render(request,'admin/admin.html', context)
 
-class audiobooksPageView(View):
-	def get(self, request):
-		return render(request,'audiobooks.html')
 
 class profilePageView(View):
 	def get(self, request):
@@ -440,74 +407,6 @@ class PasswordChangeView(PasswordChangeView):
 class PasswordChangeDoneView(PasswordChangeDoneView):
 	template_name = 'profile.html'
 
-# class PasswordResetView(View):
-# 	def get(self, request):
-# 		return render(request,'password_reset_form.html')
-
-# class PasswordResetDoneView(View):
-# 	def get(self, request):
-# 		return render(request,'password_reset_done.html')
-
-# class PasswordResetConfirmView(View):
-# 	def get(self, request):
-# 		return render(request,'password_reset_confirm.html')
-
-# class PasswordResetCompleteView(View):
-# 	def get(self, request):
-# 		return render(request,'password_reset_complete.html')
-
-class TokenGenerator(PasswordResetTokenGenerator):
-    def _make_hash_value(self, user, timestamp):
-        return (
-            six.text_type(user.pk) + six.text_type(timestamp) + six.text_type(user.is_active)
-        )
-        account_activation_token = TokenGenerator()
-
-# def password_reset_request(request):
-# 	if request.method == "POST":
-# 		password_reset_form = PasswordResetForm(request.POST)
-# 		if password_reset_form.is_valid():
-# 			data = password_reset_form.cleaned_data['email']
-# 			associated_users = User.objects.filter(Q(email=data))
-# 			if associated_users.exists():
-# 				for user in associated_users:
-# 					subject = "Password Reset Requested"
-# 					email_template_name = "password_reset_email.txt"
-# 					c = {
-# 					"email":'imcastbound@gmail.com',
-# 					'domain':'127.0.0.1:8000',
-# 					'site_name': 'CIFIR',
-# 					"uid": urlsafe_base64_encode(force_bytes(user.pk)),
-# 					"user": user,
-# 					'token': default_token_generator.make_token(user),
-# 					'protocol': 'http',
-# 					}
-# 					email = render_to_string(email_template_name, c)
-# 					try:
-# 						send_mail(subject, email, 'admin@example.com' , ['imcastbound@gmail.com'], fail_silently=False)
-# 					except BadHeaderError:
-# 						return HttpResponse('Invalid header found.')
-# 					return redirect ("/password_reset/done/")
-# 	password_reset_form = PasswordResetForm()
-# 	return render(request=request, template_name="password_reset_form.html", context={"password_reset_form":password_reset_form})
-
-
-# class bookmarksPageView(View):
-# 	def get(self, request):
-# 		return render(request,'homepage.html')
-
-# 	def bookmark_page(request):
-#  		if request.method == 'POST':
-#  			bookmark = Bookmark.objects.get()
-#  			bookmark.bookpage =  request.POST['bookpage']
-#  			bookmark.book = request.POST['book_id']
-#  			bookmark.save()
-#  			message = 'update successful'
-
-#  			return HttpResponse(message)
-class bookmarksPageView(View):
-	def get(self, request):
-		return render(request,'bookmarks.html')		
 class epubReadpageView(View):
 	def get(self, request):
 		book_id = request.POST.get('book_id', None)
@@ -696,7 +595,7 @@ class collectionsPageView(View):
 		collection_name = request.POST.get('collection_name')
 		collection = Collection.objects.create(name = collection_name)
 		collection.user.add(user)
-		messages.success(request,'Collection Added Successfuly!')
+		messages.success(request,'Collection Added Successfully!')
 
 
 		return redirect('cifir:collections_view')
@@ -817,7 +716,7 @@ class viewBook(View):
 				update_collection = Collection.objects.filter(id=collection_id).update(name=collection_new_name)
 				print('save')
 
-				messages.success(request,'Collection Edited Successfuly!')
+				messages.success(request,'Collection Edited Successfully!')
 				return redirect('cifir:collections_view')
 
 			elif 'deleteCollectionBtn' in request.POST:	
@@ -827,7 +726,7 @@ class viewBook(View):
 				collection = Collection.objects.filter(id = collection_id).update(isDeleted=True)
 				print('Collection Deleted')
 
-				messages.success(request,'Collection Deleted Successfuly!')
+				messages.success(request,'Collection Deleted Successfully!')
 				return redirect('cifir:collections_view')
 
 		context = {}

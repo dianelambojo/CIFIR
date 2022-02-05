@@ -321,35 +321,6 @@
           var index = loc.start.index
           var href = loc.start.href
 
-          // console.log(href);
-          
-          // var link = document.createElement('button');
-          // var linkText = document.createTextNode("title");
-          // link.appendChild(linkText);
-          // link.title = "title";
-          // link.innerHTML = href;
-          // link.innerHTML = href;
-          // document.getElementById("bookmark-items").appendChild(link)
-
-          // var spineItem = book.spine.get(cfi);
-          // var tocItem;
-          // if (spineItem.index in book.navigation.toc) {
-          //   tocItem = book.navigation.toc[spineItem.href];
-          //   link.textContent = "Page: "+spineItem.href;
-          //   console.log("tocitem", tocItem);
-          //   console.log("spine" ,spineItem);
-          // } else {
-          //   link.textContent = cfi;
-          // }
-
-          // link.addEventListener("click", function(event){
-          //     // var cfi = href;
-          //     console.log(cfi);
-          //     rendition.display(cfi);
-
-          //     // event.preventDefault();
-          // }, false);
-
           var spineItem = book.spine.get(cfi);
           var tocItem;
           if (spineItem.index in book.navigation.toc) {
