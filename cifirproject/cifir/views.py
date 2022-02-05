@@ -282,7 +282,7 @@ class homePageView(View):
 				except KeyError:
 					book = Book.objects.create(title= res['title'], file = file, book_author=res['creator'], cover="media/epub_cover_default.png")
 					book.user.add(user)
-					messages.success(request,'Book added!')
+					messages.success(request,'EPub added!')
 				
 				return redirect('cifir:home_view')
 
@@ -290,7 +290,7 @@ class homePageView(View):
 				#pdf file format
 				book = Book.objects.create(title= file.name, file = file, cover="media/pdf_cover_default.png")
 				book.user.add(user)
-				messages.success(request,'Book added!')
+				messages.success(request,'PDF added!')
 
 				return redirect('cifir:home_view')
 
@@ -301,6 +301,7 @@ class homePageView(View):
 		if 'addToCollection' in request.POST:
 			print('hi there')
 			addToCollection(request.POST.get('book_id'), request.POST.get('collection_id'))
+			messages.success(request,"Book added to Collection")
 			return redirect('cifir:collections_view')
 		if 'removeFromCollection' in request.POST:
 			# insert code here
@@ -359,11 +360,13 @@ class loginPageView(View):
 
 					if request.user.is_superuser:
 						return redirect('cifir:admin_view')
+					elif user.check_password(123456):
+						messages.success(request,"Logged in successfully")
+						messages.info(request, "Please reset your password in Account Setting.")
+						return redirect('cifir:home_view')
 					else:
-						if user.check_password(123456):
-							messages.info(request, "Please reset your password in Account Setting.")
-					return redirect('cifir:home_view')
-
+						messages.success(request,"Logged in successfully")
+						return redirect('cifir:home_view')
 				else:
 					messages.info(request, 'Email or password is incorrect')
 					return redirect('cifir:login_view')
@@ -374,6 +377,7 @@ class loginPageView(View):
 			
 def logoutPage(request):
 	logout(request)
+	messages.error(request,"Logged out successfully")
 	return redirect('cifir:login_view')
 
 
