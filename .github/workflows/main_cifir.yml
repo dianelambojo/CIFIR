@@ -60,4 +60,4 @@ jobs:
         with:
           app-name: 'cifir'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_7C9DE69146174940A7ABEBD46EA8FC0D }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_95AFAFA7682044658423DA41A6D1F6D0 }}
