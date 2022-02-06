@@ -30,7 +30,7 @@ REPOSITORY_ROOT = os.path.dirname(BASE_DIR)
 SECRET_KEY = 'django-insecure-p^)j2i(6en9)h%r7llse(&m%at_muodv+9m8j8*lxh!y*gxb)g'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -146,11 +146,19 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 IMPORT_EXPORT_USE_TRANSACTIONS = True
 
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(REPOSITORY_ROOT, 'static/')
+# STATIC_URL = '/static/'
+# STATIC_ROOT = os.path.join(REPOSITORY_ROOT, 'static/')
 
-STATICFILES_FINDERS = [
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+# STATICFILES_FINDERS = [
+#     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+# ]
+
+STATIC_URL = 'https://cifirstorage.z13.web.core.windows.net/'
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# any static paths you want to publish
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static')
 ]
 
 MEDIA_URL = '/media/'

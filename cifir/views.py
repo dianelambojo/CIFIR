@@ -277,7 +277,7 @@ class homePageView(View):
 
 						image = Image.open(zip.open(cover_path))
 						image_io = BytesIO()
-						image.save(image_io, format='jpeg', quality=100) # you can change format and quality
+						image.save(image_io, format='png', quality=100) # you can change format and quality
 						# save to model
 						image_name = "cover"
 						book = Book.objects.create(title= res['title'], file = file, book_author=res['creator'])
