@@ -20,7 +20,7 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('/', include('cifir.urls', namespace='cifir'))
+    path('cifir/', include('cifir.urls', namespace='cifir'))
 
 ]
 
