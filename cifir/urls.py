@@ -12,7 +12,7 @@ urlpatterns = [
     # path('api/data', views.get_data, name='api-data'),
 
     #TURL
-    path('login/', views.loginPageView.as_view(), name="login_view"),
+    path('index/', views.loginPageView.as_view(), name="login_view"),
     path('logout/', views.logoutPage, name='logout_view'),
     path('admin/', views.adminPageView.as_view(), name='admin_view'),
     path('home/', views.homePageView.as_view(), name='home_view'),

@@ -342,7 +342,7 @@ class loginPageView(View):
 	def get(self, request):
 		users = User.objects.all()
 		print(users)
-		return render(request, 'login.html')
+		return render(request, 'index.html')
 
 
 	def post(self,request):
@@ -378,7 +378,7 @@ class loginPageView(View):
 			
 			else:
 				messages.warning(request, 'Email or password is incorrect')
-				return render(request, 'login.html')
+				return render(request, 'index.html')
 			
 def logoutPage(request):
 	logout(request)
