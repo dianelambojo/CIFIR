@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'crispy_forms',
     'import_export',
+    'storages',
 ]
 
 MIDDLEWARE = [
@@ -146,24 +147,25 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 IMPORT_EXPORT_USE_TRANSACTIONS = True
 
-# STATIC_URL = '/static/'
-# STATIC_ROOT = os.path.join(REPOSITORY_ROOT, 'static/')
-
-# STATICFILES_FINDERS = [
-#     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-# ]
-
+#STATIC FILES
 STATIC_URL = 'https://cifirstorage.z13.web.core.windows.net/'
-
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # any static paths you want to publish
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
 
-MEDIA_URL = '/media/'
 
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+#MEDIA FILES 
+
+# MEDIA_URL = 'https://cifirstorage.z13.web.core.windows.net/media/'
+# MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
+DEFAULT_FILE_STORAGE = 'cifirproject.custom_azure.AzureMediaStorage'
+# STATICFILES_STORAGE = 'cifirproject.custom_azure.AzureStaticStorage'
+
+MEDIA_URL = 'https://cifirstorage.blob.core.windows.net/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

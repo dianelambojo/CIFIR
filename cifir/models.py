@@ -9,8 +9,8 @@ from django import forms
 class Book(models.Model):
 	title = models.CharField(max_length=250)
 	book_author = models.CharField(max_length=250)
-	cover = models.ImageField(upload_to='media/')
-	file = models.FileField(upload_to='media/')
+	cover = models.ImageField(upload_to='media')
+	file = models.FileField(upload_to='media')
 	user = models.ManyToManyField(User, blank=True)
 	isFavorite = models.BooleanField(default=False)
 	isHaveRead = models.BooleanField(default=False)
