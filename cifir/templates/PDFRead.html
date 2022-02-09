@@ -204,7 +204,7 @@ var bookElement = document.getElementById("book1");
 var url = window.location.protocol + "//" + window.location.hostname;
   if (window.location.port) url += ":" + window.location.port;
 
-  fetch(url + "/media/" + bookElement.innerHTML)
+  fetch("https://cifirstorage.blob.core.windows.net/media/" + bookElement.innerHTML)
     .then((response) => response.blob())
     .then(function (myBlob) {
       console.log(myBlob);

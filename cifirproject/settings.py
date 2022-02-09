@@ -165,7 +165,7 @@ DEFAULT_FILE_STORAGE = 'cifirproject.custom_azure.AzureMediaStorage'
 # STATICFILES_STORAGE = 'cifirproject.custom_azure.AzureStaticStorage'
 
 MEDIA_URL = 'https://cifirstorage.blob.core.windows.net/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media').replace('\\', '/')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
