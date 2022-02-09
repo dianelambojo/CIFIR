@@ -47,4 +47,3 @@ EbookLib==0.17.1
 beautifulsoup4==4.10.0
 keyboard==0.13.5
 django-storages[azure]
-io
