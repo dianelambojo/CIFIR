@@ -24,6 +24,8 @@ from django.db.models import Q
 #tts
 import pyttsx3
 import multiprocessing as mp
+import urllib3
+import io
 #pdf
 import pdfplumber
 import keyboard
@@ -110,9 +112,15 @@ def automateLogin(request, username, password, url, loginBtnSelector, indicator)
 def epubtotext(bookFile):
 	bookFile = bookFile
 
-	input_path = "./media/" + bookFile
+	url = "https://cifirstorage.blob.core.windows.net/media/" + bookFile
+	print(url)
 
-	book = epub.read_epub(input_path)
+	http = urllib3.PoolManager()
+	temp = io.BytesIO()
+	temp.write(http.request("GET", url).data)
+	print(temp)
+
+	book = epub.read_epub(temp)
 
 	for item in book.get_items():
 		if item.get_type() == ebooklib.ITEM_DOCUMENT:
@@ -129,15 +137,24 @@ def pdftotext(bookFile,currentPage):
 	print('tts activated')
 	print(currentPage)
 
-	path = "./media/" + bookFile
-	print(path)
+	url = "https://cifirstorage.blob.core.windows.net/media/" + bookFile
+	print(url)
 
-	pdf = pdfplumber.open(path)
+	http = urllib3.PoolManager()
+	temp = io.BytesIO()
+	temp.write(http.request("GET", url).data)
+	print(temp)
 
-	#1 page only
-	page = pdf.pages[currentPage]
-	text = page.extract_text()
-	tts(text)
+	with pdfplumber.open(temp) as pdf:
+		text = pdf.pages[currentPage].extract_text()
+		tts(text)
+
+	# pdf = pdfplumber.open(path)
+
+	# #1 page only
+	# page = pdf.pages[currentPage]
+	# text = page.extract_text()
+	# tts(text)
 
 	# start from currentpage until sa mga next
 	# totalpages = len(pdf.pages)
@@ -145,6 +162,7 @@ def pdftotext(bookFile,currentPage):
 	#     page = pdf.pages[i]
 	#     page_content = page.extract_text()
 	# tts(page_content)
+
 
 def tts(text):
 	
@@ -489,6 +507,7 @@ class epubReadpageView(View):
 					bmark = Bookmark(bookpage=bookmark, page_index = index)
 					bmark.save()
 					bmark.book.add(currentBook)
+			return render(request, 'EpubRead.html', context)
 
 				# with requests.Session() as s:
 				# 	s.get('https://httpbin.org/cookies/set/sessioncookie/123456789')
@@ -578,6 +597,7 @@ class pdfReadpageView(View):
 					bmark = Bookmark(bookpage=bookmark, page_index = bookmark)
 					bmark.save()
 					bmark.book.add(currentBook)
+			return render(request, 'PDFRead.html', context)
 
 		return render(request, 'PDFRead.html', context)
 
@@ -775,7 +795,7 @@ class viewBook(View):
 
 # #IMPORT USERS FROM CSV
 
-# Current_Date = datetime.datetime.today().strftime ('%d-%b-%Y')
+# Current_Date = datetime.today().strftime ('%d-%b-%Y')
 # User = get_user_model()
 # loc1 = 'C:/accounts.csv'
 # # loc2 = 'C:/accounts-saved'+str(Current_Date)+str(random.randint(0,100))+'.csv'
