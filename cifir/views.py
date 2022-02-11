@@ -53,6 +53,8 @@ from datetime import datetime
 from pathlib import Path
 import os
 
+from splinter import Browser
+
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -83,28 +85,20 @@ def addToCollection(book_id, collection_id):
 	collection.book.add(book)
 	print('book added')
 
-def setDriverOptions():
-	options = chromedriver.ChromeOptions()
-	options.add_experimental_option("detach", True)
-
-	return options
-
-def automateLogin(request, username, password, url, loginBtnSelector, indicator):
-	driver = chromedriver.Chrome(options=setDriverOptions())
+def automateLoginToSite(request, username, password, url, loginBtnSelector, indicator):
+	global browser
+	browser = Browser('chrome')
 	if indicator == 1:
 		try:
-			driver.get(url)
-			username_field = driver.find_element_by_css_selector("#username")
-			username_field.send_keys(username)
-			driver.execute_script("document.querySelector('#password').setAttribute('value','"+ password +"')")
-			driver.execute_script("document.querySelector('"+ loginBtnSelector +"').click();")
-
+			browser.visit(url)
+			browser.find_by_css("#username").fill(username)
+			browser.find_by_css("#password").fill(password)
+			browser.find_by_css(loginBtnSelector).click()
 		except:
 			messages.success(request,'Failed to access the database. Try Again Later.')
-	
 	if indicator == 2:
 		try:
-			driver.get(url)
+			browser.visit(url)
 		except:
 			messages.success(request,'Failed to access the database. Try Again Later.')
 
@@ -214,41 +208,41 @@ class homePageView(View):
 
 			if "Cambridge Core" in request.POST:
 				loginBtnSelector = '#login-form > div:nth-child(5) > button'
-				automateLogin(request, username, password, url, loginBtnSelector, 1)
+				automateLoginToSite(request, username, password, url, loginBtnSelector, 1)
+				return redirect('cifir:home_view')
 
 			elif "ProQuest Elibrary" in request.POST:
 				loginBtnSelector = '#login_button'
-				automateLogin(request, username, password, url, loginBtnSelector, 1)
+				automateLoginToSite(request, username, password, url, loginBtnSelector, 1)
+				return redirect('cifir:home_view')
 
 			elif "Wiley Online Library" in request.POST:
-				driver = chromedriver.Chrome(options=setDriverOptions())
-				driver.get(url)
-
-				driver.execute_script("document.querySelector('#username').setAttribute('value','"+ username +"')")
-				password = driver.find_element_by_css_selector("#password")
-				password.send_keys(pword)
-
-				driver.execute_script("document.querySelector('#main-content > div > div > div.container > div > div > div.card.card--light-shadow.login-widget.col-md-6 > div.widget__body > div.login-form > form > div.align-end > span > input').click();")
+				loginBtnSelector = '#main-content > div > div > div.container > div > div > div.card.card--light-shadow.login-widget.col-md-6 > div.widget__body > div.login-form > form > div.align-end > span > input'
+				automateLoginToSite(request, username, password, url, loginBtnSelector, 1)
+				return redirect('cifir:home_view')
 
 			elif "Science Direct" in request.POST:
-				driver = chromedriver.Chrome(options=setDriverOptions())
-				driver.get(url)
+				global browser
+				browser = Browser('chrome')
+				try:
+					browser.visit(url)
+					browser.find_by_css("#bdd-email").fill(username)
+					browser.find_by_css('#bdd-elsPrimaryBtn').click()
+					browser.find_by_css("#bdd-password").fill(password)
+					browser.find_by_css('#bdd-elsPrimaryBtn').click()
+				except:
+					messages.success(request,'Failed to access the database. Try Again Later.')
 
-				username = driver.find_element_by_css_selector("#bdd-email")
-				username.send_keys(uname)
-				driver.execute_script("document.querySelector('#bdd-elsPrimaryBtn').click();")
-				password = driver.find_element_by_css_selector("#bdd-password")
-				password.send_keys(pword)
-
-				driver.execute_script("document.querySelector('#bdd-elsPrimaryBtn').click();")
+				return redirect('cifir:home_view')
 
 			elif "Directory of Open Access Books" in request.POST:
-				automateLogin(request, username, password, url, '', 2)
+				automateLoginToSite(request, username, password, url, '', 2)
+				return redirect('cifir:home_view')
 
 			elif "Zlibrary" in request.POST:
-				automateLogin(request, username, password, url, '', 2)
+				automateLoginToSite(request, username, password, url, '', 2)
+				return redirect('cifir:home_view')
 			
-
 			#UPLOAD BOOK
 			if 'btnUpload' in request.POST:
 				user = User.objects.get(id=request.user.id)
@@ -698,39 +692,33 @@ class networkLibrariesPageView(View):
 
 			if "Cambridge Core" in request.POST:
 				loginBtnSelector = '#login-form > div:nth-child(5) > button'
-				automateLogin(request, username, password, url, loginBtnSelector, 1)
+				automateLoginToSite(request, username, password, url, loginBtnSelector, 1)
 
 			elif "ProQuest Elibrary" in request.POST:
 				loginBtnSelector = '#login_button'
-				automateLogin(request, username, password, url, loginBtnSelector, 1)
+				automateLoginToSite(request, username, password, url, loginBtnSelector, 1)
 
 			elif "Wiley Online Library" in request.POST:
-				driver = chromedriver.Chrome(options=setDriverOptions())
-				driver.get(url)
-
-				driver.execute_script("document.querySelector('#username').setAttribute('value','"+ username +"')")
-				password = driver.find_element_by_css_selector("#password")
-				password.send_keys(pword)
-
-				driver.execute_script("document.querySelector('#main-content > div > div > div.container > div > div > div.card.card--light-shadow.login-widget.col-md-6 > div.widget__body > div.login-form > form > div.align-end > span > input').click();")
+				loginBtnSelector = '#main-content > div > div > div.container > div > div > div.card.card--light-shadow.login-widget.col-md-6 > div.widget__body > div.login-form > form > div.align-end > span > input'
+				automateLoginToSite(request, username, password, url, loginBtnSelector, 1)
 
 			elif "Science Direct" in request.POST:
-				driver = chromedriver.Chrome(options=setDriverOptions())
-				driver.get(url)
-
-				username = driver.find_element_by_css_selector("#bdd-email")
-				username.send_keys(uname)
-				driver.execute_script("document.querySelector('#bdd-elsPrimaryBtn').click();")
-				password = driver.find_element_by_css_selector("#bdd-password")
-				password.send_keys(pword)
-
-				driver.execute_script("document.querySelector('#bdd-elsPrimaryBtn').click();")
+				global browser
+				browser = Browser('chrome')
+				try:
+					browser.visit(url)
+					browser.find_by_css("#bdd-email").fill(username)
+					browser.find_by_css('#bdd-elsPrimaryBtn').click()
+					browser.find_by_css("#bdd-password").fill(password)
+					browser.find_by_css('#bdd-elsPrimaryBtn').click()
+				except:
+					messages.success(request,'Failed to access the database. Try Again Later.')
 
 			elif "Directory of Open Access Books" in request.POST:
-				automateLogin(request, username, password, url, '', 2)
+				automateLoginToSite(request, username, password, url, '', 2)
 
 			elif "Zlibrary" in request.POST:
-				automateLogin(request, username, password, url, '', 2)
+				automateLoginToSite(request, username, password, url, '', 2)
 
 			return redirect("cifir:networklibraries_view")
 
