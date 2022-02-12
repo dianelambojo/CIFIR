@@ -35,7 +35,7 @@ tablib==3.0.0
 trio==0.19.0
 trio-websocket==0.9.2
 undetected-chromedriver==3.0.3
-urllib3==1.26.7
+urllib3
 websockets==10.0
 wsproto==1.0.0
 xlrd==2.0.1
@@ -48,3 +48,6 @@ beautifulsoup4==4.10.0
 keyboard==0.13.5
 django-storages[azure]
 splinter
+multiprocessing
+io
+
