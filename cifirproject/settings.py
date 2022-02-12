@@ -17,17 +17,20 @@ import pymysql
 pymysql.install_as_MySQLdb()
 import MySQLdb
 
+import django_on_heroku
+django_on_heroku.settings(locals())
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 REPOSITORY_ROOT = os.path.dirname(BASE_DIR)
-
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-p^)j2i(6en9)h%r7llse(&m%at_muodv+9m8j8*lxh!y*gxb)g'
+
+PORT = os.getenv("PORT", default="5000")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -47,7 +50,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'crispy_forms',
     'import_export',
-    'storages',
+    # 'storages',
 ]
 
 MIDDLEWARE = [
@@ -85,30 +88,30 @@ WSGI_APPLICATION = 'cifirproject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'cifir_database',
-#         'USER': 'root',
-#         'PASSWORD': '',
-#         'HOST': '127.0.0.1',
-#         'PORT': '3306',
-#         'OPTIONS': {
-#         'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-#     },
-#     }
-# }
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'cifir_db',
-        'USER': 'CIFIRadmin@cifir-server',
-        'PASSWORD': 'CIFIRpassw0rd',
-        'HOST': 'cifir-server.mysql.database.azure.com',
-        'PORT': '3306'
+        'NAME': 'cifir_database',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
+        'OPTIONS': {
+        'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+    },
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'cifir_db',
+#         'USER': 'CIFIRadmin@cifir-server',
+#         'PASSWORD': 'CIFIRpassw0rd',
+#         'HOST': 'cifir-server.mysql.database.azure.com',
+#         'PORT': '3306'
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -148,12 +151,15 @@ USE_TZ = True
 IMPORT_EXPORT_USE_TRANSACTIONS = True
 
 #STATIC FILES
-STATIC_URL = 'https://cifirstorage.z13.web.core.windows.net/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# STATIC_URL = 'https://cifirstorage.z13.web.core.windows.net/'
+
+STATIC_URL = '/static/'
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # any static paths you want to publish
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static')
-]
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'static/')
+# ]
 
 
 #MEDIA FILES 
@@ -161,10 +167,13 @@ STATICFILES_DIRS = [
 # MEDIA_URL = 'https://cifirstorage.z13.web.core.windows.net/media/'
 # MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
-DEFAULT_FILE_STORAGE = 'cifirproject.custom_azure.AzureMediaStorage'
+# DEFAULT_FILE_STORAGE = 'cifirproject.custom_azure.AzureMediaStorage'
+
 # STATICFILES_STORAGE = 'cifirproject.custom_azure.AzureStaticStorage'
 
-MEDIA_URL = 'https://cifirstorage.blob.core.windows.net/media/'
+# MEDIA_URL = 'https://cifirstorage.blob.core.windows.net/media/'
+
+MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media').replace('\\', '/')
 
 # Default primary key field type
@@ -192,3 +201,4 @@ EMAIL_HOST_PASSWORD = str(os.getenv('EMAIL_PASSWORD'))
 
 
 AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.ModelBackend']
+
