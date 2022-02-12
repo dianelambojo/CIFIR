@@ -17,7 +17,7 @@ import pymysql
 pymysql.install_as_MySQLdb()
 import MySQLdb
 
-import django_on_heroku
+import django_heroku
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -198,7 +198,6 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = str(os.getenv('EMAIL_USER'))
 EMAIL_HOST_PASSWORD = str(os.getenv('EMAIL_PASSWORD'))
 
-
 AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.ModelBackend']
 
-django_on_heroku.settings(locals())
+django_heroku.settings(locals())
