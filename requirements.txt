@@ -173,7 +173,7 @@ pyasn1==0.4.8
 pyasn1-modules==0.2.8
 pycparser==2.20
 pycryptodome==3.11.0
-pycurl==7.43.0.5
+pycurl<7.43.0.2
 PyDispatcher==2.0.5
 pyee==8.2.2
 Pygments==2.9.0
