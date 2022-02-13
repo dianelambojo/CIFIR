@@ -171,6 +171,7 @@ psycopg2-binary==2.9.3
 py==1.9.0
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
+PyAudio @ file:///C:/Users/HP/pipwin/PyAudio-0.2.11-cp38-cp38-win32.whl
 pycparser==2.20
 pycryptodome==3.11.0
 pycurl==7.43.0.5
@@ -198,7 +199,6 @@ pytils==0.3
 pyttsx3==2.90
 pytz==2020.1
 pywebview==3.5
-pywin32==228
 PyYAML==5.3.1
 queuelib==1.6.1
 regex==2021.11.10
