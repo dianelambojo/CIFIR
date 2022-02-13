@@ -18,6 +18,7 @@ pymysql.install_as_MySQLdb()
 import MySQLdb
 
 import django_heroku
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -32,11 +33,8 @@ REPOSITORY_ROOT = os.path.dirname(BASE_DIR)
 
 SECRET_KEY = config('SECRET_KEY')
 
-PORT = os.getenv("PORT", default="5000")
-
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = False
-DEBUG = config('DEBUG', default=False, cast=bool)
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -44,7 +42,8 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-    'cifir',
+    'cifir',    
+    'whitenoise.runserver_nostatic',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -53,11 +52,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'crispy_forms',
     'import_export',
+
     # 'storages',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -92,10 +93,17 @@ WSGI_APPLICATION = 'cifirproject.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.config(
-        default=config('DATABASE_URL')
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'cifir_database',
+        'USER': 'CIFIRadmin',
+        'PASSWORD': 'CIFIRpassw0rd',
+        'HOST': 'localhost',
+        'PORT': '',
+    }
 }
+
+WHITENOISE_USE_FINDERS = True
 
 # DATABASES = {
 #     'default': {
@@ -183,6 +191,11 @@ STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 # MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 # DEFAULT_FILE_STORAGE = 'cifirproject.custom_azure.AzureMediaStorage'
+
+db_from_env = dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(db_from_env)
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # STATICFILES_STORAGE = 'cifirproject.custom_azure.AzureStaticStorage'
 
