@@ -20,7 +20,8 @@ import MySQLdb
 import django_heroku
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+# BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 REPOSITORY_ROOT = os.path.dirname(BASE_DIR)
 
 # Quick-start development settings - unsuitable for production
@@ -29,10 +30,13 @@ REPOSITORY_ROOT = os.path.dirname(BASE_DIR)
 # SECURITY WARNING: keep the secret key used in production secret!
 # SECRET_KEY = 'django-insecure-p^)j2i(6en9)h%r7llse(&m%at_muodv+9m8j8*lxh!y*gxb)g'
 
+SECRET_KEY = config('SECRET_KEY')
+
 PORT = os.getenv("PORT", default="5000")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+# DEBUG = False
+DEBUG = config('DEBUG', default=False, cast=bool)
 
 ALLOWED_HOSTS = ['*']
 
@@ -88,18 +92,24 @@ WSGI_APPLICATION = 'cifirproject.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'cifir_database',
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
-        'OPTIONS': {
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-        },
-    }
+    'default': dj_database_url.config(
+        default=config('DATABASE_URL')
+    )
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'cifir_database',
+#         'USER': 'root',
+#         'PASSWORD': '',
+#         'HOST': '127.0.0.1',
+#         'PORT': '3306',
+#         'OPTIONS': {
+#             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+#         },
+#     }
+# }
 
 # DATABASES = {
 #     'default': {
@@ -154,11 +164,17 @@ IMPORT_EXPORT_USE_TRANSACTIONS = True
 
 STATIC_URL = '/static/'
 # STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # any static paths you want to publish
 # STATICFILES_DIRS = [
 #     os.path.join(BASE_DIR, 'static/')
 # ]
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
+
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+
 
 
 #MEDIA FILES 
