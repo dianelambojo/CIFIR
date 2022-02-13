@@ -142,7 +142,6 @@ mechanize==0.4.7
 msrest==0.6.21
 msrestazure==0.6.4
 mysql-connector==2.2.9
-mysqlclient @ file:///C:/Users/HP/Downloads/mysqlclient-1.4.6-cp38-cp38-win32.whl
 nltk==3.6.5
 nodeenv==1.5.0
 numpy==1.20.1
@@ -172,7 +171,6 @@ psycopg2-binary==2.9.3
 py==1.9.0
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
-PyAudio @ file:///C:/Users/HP/pipwin/PyAudio-0.2.11-cp38-cp38-win32.whl
 pycparser==2.20
 pycryptodome==3.11.0
 pycurl==7.43.0.5
