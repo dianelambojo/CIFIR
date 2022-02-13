@@ -63,6 +63,28 @@ from selenium.webdriver.support import expected_conditions as EC
 chromedriver.TARGET_VERSION = 96
 chromedriver.install()
 
+
+#API
+import collections
+from django.contrib import auth
+from django.contrib.auth import get_user_model
+from rest_framework.generics import CreateAPIView
+from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
+from rest_framework.authtoken.models import Token
+from rest_framework import status
+from rest_framework.serializers import Serializer
+from rest_framework.views import APIView
+
+from rest_framework.decorators import APIView
+
+from cifir.serializers import CollectionSerializer, CreateUserSerializer, UserSerializer
+
+from cifir.serializers import BookSerializer
+
+from .models import *
+
+
 # Create your views here.
 def updateBookStatus(item, book_id):
 	# revise code to add and remove from favorite, ishaveread, and istoread
@@ -827,3 +849,125 @@ class viewBook(View):
 # # #IMPORT USERS FROM CSV-end
 
 
+#API
+class CreateUserAPIView(CreateAPIView):
+    serializer_class = CreateUserSerializer
+    permission_classes = [AllowAny]
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        # We create a token than will be used for future auth
+        token = Token.objects.create(user=serializer.instance)
+        token_data = {"token": token.key}
+        return Response(
+            {**serializer.data, **token_data},
+            status=status.HTTP_201_CREATED,
+            headers=headers
+        )
+
+
+class LogoutUserAPIView(APIView):
+    queryset = get_user_model().objects.all()
+
+    def get(self, request, format=None):
+        # simply delete the token to force a login
+        request.user.auth_token.delete()
+        return Response(status=status.HTTP_200_OK)
+
+
+# class LoggedinUser(APIView):
+
+#     def get(self, request):
+#         user = get_user_model().objects.filter(id=request.user.id)
+#         serializer = UserSerializer(user, many=True)
+#         return Response(serializer.data)
+
+
+class BookList(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        # print(request.user)
+        books = Book.objects.filter(user=request.user)
+        serializer = BookSerializer(books, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = BookSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class BookDetails(APIView):
+    permission_classes = [AllowAny]
+
+    def get_object(self, id):
+        try:
+            return Book.objects.get(id=id)
+
+        except Book.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+    def get(self, request, id):
+        book = self.get_object(id)
+        serializer = BookSerializer(book)
+        return Response(serializer.data)
+
+    def put(self, request, id):
+        book = self.get_object(id)
+        serializer = BookSerializer(book, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, id):
+        book = self.get_object(id)
+        book.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def post(self, request):
+        serializer = BookSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CollectionList(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        # print(request.user)
+        collections = Collection.objects.filter(
+            user=request.user).filter(isDeleted=False)
+        serializer = CollectionSerializer(collections, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = CollectionSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CollectionDetails(APIView):
+    permission_classes = [AllowAny]
+
+    def get_object(self, id):
+        try:
+            return Collection.objects.get(id=id)
+
+        except Book.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+    def get(self, request, id):
+        collection = self.get_object(id)
+        serializer = CollectionSerializer(collection)
+        return Response(serializer.data)
