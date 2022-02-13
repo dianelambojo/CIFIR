@@ -184,7 +184,7 @@ PyMySQL==1.0.2
 pyOpenSSL==20.0.1
 pyparsing==2.4.7
 PyPDF2==1.26.0
-pypiwin32==223
+pypiwin32
 pyppeteer==1.0.2
 PyPrind==2.11.2
 pySmartDL==1.3.4
