@@ -1,1 +1,1 @@
-web: gunicorn cifir:app
+web: gunicorn --pythonpath cifir cifir.wsgi
