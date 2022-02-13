@@ -6,6 +6,17 @@ from django.conf import settings
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.views import PasswordChangeDoneView, PasswordChangeView
 from django.urls import reverse_lazy
+
+
+#API
+from django.conf.urls import url
+from rest_framework.authtoken.views import obtain_auth_token
+from .views import CreateUserAPIView, LogoutUserAPIView
+
+from django.urls import path
+
+from .views import *
+
 #paths arranged alphabetically by name
 app_name = 'cifir'
 urlpatterns = [ 
@@ -29,6 +40,30 @@ urlpatterns = [
     path('password/', 
         auth_views.PasswordChangeView.as_view(template_name = 'changePassword.html', 
         success_url = reverse_lazy('cifir:login_view')),name="changePassword_view"),
+
+    url(r'^auth/login/$',
+        obtain_auth_token,
+        name='auth_user_login'),
+    url(r'^auth/register/$',
+        CreateUserAPIView.as_view(),
+        name='auth_user_create'),
+    url(r'^auth/logout/$',
+        LogoutUserAPIView.as_view(),
+        name='auth_user_logout'),
+    path('book/',
+         views.BookList.as_view(),
+         name='booklist'),
+    path('bookdetails/<int:id>/',
+         views.BookDetails.as_view(),
+         name='bookdetails'),
+    path('collection/',
+         views.CollectionList.as_view(),
+         name='collectionlist'),
+    path('collectiondetails/<int:id>/',
+         views.CollectionDetails.as_view(),
+         name='collectiondetails'),
+
+
     
                
 ]
