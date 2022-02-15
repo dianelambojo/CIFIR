@@ -164,7 +164,7 @@ def pdftotext(bookFile,currentPage):
 	with pdfplumber.open(temp) as pdf:
 		text = pdf.pages[currentPage].extract_text()
 		print("pdftotextfunc")
-		tts(text)
+		speak(text)
 
 	# pdf = pdfplumber.open(path)
 
@@ -181,18 +181,18 @@ def pdftotext(bookFile,currentPage):
 	# tts(page_content)
 
 
-def tts(text):
+# def tts(text):
 	
-	p = mp.Process(target=speak, args=(text,))
-	p.start()
-	print(text)
-	print("mp")
-	while p.is_alive():
-		if keyboard.is_pressed('spacebar'):
-			p.terminate()
-		else:
-			continue
-	p.join()
+# 	p = mp.Process(target=speak, args=(text,))
+# 	p.start()
+# 	print(text)
+# 	print("mp")
+# 	while p.is_alive():
+# 		if keyboard.is_pressed('spacebar'):
+# 			p.terminate()
+# 		else:
+# 			continue
+# 	p.join()
 
 def speak(text):
 	print(text)
