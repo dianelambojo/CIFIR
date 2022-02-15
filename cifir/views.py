@@ -196,7 +196,7 @@ def pdftotext(bookFile,currentPage):
 
 def speak(text):
 	print(text)
-	speak = pyttsx3.init('sapi5')
+	speak = pyttsx3.init()
 	print("after sapi5")
 	voices = speak.getProperty('voices')
 	speak.setProperty("rate", 178)
