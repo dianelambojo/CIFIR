@@ -163,6 +163,7 @@ def pdftotext(bookFile,currentPage):
 
 	with pdfplumber.open(temp) as pdf:
 		text = pdf.pages[currentPage].extract_text()
+		print("pdftotextfunc")
 		tts(text)
 
 	# pdf = pdfplumber.open(path)
@@ -184,6 +185,8 @@ def tts(text):
 	
 	p = mp.Process(target=speak, args=(text,))
 	p.start()
+	print(text)
+	print("mp")
 	while p.is_alive():
 		if keyboard.is_pressed('spacebar'):
 			p.terminate()
@@ -192,11 +195,14 @@ def tts(text):
 	p.join()
 
 def speak(text):
+	print(text)
 	speak = pyttsx3.init('sapi5')
+	print("after sapi5")
 	voices = speak.getProperty('voices')
 	speak.setProperty("rate", 178)
 	speak.setProperty("voice", voices[0].id)
 	speak.say(text)
+	print("after say")
 	speak.runAndWait()
 
 
